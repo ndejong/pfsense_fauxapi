@@ -18,22 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace fauxapi\v1;
-define('FAUXAPI_CALLID', uniqid());
+global $priv_list;
 
-include_once('lib/fauxapi.php');
+$priv_list['page-system-fauxapi'] = array();
+$priv_list['page-system-fauxapi']['name'] = "WebCfg - System: FauxAPI";
+$priv_list['page-system-fauxapi']['descr'] = "Allow access to FauxAPI configuration";
+$priv_list['page-system-fauxapi']['match'] = array();
+$priv_list['page-system-fauxapi']['match'][] = "fauxapi.php";
 
-$action = (string)filter_input(INPUT_GET, 'action');
-if(empty($action)) { 
-    $action = 'undefined'; 
-}
-
-$fauxapi = new fauxApi();
-$response = $fauxapi->$action($_GET, file_get_contents("php://input"));
-
-http_response_code($response->http_code);
-header('fauxapi-callid: ' . FAUXAPI_CALLID);
-header('Content-Type: application/json');
-
-unset($response->http_code);
-echo json_encode($response);
+?>

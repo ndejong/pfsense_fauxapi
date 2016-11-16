@@ -1,4 +1,9 @@
-<?php
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE packagegui SYSTEM "../schema/packages.dtd">
+<?xml-stylesheet type="text/xsl" href="../xsl/package.xsl"?>
+<packagegui>
+	<copyright>
+	<![CDATA[
 /**
  * FauxAPI
  *  - A REST API interface for pfSense to faciliate dev-ops.
@@ -18,22 +23,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace fauxapi\v1;
-define('FAUXAPI_CALLID', uniqid());
-
-include_once('lib/fauxapi.php');
-
-$action = (string)filter_input(INPUT_GET, 'action');
-if(empty($action)) { 
-    $action = 'undefined'; 
-}
-
-$fauxapi = new fauxApi();
-$response = $fauxapi->$action($_GET, file_get_contents("php://input"));
-
-http_response_code($response->http_code);
-header('fauxapi-callid: ' . FAUXAPI_CALLID);
-header('Content-Type: application/json');
-
-unset($response->http_code);
-echo json_encode($response);
+	]]>
+	</copyright>
+	<description>A REST API interface</description>
+	<name>FauxAPI</name>
+	<title>System: FauxAPI</title>
+	<menu>
+		<name>FauxAPI</name>
+		<tooltiptext>A REST API interface for pfSense to faciliate dev-ops.</tooltiptext>
+		<section>System</section>
+		<url>/fauxapi.php</url>
+	</menu>
+</packagegui>
