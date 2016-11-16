@@ -3,8 +3,8 @@
 	<package>
 		<name>FauxAPI</name>
 		<internal_name>fauxapi</internal_name>
-		<descr><![CDATA[A REST API interface for pfSense to faciliate dev-ops.]]></descr>
-		<website>https://github.com/ndejong/pfSense-FauxAPI</website>
+		<descr><![CDATA[A REST API interface for pfSense to facilitate dev-ops.]]></descr>
+		<website>https://github.com/ndejong/pfsense_fauxapi</website>
                 <category>System</category>
 		<version>%%PKGVERSION%%</version>
 		<status>beta</status>

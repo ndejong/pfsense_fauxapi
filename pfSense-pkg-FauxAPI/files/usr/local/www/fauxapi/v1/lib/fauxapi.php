@@ -1,8 +1,8 @@
 <?php
 /**
  * FauxAPI
- *  - A REST API interface for pfSense to faciliate dev-ops.
- *  - https://github.com/ndejong/pfSense-FauxAPI
+ *  - A REST API interface for pfSense to facilitate dev-ops.
+ *  - https://github.com/ndejong/pfsense_fauxapi
  * 
  * Copyright 2016 Nicholas de Jong  
  * 
