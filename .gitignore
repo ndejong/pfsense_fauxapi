@@ -2,3 +2,4 @@
 /.idea
 /nbproject
 *.pyc
+credentials.ini
