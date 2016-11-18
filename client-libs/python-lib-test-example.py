@@ -15,13 +15,18 @@
 # limitations under the License.
 # 
 
-import pprint
+import pprint, sys
 from python.fauxapi_lib import FauxapiLib
 
+# check args exist
+if(len(sys.argv) < 4):
+    print('usage: ' + sys.argv[0] + ' <host> <apikey> <apisecret>')
+    sys.exit(1)
+
 # config
-fauxapi_host='<pfsense-host>'
-fauxapi_apikey='<apikey>'
-fauxapi_apisecret='<apisecret>'
+fauxapi_host=sys.argv[1]
+fauxapi_apikey=sys.argv[2]
+fauxapi_apisecret=sys.argv[3]
 
 FauxapiLib = FauxapiLib(fauxapi_host, fauxapi_apikey, fauxapi_apisecret)
 
@@ -42,8 +47,10 @@ pprint.pprint(FauxapiLib.config_reload())
 # pprint.pprint(FauxapiLib.system_reboot())
 
 # config get just a section
-config_aliases = FauxapiLib.config_get('aliases')
+config_filter = FauxapiLib.config_get('filter')
+pprint.pprint(config_filter)
 
 # config set just a section
+config_aliases = FauxapiLib.config_get('aliases')
 pprint.pprint(FauxapiLib.config_set(config_aliases, 'aliases'))
 

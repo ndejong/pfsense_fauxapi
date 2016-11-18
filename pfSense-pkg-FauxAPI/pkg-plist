@@ -1,2 +1,22 @@
-pkg/fauxapi.xml
+@dir /usr/local/pkg
+/usr/local/pkg/fauxapi.xml
+
+@dir /etc/inc/priv
+/etc/inc/priv/fauxapi.priv.inc
+
+@dir /etc/fauxapi
+/etc/fauxapi/credentials.ini
+
+@dir /usr/local/www/fauxapi
+@dir /usr/local/www/fauxapi/v1
+www/fauxapi/v1/index.php
+
+@dir /usr/local/www/fauxapi/v1/lib
+www/fauxapi/v1/lib/fauxapi.php
+www/fauxapi/v1/lib/fauxapi_actions.php
+www/fauxapi/v1/lib/fauxapi_auth.php
+www/fauxapi/v1/lib/fauxapi_logger.php
+www/fauxapi/v1/lib/fauxapi_pfsense_interface.php
+www/fauxapi/v1/lib/fauxapi_utils.php
+
 %%DATADIR%%/info.xml

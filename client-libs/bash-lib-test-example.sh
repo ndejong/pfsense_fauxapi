@@ -18,10 +18,16 @@
 # include source library
 source $(dirname ${0})/bash/fauxapi_lib.sh
 
+# check args exist
+if [ -z ${1} ] || [ -z ${2} ] || [ -z ${3} ]; then
+    echo 'usage: '$0' <host> <apikey> <apisecret>'
+    exit 1
+fi
+
 # config
-fauxapi_host='<pfsense-host>'
-fauxapi_apikey='<apikey>'
-fauxapi_apisecret='<apisecret>'
+fauxapi_host=${1}
+fauxapi_apikey=${2}
+fauxapi_apisecret=${3}
 
 # establish the debug and auth then export
 export fauxapi_debug=false

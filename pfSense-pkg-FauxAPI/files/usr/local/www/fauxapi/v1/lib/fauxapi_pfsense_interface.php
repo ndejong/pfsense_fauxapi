@@ -39,15 +39,6 @@ class fauxApiPfsenseInterface {
     public $config_reload_max_wait_secs = 60;
     
     /**
-     * __construct()
-     */
-    public function __construct() {
-        if(!is_dir($this->config_fauxapi_backup_path)) {
-            mkdir($this->config_fauxapi_backup_path, 0755, TRUE);
-        }
-    }
-    
-    /**
      * get_next_backup_config_filename()
      * 
      * @return string
@@ -219,7 +210,7 @@ class fauxApiPfsenseInterface {
         # create a fauxapi symlink to make these backups easier to identify
         if(TRUE === $do_fauxapi_symlink) {
             if(!is_dir($this->config_fauxapi_backup_path)) {
-                mkdir($this->config_fauxapi_backup_path);
+                mkdir($this->config_fauxapi_backup_path, 0755, TRUE);
             }
             symlink($config_backup_file, $this->get_next_backup_config_filename('fauxapi'));
         }
