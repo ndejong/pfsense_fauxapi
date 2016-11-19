@@ -1,3 +1,4 @@
+<<<<<<< 6159b0a46698d0b004d515e63eb4af090e49a8bf
 # FauxAPI - v1
 A REST API interface for pfSense to facilitate dev-ops:-
  - https://github.com/ndejong/pfsense_fauxapi
@@ -449,3 +450,89 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+=======
+# FauxAPI
+A REST API interface for pfSense to facilitate dev-ops:-
+ - https://github.com/ndejong/pfsense_fauxapi
+
+## Intent
+Provide a basic API interface into pfSense 2.3+ to facilitate dev-ops tasks with 
+pfSense until version 3.x comes around offering a ground up API as has been 
+indicated here - https://blog.pfsense.org/?p=1588
+
+## Approach
+The FauxAPI provides basic interfaces to perform actions directly on the main 
+pfSense configuration file ```/cf/config/config.xml```.  It should be obvious
+therefore that this provides the ability to write configurations that can break 
+your pfSense system.  The ability however to write an external Python (or Bash) 
+code that can quickly update and adjust your running pfSense host(s) is 
+enormously useful.
+
+It it's core the FauxAPI simply reads the config.xml file, converts it to JSON
+are returns to the caller.  Similarly it will take a JSON formatted config and
+write it to the config.xml and (by default) handle the required config reload.
+
+There are several sanity checks in place to make sure a provided JSON config
+will convert into the pfSense XML config.xml format and reload in the same way,
+however it is still possible for the API user to create configuration changes
+that make no sense at all and hence break your pfSense host.
+
+Users of the API should also keep in mind that it is possible for pfSense (and 
+other packages) to change the configuration format of the items they are using, 
+so take care with updates - I have not yet seen any such case but it is 
+certainly possible.
+
+
+## API Authentication
+
+
+## API Actions
+The following REST based API actions are provided, cURL call request examples
+are provided to document each, however you will more likely interface with the
+client libraries as documented further below.
+
+### HTTP GET ```backup```
+Causes the system to take a configuration backup and add it to the regular set
+of system backups located here ```/cf/conf/backup/```
+
+*Example*
+
+*Response*
+
+
+### HTTP GET ```backup_list```
+Returns a list of the currently available system configuration backups
+
+*Example*
+
+*Response*
+
+
+### HTTP GET ```config_get```
+
+
+### HTTP POST ```config_set```
+
+
+### HTTP GET ```config_reload```
+
+
+### HTTP GET ```config_restore```
+
+
+### HTTP GET ```send_event```
+
+
+### HTTP GET ```system_reboot```
+
+
+## Client libraries
+
+## Python
+
+## BASH
+
+## PHP
+
+
+>>>>>>> provide a basic UI to observe the api keys #2
