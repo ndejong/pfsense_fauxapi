@@ -29,9 +29,20 @@
 	<name>FauxAPI</name>
 	<title>System: FauxAPI</title>
 	<menu>
-		<name>FauxAPI</name>
-		<tooltiptext>A REST API interface for pfSense to facilitate dev-ops.</tooltiptext>
-		<section>System</section>
-		<url>/fauxapi.php</url>
+            <name>FauxAPI</name>
+            <tooltiptext>A REST API interface for pfSense to facilitate dev-ops.</tooltiptext>
+            <section>System</section>
+            <url>/fauxapi/admin/credentials.php</url>
 	</menu>
+        <tabs>
+            <tab>
+                <text>API credentials</text>
+                <url>/fauxapi/admin/credentials.php</url>
+                <active/>
+            </tab>
+            <tab>
+                <text>About</text>
+                <url>/fauxapi/admin/about.php</url>
+            </tab>
+        </tabs>
 </packagegui>

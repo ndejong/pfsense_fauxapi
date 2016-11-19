@@ -40,6 +40,12 @@ do-install:
 	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/index.php \
 		${STAGEDIR}${PREFIX}/www/fauxapi/v1
 
+	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi/admin
+	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/about.php \
+		${STAGEDIR}${PREFIX}/www/fauxapi/admin
+	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/credentials.php \
+		${STAGEDIR}${PREFIX}/www/fauxapi/admin
+
 	${MKDIR} ${STAGEDIR}/etc/inc/fauxapi
 	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc \
 		${STAGEDIR}/etc/inc/fauxapi

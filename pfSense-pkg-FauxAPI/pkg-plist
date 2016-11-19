@@ -11,6 +11,10 @@
 @dir /usr/local/www/fauxapi/v1
 /usr/local/www/fauxapi/v1/index.php
 
+@dir /usr/local/www/fauxapi/admin
+/usr/local/www/fauxapi/admin/about.php
+/usr/local/www/fauxapi/admin/credentials.php
+
 @dir /etc/inc/fauxapi
 /etc/inc/fauxapi/fauxapi.inc
 /etc/inc/fauxapi/fauxapi_actions.inc

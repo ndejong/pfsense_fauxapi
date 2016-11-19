@@ -89,7 +89,13 @@ class fauxApi {
         }
         
         if (200 !== $response->http_code || TRUE === $this->debug) {
-            $response->logs = fauxApiLogger::get_logs($this->debug);
+            if(empty($response->action)) {
+                // feels prudent to provide limited return data in this case, also feels messy
+                unset($response->logs);
+                unset($response->action);
+            } else {
+                $response->logs = fauxApiLogger::get_logs($this->debug);
+            }
         } else {
             unset($response->logs);
         }

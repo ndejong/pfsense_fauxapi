@@ -32,7 +32,9 @@ $fauxapi = new fauxApi();
 $response = $fauxapi->$action($_GET, file_get_contents("php://input"));
 
 http_response_code($response->http_code);
-header('fauxapi-callid: ' . FAUXAPI_CALLID);
+if(!empty($response->action)) {
+    header('fauxapi-callid: ' . FAUXAPI_CALLID);
+}
 header('Content-Type: application/json');
 
 unset($response->http_code);
