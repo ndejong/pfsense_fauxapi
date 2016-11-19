@@ -21,7 +21,7 @@
 namespace fauxapi\v1;
 define('FAUXAPI_CALLID', uniqid());
 
-include_once('lib/fauxapi.php');
+include_once('/etc/inc/fauxapi/fauxapi.inc');
 
 $action = (string)filter_input(INPUT_GET, 'action');
 if(empty($action)) { 

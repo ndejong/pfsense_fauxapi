@@ -9,14 +9,14 @@
 
 @dir /usr/local/www/fauxapi
 @dir /usr/local/www/fauxapi/v1
-www/fauxapi/v1/index.php
+/usr/local/www/fauxapi/v1/index.php
 
-@dir /usr/local/www/fauxapi/v1/lib
-www/fauxapi/v1/lib/fauxapi.php
-www/fauxapi/v1/lib/fauxapi_actions.php
-www/fauxapi/v1/lib/fauxapi_auth.php
-www/fauxapi/v1/lib/fauxapi_logger.php
-www/fauxapi/v1/lib/fauxapi_pfsense_interface.php
-www/fauxapi/v1/lib/fauxapi_utils.php
+@dir /etc/inc/fauxapi
+/etc/inc/fauxapi/fauxapi.inc
+/etc/inc/fauxapi/fauxapi_actions.inc
+/etc/inc/fauxapi/fauxapi_auth.inc
+/etc/inc/fauxapi/fauxapi_logger.inc
+/etc/inc/fauxapi/fauxapi_pfsense_interface.inc
+/etc/inc/fauxapi/fauxapi_utils.inc
 
 %%DATADIR%%/info.xml

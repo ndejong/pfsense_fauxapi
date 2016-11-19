@@ -21,11 +21,11 @@
 namespace fauxapi\v1;
 if (!defined('FAUXAPI_CALLID')) { echo 'FAUXAPI_CALLID missing'; exit; };
 
-include_once('fauxapi_logger.php');
-include_once('fauxapi_utils.php');
-include_once('fauxapi_auth.php');
-include_once('fauxapi_actions.php');
-include_once('fauxapi_pfsense_interface.php');
+include_once('fauxapi_logger.inc');
+include_once('fauxapi_utils.inc');
+include_once('fauxapi_auth.inc');
+include_once('fauxapi_actions.inc');
+include_once('fauxapi_pfsense_interface.inc');
 
 class fauxApi {
     

@@ -40,19 +40,19 @@ do-install:
 	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/index.php \
 		${STAGEDIR}${PREFIX}/www/fauxapi/v1
 
-	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi/v1/lib
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/lib/fauxapi.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1/lib
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/lib/fauxapi_actions.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1/lib
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/lib/fauxapi_auth.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1/lib
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/lib/fauxapi_logger.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1/lib
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/lib/fauxapi_pfsense_interface.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1/lib
-	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/v1/lib/fauxapi_utils.php \
-		${STAGEDIR}${PREFIX}/www/fauxapi/v1/lib
+	${MKDIR} ${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc \
+		${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_actions.inc \
+		${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_auth.inc \
+		${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_logger.inc \
+		${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_pfsense_interface.inc \
+		${STAGEDIR}/etc/inc/fauxapi
+	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi_utils.inc \
+		${STAGEDIR}/etc/inc/fauxapi
 
 	${MKDIR} ${STAGEDIR}${DATADIR}
 	${INSTALL_DATA} ${FILESDIR}${DATADIR}/info.xml \
