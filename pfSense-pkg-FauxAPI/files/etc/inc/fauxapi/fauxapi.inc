@@ -89,8 +89,7 @@ class fauxApi {
         }
         
         if (200 !== $response->http_code || TRUE === $this->debug) {
-            global $__fauxapi_logs;
-            $response->logs = $__fauxapi_logs;
+            $response->logs = fauxApiLogger::get_logs($this->debug);
         } else {
             unset($response->logs);
         }

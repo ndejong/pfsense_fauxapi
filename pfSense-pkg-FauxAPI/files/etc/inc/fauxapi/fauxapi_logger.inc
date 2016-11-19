@@ -59,6 +59,20 @@ class fauxApiLogger {
         );
     }
     
+    public static function get_logs($include_debug=FALSE) {
+        global $__fauxapi_logs;
+        $logs = array();
+        foreach($__fauxapi_logs as $log) {
+            if(array_key_exists('DEBUG', $log) && TRUE === $include_debug) {
+                $logs[] = $log;
+            }
+            elseif(!array_key_exists('DEBUG', $log)) {
+                $logs[] = $log;
+            }
+        }
+        return $logs;
+    }
+    
     private static function write_syslog($level, $log) {
         #openlog(fauxApiLogger::$syslog_filename, LOG_PID | LOG_LOCAL0);
         syslog($level, json_encode($log));
