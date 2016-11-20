@@ -488,7 +488,7 @@ actions, the following standard pfSense send_event combinations are permitted:-
 <a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
 
 <ul>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi/client-libs/bash">https://github.com/ndejong/pfsense_fauxapi/client-libs/bash</a></li>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash</a></li>
 </ul>
 
 <p>The Bash client library makes it possible to add a line with 
@@ -508,7 +508,7 @@ how to use it.</p>
 <a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
 
 <ul>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi/client-libs/python">https://github.com/ndejong/pfsense_fauxapi/client-libs/python</a></li>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash</a></li>
 </ul>
 
 <p>A Python interface to pfSense was perhaps the most desired end-goal at the onset
