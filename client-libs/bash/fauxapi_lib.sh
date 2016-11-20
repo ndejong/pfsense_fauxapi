@@ -105,7 +105,7 @@ fauxapi_send_event() {
         --insecure \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         --header "Content-Type: application/json" \
-        --data "${fauxapi_command}" \
+        --data "[\"${fauxapi_command}\"]" \
         "https://${fauxapi_host}/fauxapi/v1/?action=send_event&__debug=${fauxapi_debug}"`
 }
 
