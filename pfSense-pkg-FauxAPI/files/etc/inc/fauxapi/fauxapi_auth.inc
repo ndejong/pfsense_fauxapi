@@ -92,12 +92,17 @@ class fauxApiAuth {
             return FALSE;
         }
 
+        // TODO - nonce
+        // these nonce values really should be checked to ensure requests are not
+        // replayed by a third party, should be easy enough to do with files
+        // contained in a /tmp/fauxapi/nonce path for example
+
         // confirm the nonce is valid
         if (strlen($auth['nonce']) < 8 || strlen($auth['nonce']) > 40) {
             fauxApiLogger::error('length of nonce value is out-of-bounds');
             return FALSE;
         }
-        
+      
         // confirm the api credentials now in use meet the rules:-
         //  - NB1: refer to fauxApiUtils::sanitize() above, hence alpha numeric only
         //  - NB2: <apikey_value> MUST start with the prefix PFFA (pfSense Faux API)

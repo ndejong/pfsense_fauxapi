@@ -44,12 +44,8 @@ display_top_tabs($tab_array, true);
 </ul>
 
 <p>Additionally available are a set of <a href="#user-content-clientlibraries">client libraries</a> 
-to make programmatic access and update of pfSense hosts for dev-ops tasks feasible.</p>
-
-<ul>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi_bash_client">https://github.com/ndejong/pfsense_fauxapi_bash_client</a></li>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi_python_client">https://github.com/ndejong/pfsense_fauxapi_python_client</a></li>
-</ul>
+thus making programmatic access and update of pfSense hosts for dev-ops tasks 
+more feasible.</p>
 
 <hr>
 
@@ -74,10 +70,10 @@ running pfSense host(s) is enormously useful.</p>
 
 <p>At it's core FauxAPI simply reads the pfSense <code>config.xml</code> file, converts it to 
 JSON and returns to the caller.  Similarly it can take a JSON formatted config 
-and write it to the pfSense config.xml and (by default) perform a config backup 
-and handle the required config reload.</p>
+and write it to the pfSense <code>config.xml</code> and (by default) perform a config 
+backup and handle the required config reload.</p>
 
-<p>FauxAPI then loads core pfSense libraries to issue system functions as would 
+<p>FauxAPI loads core pfSense libraries to issue system functions as would 
 ordinarily occur through the regular GUI interface.  For those inclined to 
 review the inner workings of the FauxAPI &lt;&gt; pfSense interface you can find them
 located in the file <code>/etc/inc/fauxapi/fauxapi_pfsense_interface.inc</code></p>
@@ -109,8 +105,8 @@ requests to resolve if anyone cares to provide.</p>
 <p>Testing is not (yet) thorough, there are however two client side test scripts 
 (1x Bash, 1x Python) that test all possible server side actions.  The tests only 
 test for success and not all possible failure modes.  This said, many failure 
-scenarios have been considered and FauxAPI will roll back if anything does not 
-pass real-time sanity checks.</p>
+scenarios have been considered and tested in development to cause FauxAPI to 
+roll back if anything does not pass real-time sanity checks.</p>
 
 <p>The FauxAPI REST call path has been name-spaced as v1 to accommodate future 
 situations that may introduce breaking REST interface changes, in the event this
@@ -171,11 +167,11 @@ are provided for each.  The API user is perhaps more likely interface with the
 rather than these REST end-points.</p>
 
 <p>The framework around the FauxAPI has been put together with the idea of being
-able to easily add more actions at a later time, if you have an idea for an
-action that might be useful be sure to get in contact and suggest.</p>
+able to easily add more actions at a later time, if you have ideas for actions 
+that might be useful be sure to get in contact.</p>
 
-<p>NB: the cURL requests below use the '--insecure' switch because in many pfSense
-deployments certificate chain signed SSL certificates are not deployed, a 
+<p>NB: the cURL requests below use the '--insecure' switch because many pfSense
+deployments do not deploy certificate chain signed SSL certificates, a 
 reasonable improvement in this regard might be to implement certificate pinning
 at the client side to hence remove scope for man-in-middle concerns.</p>
 
@@ -491,6 +487,10 @@ actions, the following standard pfSense send_event combinations are permitted:-
 <h4>
 <a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
 
+<ul>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/client-libs/bash">https://github.com/ndejong/pfsense_fauxapi/client-libs/bash</a></li>
+</ul>
+
 <p>The Bash client library makes it possible to add a line with 
 <code>source fauxapi_lib.sh</code> to your bash script and then access a pfSense host 
 configuration directly as a JSON string</p>
@@ -507,10 +507,14 @@ how to use it.</p>
 <h4>
 <a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
 
+<ul>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/client-libs/python">https://github.com/ndejong/pfsense_fauxapi/client-libs/python</a></li>
+</ul>
+
 <p>A Python interface to pfSense was perhaps the most desired end-goal at the onset
 of the FauxAPI package project.  Anyone that has tried to parse the pfSense 
-config.xml files using a Python based library will understand that things don't
-quite work out as expected or desired.</p>
+<code>config.xml</code> files using a Python based library will understand that things 
+don't quite work out as expected or desired.</p>
 
 <div class="highlight highlight-source-python"><pre>    <span class="pl-k">import</span> pprint, sys
     <span class="pl-k">from</span> fauxapi_lib <span class="pl-k">import</span> FauxapiLib
