@@ -51,10 +51,10 @@ fauxapi_config_backup ${fauxapi_host}
 fauxapi_config_backup_list ${fauxapi_host}
 
 # restore a previous config
-#fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1478948093.xml
+#fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1479615086.xml
 
 # do a pfsense send_event($command) call
-fauxapi_send_event ${fauxapi_host} 'filter reload'
+fauxapi_send_event ${fauxapi_host} '["filter reload"]'
 
 # reboot the system
 # fauxapi_system_reboot ${fauxapi_host}

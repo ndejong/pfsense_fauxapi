@@ -188,14 +188,18 @@ class fauxApiActions {
     /**
      * send_event
      * 
-     * @param array $__args
      * @return boolean
      */
-    public function send_event($__args) {
+    public function send_event() {
         fauxApiLogger::debug(__METHOD__);
         
-        $command = NULL;
-        extract($__args, EXTR_IF_EXISTS);
+        if(!is_array($this->action_input_data) || !isset($this->action_input_data[0])) {
+            $this->response->http_code = 400;
+            $this->response->message = 'incorrectly formatted request data';
+            return FALSE;
+        }
+        
+        $command = $this->action_input_data[0];
         
         if (!$this->PfsenseInterface->send_event($command)) {
             $this->response->http_code = 400;

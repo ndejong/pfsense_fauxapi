@@ -100,11 +100,13 @@ fauxapi_send_event() {
     fauxapi_host=${1}
     fauxapi_command=${2}
     echo `curl \
-        -X GET \
+        -X POST \
         --silent \
         --insecure \
         --header "fauxapi-auth: ${fauxapi_auth}" \
-        "https://${fauxapi_host}/fauxapi/v1/?action=send_event&command=${fauxapi_command}&__debug=${fauxapi_debug}"`
+        --header "Content-Type: application/json" \
+        --data "${fauxapi_command}" \
+        "https://${fauxapi_host}/fauxapi/v1/?action=send_event&__debug=${fauxapi_debug}"`
 }
 
 fauxapi_system_reboot() {
