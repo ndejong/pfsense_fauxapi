@@ -387,7 +387,7 @@ Hint: use `jq` to obtain the config only, as such:-
 ### Client libraries
 
 #### Bash
- - https://github.com/ndejong/pfsense_fauxapi/client-libs/bash
+ - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash
 
 The Bash client library makes it possible to add a line with 
 `source fauxapi_lib.sh` to your bash script and then access a pfSense host 
@@ -404,7 +404,7 @@ It is recommended to review `bash-lib-test-example.sh` to get a better idea of
 how to use it.
 
 #### Python
- - https://github.com/ndejong/pfsense_fauxapi/client-libs/python
+ - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash
 
 A Python interface to pfSense was perhaps the most desired end-goal at the onset
 of the FauxAPI package project.  Anyone that has tried to parse the pfSense 
