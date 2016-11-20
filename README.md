@@ -404,7 +404,7 @@ It is recommended to review `bash-lib-test-example.sh` to get a better idea of
 how to use it.
 
 #### Python
- - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash
+ - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/python
 
 A Python interface to pfSense was perhaps the most desired end-goal at the onset
 of the FauxAPI package project.  Anyone that has tried to parse the pfSense 

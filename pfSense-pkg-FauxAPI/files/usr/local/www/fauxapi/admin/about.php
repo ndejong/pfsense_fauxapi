@@ -508,7 +508,7 @@ how to use it.</p>
 <a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
 
 <ul>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/bash</a></li>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/python">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs/python</a></li>
 </ul>
 
 <p>A Python interface to pfSense was perhaps the most desired end-goal at the onset
