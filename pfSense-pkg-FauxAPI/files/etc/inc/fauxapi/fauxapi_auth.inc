@@ -113,7 +113,7 @@ class fauxApiAuth {
         }
 
         // confirm the hash is valid
-        $auth_hash_input = $api_credentials[$auth['apikey']] . ':' . $auth['timestamp'] . ':' . $auth['nonce'];
+        $auth_hash_input = $api_credentials[$auth['apikey']] . $auth['timestamp'] . $auth['nonce'];
         if (hash('sha256', $auth_hash_input) !== $auth['hash']) {
             fauxApiLogger::error('invalid hash value provided');
             return FALSE;

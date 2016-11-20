@@ -115,6 +115,6 @@ class FauxapiLib:
         # auth = apikey:timestamp:nonce:HASH(apisecret:timestamp:nonce)
         nonce = base64.b64encode(os.urandom(40)).decode('utf-8').replace('=', '').replace('/', '').replace('+', '')[0:8]
         timestamp = datetime.datetime.utcnow().strftime('%Y%m%dZ%H%M%S')
-        hash = hashlib.sha256('{}:{}:{}'.format(self.apisecret, timestamp, nonce).encode('utf-8')).hexdigest()
+        hash = hashlib.sha256('{}{}{}'.format(self.apisecret, timestamp, nonce).encode('utf-8')).hexdigest()
         return '{}:{}:{}:{}'.format(self.apikey, timestamp, nonce, hash)
 
