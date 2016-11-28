@@ -3,8 +3,8 @@
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree a binary release is
 made herewith allowing you to get started right away
 
-You'll need to download the `pfSense-pkg-FauxAPI-1.txz` package file directly onto
-your pfSense system and perform a manual pkg install as shown below.
+You'll need to download the latest `pfSense-pkg-FauxAPI` package file directly 
+onto your pfSense system and perform a manual pkg install as shown below.
 
 ```
 [2.3.2-RELEASE][root@pfsensedev]/root: 
