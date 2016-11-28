@@ -41,7 +41,9 @@ class fauxApiPfsenseInterface {
     /**
      * get_next_backup_config_filename()
      * 
+     * @param string $type
      * @return string
+     * @throws \Exception
      */
     public function get_next_backup_config_filename($type='pfsense') {
         fauxApiLogger::debug(__METHOD__, array(
@@ -375,5 +377,82 @@ class fauxApiPfsenseInterface {
         \send_event($command);
         return TRUE;
     }
+    
+    /**
+     * rule_get
+     * 
+     * @param int $rule_number
+     * @return array
+     */
+    public function rule_get($rule_number=NULL) {
+        fauxApiLogger::debug(__METHOD__, array(
+            'rule_number' => $rule_number
+        ));
+        
+        $rules_temp_file = tempnam(sys_get_temp_dir(), 'fauxApi_');
+        $exec_command = 'pfctl -sr -vv > "'.$rules_temp_file.'"';
+        fauxApiLogger::debug('exec pfctl', array(
+            'exec_command' => $exec_command
+        ));
+        exec($exec_command); 
+        
+        if(!is_file($rules_temp_file)) {
+            fauxApiLogger::error('unable to locate output temp file from exec pfctl call', array(
+                'rules_temp_file' => $rules_temp_file,
+            ));
+            return array();
+        }
+        
+        $rules_temp_file_content = file_get_contents($rules_temp_file);
+        unlink($rules_temp_file);
+        
+        $rule = NULL;
+        $rules = array();
+        foreach(explode("\n",$rules_temp_file_content) as $line) {
+            if('@' === substr($line, 0, 1)) {
+                preg_match('/^\@([0-9]+)\(\d+\) (.*?)$/', $line, $m);
+                if(!isset($m[1]) || !isset($m[2])) {
+                    fauxApiLogger::error('problem parsing pfctl rules output rule-line', array(
+                        'line' => $line,
+                    ));
+                    return array();
+                } else {
+                    $rule = (int)$m[1];
+                }
+                $rules[$rule] = array(
+                    'rule' => $m[2]
+                );
+            } elseif (strpos($line,'[') && strpos($line,']')) {
+                // Hack to make the output more easily parseable
+                $line = str_replace(': pid ', ': ', $line);
+                $line = str_replace('State Creations: ', 'StateCreations: ', $line);
+                $line = strtolower($line);
+                
+                preg_match_all('/(\w+)\: ([0-9]+)/', $line, $m);
+                if(!isset($m[1]) || !isset($m[2])) {
+                    fauxApiLogger::error('problem parsing pfctl rules output stats-line', array(
+                        'line' => $line,
+                    ));
+                    return array();
+                } else {
+                    foreach($m[1] as $index=>$attribute) {
+                        $rules[$rule][$attribute] = $m[2][$index];
+                    }
+                }
+            }
+        }
+        
+        if(!empty($rule_number)) {
+            if(!array_key_exists($rule_number, $rules)) {
+                fauxApiLogger::error('unable to locate rule', array(
+                    'rule_number' => $rule_number
+                ));
+                return array();
+            }
+            return array($rules[$rule_number]);
+        }
+        return $rules;
+    }
+    
 
 }

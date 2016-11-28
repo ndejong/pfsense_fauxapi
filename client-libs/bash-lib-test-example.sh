@@ -36,26 +36,28 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 
 # get config request
 # NB: must have the 'jq' binary to process the JSON response easily!
-fauxapi_config_get ${fauxapi_host} | jq .data.config > /tmp/pfsense-fauxapi.json
+#fauxapi_config_get ${fauxapi_host} | jq .data.config > /tmp/pfsense-fauxapi.json
 
 # set a config
-fauxapi_config_set ${fauxapi_host} /tmp/pfsense-fauxapi.json
+#fauxapi_config_set ${fauxapi_host} /tmp/pfsense-fauxapi.json
 
 # reload the current config
-fauxapi_config_reload ${fauxapi_host}
+#fauxapi_config_reload ${fauxapi_host}
 
 # do a remote config backup
-fauxapi_config_backup ${fauxapi_host}
+#fauxapi_config_backup ${fauxapi_host}
 
 # get the list of backup files
-fauxapi_config_backup_list ${fauxapi_host}
+#fauxapi_config_backup_list ${fauxapi_host}
 
 # restore a previous config
 #fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1479615086.xml
 
 # do a pfsense send_event($command) call
-fauxapi_send_event ${fauxapi_host} 'filter reload'
+#fauxapi_send_event ${fauxapi_host} 'filter reload'
 
 # reboot the system
 # fauxapi_system_reboot ${fauxapi_host}
 
+# get rules
+fauxapi_rule_get ${fauxapi_host} 1

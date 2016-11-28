@@ -381,6 +381,46 @@ Hint: use `jq` to obtain the config only, as such:-
     }
 ```
 
+### `/fauxapi/v1/?action=rule_get`
+ - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command 
+   on the pfSense host.  An empty rule_number parameter causes all rules to be
+   returned.
+ - HTTP: **`GET`**
+ - Params:
+    - `rule_number` (optional, default = null)
+
+*Example Request*
+```bash
+    curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
+        "https://192.168.10.10/fauxapi/v1/?action=rule_get&rule_number=1"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "583c279b56958",
+  "action": "rule_get",
+  "message": "ok",
+  "data": {
+    "rules": [
+      {
+        "rule": "anchor \"openvpn/*\" all",
+        "evaluations": "14134",
+        "packets": "0",
+        "bytes": "0",
+        "states": "0",
+        "inserted": "21188",
+        "statecreations": "0"
+      }
+    ]
+  }
+}
+```
+
 ---
 
 <a name="clientlibraries"></a>

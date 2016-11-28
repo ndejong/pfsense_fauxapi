@@ -34,7 +34,7 @@ class fauxApiActions {
     public function __construct() {
         $this->PfsenseInterface = new fauxApiPfsenseInterface();
     }
-
+    
     /**
      * config_get()
      * 
@@ -245,7 +245,36 @@ class fauxApiActions {
         
         $this->response->http_code = 500;
         $this->response->message = 'system_data not yet implemented';
+        // TODO: start with hints from Markus Tenghamn
+        // https://gist.github.com/markustenghamn/107ac16632a6eb256b5f
         return FALSE;
+    }
+    
+    /**
+     * rule_get()
+     * 
+     * @param type $__args
+     * @return boolean
+     */
+    public function rule_get($__args) {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $rule_number = NULL;
+        extract($__args, EXTR_IF_EXISTS);
+        
+        $rules = $this->PfsenseInterface->rule_get((int)$rule_number);
+        
+        if (empty($rules)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get rule(s)';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'rules' => $rules
+        );
+        return TRUE;
     }
 
 }
