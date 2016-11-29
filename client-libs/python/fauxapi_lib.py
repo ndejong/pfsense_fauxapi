@@ -18,6 +18,7 @@
 import os
 import json
 import base64
+import urllib
 import requests
 import datetime
 import hashlib
@@ -31,17 +32,19 @@ class FauxapiLib:
 
     host = None
     proto = None
+    debug = None
     apikey = None
     apisecret = None
     use_snakeoil_https = None
 
-    def __init__(self, host, apikey, apisecret, use_verified_https=False):
-        self.host = host
+    def __init__(self, host, apikey, apisecret, use_verified_https=False, debug=False):
         self.proto = 'https'
         self.base_url = 'fauxapi/v1'
+        self.host = host
         self.apikey = apikey
         self.apisecret = apisecret
         self.use_verified_https = use_verified_https
+        self.debug = debug
         if not self.use_verified_https:
             requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
@@ -92,15 +95,29 @@ class FauxapiLib:
             raise FauxapiLibException('unable to complete config_restore() request', json.loads(res.text))
         return json.loads(res.text)
 
+    def send_event(self, command):
+        res = self._api_request('POST', 'send_event', data=json.dumps([command]))
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete send_event() request', json.loads(res.text))
+        return json.loads(res.text)
+
     def system_reboot(self):
         res = self._api_request('GET', 'system_reboot')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete system_reboot() request', json.loads(res.text))
         return json.loads(res.text)
 
-    def _api_request(self, method, name, params={}, data=None):
-        url = '{proto}://{host}/{base_url}/?action={name}'.format(
-            proto=self.proto, host=self.host, base_url=self.base_url, name=name)
+    def rule_get(self, rule_number=None):
+        res = self._api_request('GET', 'rule_get', params={'rule_number': rule_number})
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete rule_get() request', json.loads(res.text))
+        return json.loads(res.text)
+
+    def _api_request(self, method, action, params={}, data=None):
+        if self.debug:
+            params['__debug'] = 'true'
+        url = '{proto}://{host}/{base_url}/?action={action}&{params}'.format(
+            proto=self.proto, host=self.host, base_url=self.base_url, action=action, params=urllib.parse.urlencode(params))
         if method.upper() == 'GET':
             return requests.get(url,
                 headers={'fauxapi-auth': self._generate_auth()},

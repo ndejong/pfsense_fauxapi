@@ -1,4 +1,4 @@
-# FauxAPI - binary package
+# FauxAPI - release packages
 
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree a binary release is
 made herewith allowing you to get started right away
