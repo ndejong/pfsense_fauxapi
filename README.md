@@ -109,6 +109,56 @@ about this.
 
 ---
 
+<a name="clientlibraries"></a>
+### Client libraries
+
+#### Bash
+ - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs
+
+The Bash client library makes it possible to add a line with 
+`source fauxapi_lib.sh` to your bash script and then access a pfSense host 
+configuration directly as a JSON string
+```bash
+    source fauxapi_lib.sh
+    export fauxapi_auth=`fauxapi_auth <fauxapi-key> <fauxapi-secret>`
+
+    fauxapi_config_get <host-address> | jq .data.config > /tmp/config.json
+    fauxapi_config_set <host-address> /tmp/config.json
+```
+
+It is recommended to review `bash-lib-test-example.sh` to get a better idea of
+how to use it.
+
+#### Python
+ - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs
+
+A Python interface to pfSense was perhaps the most desired end-goal at the onset
+of the FauxAPI package project.  Anyone that has tried to parse the pfSense 
+`config.xml` files using a Python based library will understand that things 
+don't quite work out as expected or desired.
+
+```python
+    import pprint, sys
+    from fauxapi_lib import FauxapiLib
+    FauxapiLib = FauxapiLib('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
+
+    aliases = FauxapiLib.config_get('aliases')
+    pprint.pprint(FauxapiLib.config_set(aliases, 'aliases'))
+```
+
+Again, it is recommended to review `python-lib-test-example.py` to observe 
+worked examples with the library.  Of small note is that the Python library
+supports the ability to get and set single sections of the pfSense system, not
+just the entire system configuration as with the Bash library.
+
+
+#### PHP
+A PHP client does not yet exist, it should be fairly easy to develop by 
+observing the Bash and Python examples - if you do please submit it as a github 
+pull request, there are no doubt others that will appreciate a PHP interface.
+
+---
+
 ### API REST Actions
 The following REST based API actions are provided, cURL call request examples
 are provided for each.  The API user is perhaps more likely interface with the 
@@ -468,56 +518,6 @@ Hint: use `jq` to obtain the config only, as such:-
   }
 }
 ```
-
----
-
-<a name="clientlibraries"></a>
-### Client libraries
-
-#### Bash
- - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs
-
-The Bash client library makes it possible to add a line with 
-`source fauxapi_lib.sh` to your bash script and then access a pfSense host 
-configuration directly as a JSON string
-```bash
-    source fauxapi_lib.sh
-    export fauxapi_auth=`fauxapi_auth <fauxapi-key> <fauxapi-secret>`
-
-    fauxapi_config_get <host-address> | jq .data.config > /tmp/config.json
-    fauxapi_config_set <host-address> /tmp/config.json
-```
-
-It is recommended to review `bash-lib-test-example.sh` to get a better idea of
-how to use it.
-
-#### Python
- - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs
-
-A Python interface to pfSense was perhaps the most desired end-goal at the onset
-of the FauxAPI package project.  Anyone that has tried to parse the pfSense 
-`config.xml` files using a Python based library will understand that things 
-don't quite work out as expected or desired.
-
-```python
-    import pprint, sys
-    from fauxapi_lib import FauxapiLib
-    FauxapiLib = FauxapiLib('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
-
-    aliases = FauxapiLib.config_get('aliases')
-    pprint.pprint(FauxapiLib.config_set(aliases, 'aliases'))
-```
-
-Again, it is recommended to review `python-lib-test-example.py` to observe 
-worked examples with the library.  Of small note is that the Python library
-supports the ability to get and set single sections of the pfSense system, not
-just the entire system configuration as with the Bash library.
-
-
-#### PHP
-A PHP client does not yet exist, it should be fairly easy to develop by 
-observing the Bash and Python examples - if you do please submit it as a github 
-pull request, there are no doubt others that will appreciate a PHP interface.
 
 ---
 

@@ -158,6 +158,64 @@ about this.</p>
 
 <hr>
 
+<p><a name="user-content-clientlibraries"></a></p>
+
+<h3>
+<a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h3>
+
+<h4>
+<a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
+
+<ul>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs</a></li>
+</ul>
+
+<p>The Bash client library makes it possible to add a line with 
+<code>source fauxapi_lib.sh</code> to your bash script and then access a pfSense host 
+configuration directly as a JSON string</p>
+
+<div class="highlight highlight-source-shell"><pre>    <span class="pl-c1">source</span> fauxapi_lib.sh
+    <span class="pl-k">export</span> fauxapi_auth=<span class="pl-s"><span class="pl-pds">`</span>fauxapi_auth <span class="pl-k">&lt;</span>fauxapi-key<span class="pl-k">&gt;</span> <span class="pl-k">&lt;</span>fauxapi-secret<span class="pl-k">&gt;</span><span class="pl-pds">`</span></span>
+
+    fauxapi_config_get <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json
+    fauxapi_config_set <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
+
+<p>It is recommended to review <code>bash-lib-test-example.sh</code> to get a better idea of
+how to use it.</p>
+
+<h4>
+<a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
+
+<ul>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs</a></li>
+</ul>
+
+<p>A Python interface to pfSense was perhaps the most desired end-goal at the onset
+of the FauxAPI package project.  Anyone that has tried to parse the pfSense 
+<code>config.xml</code> files using a Python based library will understand that things 
+don't quite work out as expected or desired.</p>
+
+<div class="highlight highlight-source-python"><pre>    <span class="pl-k">import</span> pprint, sys
+    <span class="pl-k">from</span> fauxapi_lib <span class="pl-k">import</span> FauxapiLib
+    FauxapiLib <span class="pl-k">=</span> FauxapiLib(<span class="pl-s"><span class="pl-pds">'</span>&lt;host-address&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-key&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-secret&gt;<span class="pl-pds">'</span></span>)
+
+    aliases <span class="pl-k">=</span> FauxapiLib.config_get(<span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>)
+    pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>))</pre></div>
+
+<p>Again, it is recommended to review <code>python-lib-test-example.py</code> to observe 
+worked examples with the library.  Of small note is that the Python library
+supports the ability to get and set single sections of the pfSense system, not
+just the entire system configuration as with the Bash library.</p>
+
+<h4>
+<a id="user-content-php" class="anchor" href="#php" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PHP</h4>
+
+<p>A PHP client does not yet exist, it should be fairly easy to develop by 
+observing the Bash and Python examples - if you do please submit it as a github 
+pull request, there are no doubt others that will appreciate a PHP interface.</p>
+
+<hr>
+
 <h3>
 <a id="user-content-api-rest-actions" class="anchor" href="#api-rest-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API REST Actions</h3>
 
@@ -574,64 +632,6 @@ returned.</li>
     ]
   }
 }</pre></div>
-
-<hr>
-
-<p><a name="user-content-clientlibraries"></a></p>
-
-<h3>
-<a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h3>
-
-<h4>
-<a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
-
-<ul>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs</a></li>
-</ul>
-
-<p>The Bash client library makes it possible to add a line with 
-<code>source fauxapi_lib.sh</code> to your bash script and then access a pfSense host 
-configuration directly as a JSON string</p>
-
-<div class="highlight highlight-source-shell"><pre>    <span class="pl-c1">source</span> fauxapi_lib.sh
-    <span class="pl-k">export</span> fauxapi_auth=<span class="pl-s"><span class="pl-pds">`</span>fauxapi_auth <span class="pl-k">&lt;</span>fauxapi-key<span class="pl-k">&gt;</span> <span class="pl-k">&lt;</span>fauxapi-secret<span class="pl-k">&gt;</span><span class="pl-pds">`</span></span>
-
-    fauxapi_config_get <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json
-    fauxapi_config_set <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
-
-<p>It is recommended to review <code>bash-lib-test-example.sh</code> to get a better idea of
-how to use it.</p>
-
-<h4>
-<a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
-
-<ul>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs">https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs</a></li>
-</ul>
-
-<p>A Python interface to pfSense was perhaps the most desired end-goal at the onset
-of the FauxAPI package project.  Anyone that has tried to parse the pfSense 
-<code>config.xml</code> files using a Python based library will understand that things 
-don't quite work out as expected or desired.</p>
-
-<div class="highlight highlight-source-python"><pre>    <span class="pl-k">import</span> pprint, sys
-    <span class="pl-k">from</span> fauxapi_lib <span class="pl-k">import</span> FauxapiLib
-    FauxapiLib <span class="pl-k">=</span> FauxapiLib(<span class="pl-s"><span class="pl-pds">'</span>&lt;host-address&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-key&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-secret&gt;<span class="pl-pds">'</span></span>)
-
-    aliases <span class="pl-k">=</span> FauxapiLib.config_get(<span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>)
-    pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>))</pre></div>
-
-<p>Again, it is recommended to review <code>python-lib-test-example.py</code> to observe 
-worked examples with the library.  Of small note is that the Python library
-supports the ability to get and set single sections of the pfSense system, not
-just the entire system configuration as with the Bash library.</p>
-
-<h4>
-<a id="user-content-php" class="anchor" href="#php" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PHP</h4>
-
-<p>A PHP client does not yet exist, it should be fairly easy to develop by 
-observing the Bash and Python examples - if you do please submit it as a github 
-pull request, there are no doubt others that will appreciate a PHP interface.</p>
 
 <hr>
 
