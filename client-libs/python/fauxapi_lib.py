@@ -107,6 +107,12 @@ class FauxapiLib:
             raise FauxapiLibException('unable to complete system_reboot() request', json.loads(res.text))
         return json.loads(res.text)
 
+    def system_stats(self):
+        res = self._api_request('GET', 'system_stats')
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete system_stats() request', json.loads(res.text))
+        return json.loads(res.text)
+
     def rule_get(self, rule_number=None):
         res = self._api_request('GET', 'rule_get', params={'rule_number': rule_number})
         if res.status_code != 200:

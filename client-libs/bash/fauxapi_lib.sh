@@ -119,6 +119,16 @@ fauxapi_system_reboot() {
         "https://${fauxapi_host}/fauxapi/v1/?action=system_reboot&__debug=${fauxapi_debug}"`
 }
 
+fauxapi_system_stats() {
+    fauxapi_host=${1}
+    echo `curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: ${fauxapi_auth}" \
+        "https://${fauxapi_host}/fauxapi/v1/?action=system_stats&__debug=${fauxapi_debug}"`
+}
+
 fauxapi_rule_get() {
     fauxapi_host=${1}
     fauxapi_rule_number=${2}

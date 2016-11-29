@@ -59,5 +59,8 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 # system_reboot
 # fauxapi_system_reboot ${fauxapi_host}
 
+# fauxapi_system_stats
+fauxapi_system_stats ${fauxapi_host}
+
 # rule_get
-fauxapi_rule_get ${fauxapi_host} 1
+#fauxapi_rule_get ${fauxapi_host} 1

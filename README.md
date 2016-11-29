@@ -326,6 +326,7 @@ Hint: use `jq` to obtain the config only, as such:-
     }
 ```
 
+
 ### `/fauxapi/v1/?action=send_event`
  - Performs a pfSense "send_event" command to cause various pfSense system 
    actions, the following standard pfSense send_event combinations are permitted:-
@@ -380,6 +381,53 @@ Hint: use `jq` to obtain the config only, as such:-
       "message": "ok"
     }
 ```
+
+
+### `/fauxapi/v1/?action=system_stats`
+ - Returns various system stats.
+ - HTTP: **`GET`**
+ - Params: none
+
+*Example Request*
+```bash
+    curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
+        "https://192.168.10.10/fauxapi/v1/?action=system_stats"
+```
+
+*Example Response*
+```javascript
+    {
+      "callid": "583d5ce3301f4",
+      "action": "system_stats",
+      "message": "ok",
+      "data": {
+        "stats": {
+          "cpu": "2",
+          "mem": "16",
+          "uptime": "9 Days 20 Hours 02 Minutes 08 Seconds",
+          "states": "364/48000",
+          "temp": "",
+          "datetime": "20161129Z104804",
+          "interfacestatistics": "",
+          "interfacestatus": "",
+          "cpufreq": "",
+          "load_average": [
+            "0.29",
+            "0.29",
+            "0.28"
+          ],
+          "mbuf": "1016/30414",
+          "mbufpercent": "3",
+          "statepercent": "1"
+        }
+      }
+    }
+```
+
 
 ### `/fauxapi/v1/?action=rule_get`
  - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command 

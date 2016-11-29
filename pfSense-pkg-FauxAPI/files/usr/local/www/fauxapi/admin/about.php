@@ -478,6 +478,55 @@ actions, the following standard pfSense send_event combinations are permitted:-
     }</pre></div>
 
 <h3>
+<a id="user-content-fauxapiv1actionsystem_stats" class="anchor" href="#fauxapiv1actionsystem_stats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>/fauxapi/v1/?action=system_stats</code>
+</h3>
+
+<ul>
+<li>Returns various system stats.</li>
+<li>HTTP: <strong><code>GET</code></strong>
+</li>
+<li>Params: none</li>
+</ul>
+
+<p><em>Example Request</em></p>
+
+<div class="highlight highlight-source-shell"><pre>    curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55<span class="pl-pds">"</span></span> \
+        <span class="pl-s"><span class="pl-pds">"</span>https://192.168.10.10/fauxapi/v1/?action=system_stats<span class="pl-pds">"</span></span></pre></div>
+
+<p><em>Example Response</em></p>
+
+<div class="highlight highlight-source-js"><pre>    {
+      <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583d5ce3301f4<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>system_stats<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>stats<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+          <span class="pl-s"><span class="pl-pds">"</span>cpu<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>mem<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>16<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>uptime<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>9 Days 20 Hours 02 Minutes 08 Seconds<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>states<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>364/48000<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>temp<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>datetime<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>20161129Z104804<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>interfacestatistics<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>interfacestatus<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>cpufreq<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>load_average<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
+            <span class="pl-s"><span class="pl-pds">"</span>0.29<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>0.29<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>0.28<span class="pl-pds">"</span></span>
+          ],
+          <span class="pl-s"><span class="pl-pds">"</span>mbuf<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>1016/30414<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>mbufpercent<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>statepercent<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>
+        }
+      }
+    }</pre></div>
+
+<h3>
 <a id="user-content-fauxapiv1actionrule_get" class="anchor" href="#fauxapiv1actionrule_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>/fauxapi/v1/?action=rule_get</code>
 </h3>
 
@@ -503,35 +552,28 @@ returned.</li>
         --silent \
         --insecure \
         --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55<span class="pl-pds">"</span></span> \
-        <span class="pl-s"><span class="pl-pds">"</span>https://192.168.10.10/fauxapi/v1/?action=rule_get<span class="pl-pds">"</span></span></pre></div>
+        <span class="pl-s"><span class="pl-pds">"</span>https://192.168.10.10/fauxapi/v1/?action=rule_get&amp;rule_number=1<span class="pl-pds">"</span></span></pre></div>
 
 <p><em>Example Response</em></p>
 
 <div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583c2530d6888<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583c279b56958<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>rule_get<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
     <span class="pl-s"><span class="pl-pds">"</span>rules<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
       {
-        <span class="pl-s"><span class="pl-pds">"</span>rule<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>anchor <span class="pl-cce">\"</span>relayd/*<span class="pl-cce">\"</span> all<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>evaluations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>11390<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>packets<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>bytes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>states<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>inserted<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>21188<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>statecreations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>
-      },
-      {
         <span class="pl-s"><span class="pl-pds">"</span>rule<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>anchor <span class="pl-cce">\"</span>openvpn/*<span class="pl-cce">\"</span> all<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>evaluations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>11390<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>evaluations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>14134<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>packets<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>bytes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>states<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>inserted<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>21188<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>statecreations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>
-      },
-      <span class="pl-k">...</span></pre></div>
+      }
+    ]
+  }
+}</pre></div>
 
 <hr>
 

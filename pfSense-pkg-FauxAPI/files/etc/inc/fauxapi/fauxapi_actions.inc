@@ -232,22 +232,26 @@ class fauxApiActions {
     }
     
     /**
-     * system_data()
+     * system_stats()
      * 
-     * @param array $__args
      * @return boolean
      */
-    public function system_data($__args) {
+    public function system_stats() {
         fauxApiLogger::debug(__METHOD__);
         
-        $section = NULL;
-        extract($__args, EXTR_IF_EXISTS);
+        $stats = $this->PfsenseInterface->system_stats();
         
-        $this->response->http_code = 500;
-        $this->response->message = 'system_data not yet implemented';
-        // TODO: start with hints from Markus Tenghamn
-        // https://gist.github.com/markustenghamn/107ac16632a6eb256b5f
-        return FALSE;
+        if (empty($stats)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get system stats';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'stats' => $stats
+        );
+        return TRUE;
     }
     
     /**
