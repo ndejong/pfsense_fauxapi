@@ -81,7 +81,10 @@ class FauxapiLib:
         return json.loads(res.text)
 
     def config_backup_list(self):
-        pass
+        res = self._api_request('GET', 'config_backup_list')
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete config_backup_list() request', json.loads(res.text))
+        return json.loads(res.text)
 
     def config_restore(self, config_file):
         res = self._api_request('GET', 'config_restore', params={'config_file': config_file})
