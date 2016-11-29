@@ -8,9 +8,9 @@ onto your pfSense system and perform a manual pkg install as shown below.
 
 ```
 [2.3.2-RELEASE][root@pfsensedev]/root: 
-[2.3.2-RELEASE][root@pfsensedev]/root: curl -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1_1.txz
+[2.3.2-RELEASE][root@pfsensedev]/root: curl -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1_2.txz
 [2.3.2-RELEASE][root@pfsensedev]/root: 
-[2.3.2-RELEASE][root@pfsensedev]/root: pkg install pfSense-pkg-FauxAPI-1.txz
+[2.3.2-RELEASE][root@pfsensedev]/root: pkg install pfSense-pkg-FauxAPI-1_2.txz
 Updating pfSense-core repository catalogue...
 pfSense-core repository is up-to-date.
 Updating pfSense repository catalogue...
