@@ -115,49 +115,6 @@ implementations.</p>
 
 <hr>
 
-<h3>
-<a id="user-content-api-authentication" class="anchor" href="#api-authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authentication</h3>
-
-<p>A deliberate design decision to decouple FauxAPI authentication from both the 
-pfSense user authentication and the pfSense <code>config.xml</code> system.  This was done 
-to limit the possibility of an accidental API change that removes access to the 
-host.  It also seems more prudent to cause an API user to manually edit the 
-FauxAPI <code>credentials.ini</code> file located at <code>/etc/fauxapi/credentials.ini</code> - happy 
-to receive feedback about this.</p>
-
-<p>The two sample FauxAPI keys (PFFAexample01 and PFFAexample02) and their 
-associated secrets in the sample <code>credentials.ini</code> file are hard-coded to be
-inoperative, you must create entirely new values before your client scripts
-will be able to issue commands to FauxAPI.</p>
-
-<p>API authentication itself is performed on a per-call basis with the auth value 
-inserted as an additional <code>fauxapi-auth</code> HTTP request header, it can be 
-calculated as such:-</p>
-
-<pre><code>    fauxapi-auth: &lt;apikey&gt;:&lt;timestamp&gt;:&lt;nonce&gt;:&lt;hash&gt;
-
-    For example:-
-    fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55
-</code></pre>
-
-<p>Where the <code>&lt;hash&gt;</code> value is calculated like so:-</p>
-
-<pre><code>    &lt;hash&gt; = sha256(&lt;apisecret&gt;&lt;timestamp&gt;&lt;nonce&gt;)
-</code></pre>
-
-<p>This is all handled in the <a href="#user-content-clientlibraries">client libraries</a> 
-provided, but as can be seen it is relatively easy to implement even in a Bash 
-shell script - indeed a Bash include library <code>fauxapi_lib.sh</code> is provided that 
-does this for you.</p>
-
-<p>NB: Make sure the client side clock is within 60 seconds of the pfSense host 
-clock else the auth token values calculated by the client will not be valid - 60 
-seconds seems tight, however, provided you are using NTP to look after your 
-system time it's quite unlikely to cause issues - happy to receive feedback 
-about this.</p>
-
-<hr>
-
 <p><a name="user-content-clientlibraries"></a></p>
 
 <h3>
@@ -213,6 +170,49 @@ just the entire system configuration as with the Bash library.</p>
 <p>A PHP client does not yet exist, it should be fairly easy to develop by 
 observing the Bash and Python examples - if you do please submit it as a github 
 pull request, there are no doubt others that will appreciate a PHP interface.</p>
+
+<hr>
+
+<h3>
+<a id="user-content-api-authentication" class="anchor" href="#api-authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authentication</h3>
+
+<p>A deliberate design decision to decouple FauxAPI authentication from both the 
+pfSense user authentication and the pfSense <code>config.xml</code> system.  This was done 
+to limit the possibility of an accidental API change that removes access to the 
+host.  It also seems more prudent to cause an API user to manually edit the 
+FauxAPI <code>credentials.ini</code> file located at <code>/etc/fauxapi/credentials.ini</code> - happy 
+to receive feedback about this.</p>
+
+<p>The two sample FauxAPI keys (PFFAexample01 and PFFAexample02) and their 
+associated secrets in the sample <code>credentials.ini</code> file are hard-coded to be
+inoperative, you must create entirely new values before your client scripts
+will be able to issue commands to FauxAPI.</p>
+
+<p>API authentication itself is performed on a per-call basis with the auth value 
+inserted as an additional <code>fauxapi-auth</code> HTTP request header, it can be 
+calculated as such:-</p>
+
+<pre><code>    fauxapi-auth: &lt;apikey&gt;:&lt;timestamp&gt;:&lt;nonce&gt;:&lt;hash&gt;
+
+    For example:-
+    fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55
+</code></pre>
+
+<p>Where the <code>&lt;hash&gt;</code> value is calculated like so:-</p>
+
+<pre><code>    &lt;hash&gt; = sha256(&lt;apisecret&gt;&lt;timestamp&gt;&lt;nonce&gt;)
+</code></pre>
+
+<p>This is all handled in the <a href="#user-content-clientlibraries">client libraries</a> 
+provided, but as can be seen it is relatively easy to implement even in a Bash 
+shell script - indeed a Bash include library <code>fauxapi_lib.sh</code> is provided that 
+does this for you.</p>
+
+<p>NB: Make sure the client side clock is within 60 seconds of the pfSense host 
+clock else the auth token values calculated by the client will not be valid - 60 
+seconds seems tight, however, provided you are using NTP to look after your 
+system time it's quite unlikely to cause issues - happy to receive feedback 
+about this.</p>
 
 <hr>
 

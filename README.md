@@ -68,47 +68,6 @@ implementations.
 
 ---
 
-### API Authentication
-A deliberate design decision to decouple FauxAPI authentication from both the 
-pfSense user authentication and the pfSense `config.xml` system.  This was done 
-to limit the possibility of an accidental API change that removes access to the 
-host.  It also seems more prudent to cause an API user to manually edit the 
-FauxAPI `credentials.ini` file located at `/etc/fauxapi/credentials.ini` - happy 
-to receive feedback about this.
-
-The two sample FauxAPI keys (PFFAexample01 and PFFAexample02) and their 
-associated secrets in the sample `credentials.ini` file are hard-coded to be
-inoperative, you must create entirely new values before your client scripts
-will be able to issue commands to FauxAPI.
-
-API authentication itself is performed on a per-call basis with the auth value 
-inserted as an additional `fauxapi-auth` HTTP request header, it can be 
-calculated as such:-
-```
-    fauxapi-auth: <apikey>:<timestamp>:<nonce>:<hash>
-
-    For example:-
-    fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55
-```
-
-Where the `<hash>` value is calculated like so:-
-```
-    <hash> = sha256(<apisecret><timestamp><nonce>)
-```
-
-This is all handled in the [client libraries](#user-content-clientlibraries) 
-provided, but as can be seen it is relatively easy to implement even in a Bash 
-shell script - indeed a Bash include library `fauxapi_lib.sh` is provided that 
-does this for you.
-
-NB: Make sure the client side clock is within 60 seconds of the pfSense host 
-clock else the auth token values calculated by the client will not be valid - 60 
-seconds seems tight, however, provided you are using NTP to look after your 
-system time it's quite unlikely to cause issues - happy to receive feedback 
-about this.
-
----
-
 <a name="clientlibraries"></a>
 ### Client libraries
 
@@ -156,6 +115,47 @@ just the entire system configuration as with the Bash library.
 A PHP client does not yet exist, it should be fairly easy to develop by 
 observing the Bash and Python examples - if you do please submit it as a github 
 pull request, there are no doubt others that will appreciate a PHP interface.
+
+---
+
+### API Authentication
+A deliberate design decision to decouple FauxAPI authentication from both the 
+pfSense user authentication and the pfSense `config.xml` system.  This was done 
+to limit the possibility of an accidental API change that removes access to the 
+host.  It also seems more prudent to cause an API user to manually edit the 
+FauxAPI `credentials.ini` file located at `/etc/fauxapi/credentials.ini` - happy 
+to receive feedback about this.
+
+The two sample FauxAPI keys (PFFAexample01 and PFFAexample02) and their 
+associated secrets in the sample `credentials.ini` file are hard-coded to be
+inoperative, you must create entirely new values before your client scripts
+will be able to issue commands to FauxAPI.
+
+API authentication itself is performed on a per-call basis with the auth value 
+inserted as an additional `fauxapi-auth` HTTP request header, it can be 
+calculated as such:-
+```
+    fauxapi-auth: <apikey>:<timestamp>:<nonce>:<hash>
+
+    For example:-
+    fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55
+```
+
+Where the `<hash>` value is calculated like so:-
+```
+    <hash> = sha256(<apisecret><timestamp><nonce>)
+```
+
+This is all handled in the [client libraries](#user-content-clientlibraries) 
+provided, but as can be seen it is relatively easy to implement even in a Bash 
+shell script - indeed a Bash include library `fauxapi_lib.sh` is provided that 
+does this for you.
+
+NB: Make sure the client side clock is within 60 seconds of the pfSense host 
+clock else the auth token values calculated by the client will not be valid - 60 
+seconds seems tight, however, provided you are using NTP to look after your 
+system time it's quite unlikely to cause issues - happy to receive feedback 
+about this.
 
 ---
 
