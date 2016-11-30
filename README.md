@@ -295,7 +295,7 @@ Hint: use `jq` to obtain the config only, as such:-
         -X GET \
         --silent \
         --insecure \
-        --header "fauxapi-auth: <fauxapi_auth>" \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
         "https://<fauxapi_host>/fauxapi/v1/?action=config_backup"
 ```
 
