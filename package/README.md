@@ -38,3 +38,6 @@ Menu items... done.
 Writing configuration... done.
 [2.3.2-RELEASE][root@pfsensedev]/root: 
 ```
+
+## FauxAPI - Menu
+![alt text](README-menu-screenshot-01.png "menu-screenshot")
