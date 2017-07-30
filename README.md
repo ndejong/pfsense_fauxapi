@@ -46,6 +46,27 @@ to, while no such cases have been observed (yet) there is nothing stopping this
 from occurring and thus package or system upgrades could cause breaking 
 configuration format changes.
 
+A common source of confusion is the <span style="color:blue">requirement to pass 
+the *FULL* configuration into the `config_set` call not just the portion of the 
+configuration you wish to adjust </span> - the reason for this is that FauxAPI
+is a utility that interfaces with the pfSense `config.xml` file without 
+attempting to reach into the pfSense control layers (function calls) too much.
+This is a deliberate position and helps make FauxAPI a low maintenance project 
+that should keep working with pfSense as new versions evolve.  Part of the real 
+challenge for pfSense (as at 2.3.x) seems to be the lack of a well structured 
+application control layer under the hood.  To be clear, pfSense is a very 
+awesome project it's just that writing well structured API might mean this 
+project having to cast opinions about what's appropriate for a pfSense API 
+and doing so does not seem appropriate - happy to hear feedback about this.
+
+Because FauxAPI is a utility that interfaces with the pfSense `config.xml` there
+are some cases where reloading the configuration file is not enough and you 
+might need to "tickle" pfSense a little more to do what you want.  Good example
+cases of this are getting newly defined network interfaces or VLANs to be 
+recognized.  These situations are easily handled by doing a `send_event` with
+the payload `interface reload all` - see the example included below or refer
+to a the resolution to a user issue here - https://github.com/ndejong/pfsense_fauxapi/issues/10
+
 ---
 
 ### Versions and Testing
@@ -149,6 +170,31 @@ This is all handled in the [client libraries](#user-content-clientlibraries)
 provided, but as can be seen it is relatively easy to implement even in a Bash 
 shell script - indeed a Bash include library `fauxapi_lib.sh` is provided that 
 does this for you.
+
+Getting the API credentials right seems to be a common source of confusion in
+getting started with FauxAPI because the rules about valid API keys and secret 
+values are pedantic to help make ensure poor choices are not made.
+
+The API key+secret values you create for yourself in `/etc/fauxapi/credentials.ini`
+have the following rules:-
+ - <apikey_value> and <apisecret_value> may have alphanumeric chars ONLY!
+ - <apikey_value> MUST start with the prefix PFFA (pfSense Faux API)
+ - <apikey_value> MUST be >= 12 chars AND <= 40 chars in total length
+ - <apisecret_value> MUST be >= 40 chars AND <= 128 chars in length
+ - you must not use the sample key/secret in the `credentials.ini` since they
+   are hard coded to fail.
+
+Consider using the following shell commands to generate valid values:-
+
+apikey_value
+```bash
+    echo PPFA`head /dev/urandom | base64 -w0 | tr -d /+= | head -c 32`
+```
+
+apisecret_value
+```bash
+    echo `head /dev/urandom | base64 -w0 | tr -d /+= | head -c 60`
+```
 
 NB: Make sure the client side clock is within 60 seconds of the pfSense host 
 clock else the auth token values calculated by the client will not be valid - 60 
@@ -394,6 +440,27 @@ Hint: use `jq` to obtain the config only, as such:-
         --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
         --header "Content-Type: application/json" \
         --data "[\"filter reload\"]" \
+        "https://192.168.10.10/fauxapi/v1/?action=send_event"
+```
+
+*Example Response*
+```javascript
+    {
+      "callid": "58312bb3398bc",
+      "action": "send_event",
+      "message": "ok"
+    }
+```
+
+*Example Request*
+```bash
+    curl \
+        -X POST \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
+        --header "Content-Type: application/json" \
+        --data "[\"interface reload all\"]" \
         "https://192.168.10.10/fauxapi/v1/?action=send_event"
 ```
 
