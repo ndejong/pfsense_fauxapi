@@ -32,41 +32,44 @@ FauxapiLib = FauxapiLib(fauxapi_host, fauxapi_apikey, fauxapi_apisecret, debug=F
 
 
 # config get
-#config = FauxapiLib.config_get()
+config = FauxapiLib.config_get()
+config_filter = FauxapiLib.config_get('filter')  # get 'filter' section only
 
 # config set
-#pprint.pprint(FauxapiLib.config_set(config))
+pprint.pprint(FauxapiLib.config_set(config))
+
+# config set just the section under 'aliases'
+config_aliases = FauxapiLib.config_get('aliases')
+pprint.pprint(FauxapiLib.config_set(config_aliases, 'aliases'))
 
 # config reload
-#pprint.pprint(FauxapiLib.config_reload())
+pprint.pprint(FauxapiLib.config_reload())
 
 # config backuo
-#pprint.pprint(FauxapiLib.config_backup())
+pprint.pprint(FauxapiLib.config_backup())
 
 # config_backup_list
-#pprint.pprint(FauxapiLib.config_backup_list())
+pprint.pprint(FauxapiLib.config_backup_list())
 
 # config_restore
 #pprint.pprint(FauxapiLib.config_restore('/cf/conf/backup/config-1480337444.xml'))
 
-# send_event
-#pprint.pprint(FauxapiLib.send_event('filter reload'))
-
-# system reboot
-#pprint.pprint(FauxapiLib.system_reboot())
-
 # system_stats
 pprint.pprint(FauxapiLib.system_stats())
 
+# gateway_status
+pprint.pprint(FauxapiLib.gateway_status())
+
+# send_event
+#pprint.pprint(FauxapiLib.send_event('filter reload'))
+pprint.pprint(FauxapiLib.send_event('interface all reload'))
+
 # rule_get
-#pprint.pprint(FauxapiLib.rule_get(1))
+#pprint.pprint(FauxapiLib.rule_get())
+pprint.pprint(FauxapiLib.rule_get(5))
 
-# config get just the section under 'filter'
-#config_filter = FauxapiLib.config_get('filter')
-#pprint.pprint(config_filter)
+# alias_update_urltables
+pprint.pprint(FauxapiLib.alias_update_urltables())
 
-# config set just the section under 'aliases'
-#config_aliases = FauxapiLib.config_get('aliases')
-#pprint.pprint(FauxapiLib.config_set(config_aliases, 'aliases'))
-
-
+# system reboot
+#pprint.pprint(FauxapiLib.system_reboot())

@@ -257,7 +257,7 @@ class fauxApiActions {
     /**
      * rule_get()
      * 
-     * @param type $__args
+     * @param array $__args
      * @return boolean
      */
     public function rule_get($__args) {
@@ -277,6 +277,51 @@ class fauxApiActions {
         $this->response->message = 'ok';
         $this->response->data = array(
             'rules' => $rules
+        );
+        return TRUE;
+    }
+    
+    /**
+     * alias_update_urltables()
+     * 
+     * @param array $__args
+     * @return boolean
+     */
+    public function alias_update_urltables($__args) {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $table = NULL;
+        extract($__args, EXTR_IF_EXISTS);
+        
+        $updates = $this->PfsenseInterface->alias_update_urltables($table);
+        
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'updates' => $updates
+        );
+        return TRUE;
+    }
+    
+    /**
+     * gateway_status()
+     * 
+     * @return boolean
+     */
+    public function gateway_status() {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $gateway_status = $this->PfsenseInterface->gateway_status();
+        
+        if (empty($gateway_status)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get gateway status';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'gateway_status' => $gateway_status
         );
         return TRUE;
     }

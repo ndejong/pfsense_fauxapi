@@ -51,16 +51,24 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 #fauxapi_config_backup_list ${fauxapi_host}
 
 # config_restore
-#fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1479615086.xml
+# fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1481190790.xml
+
+# fauxapi_system_stats
+#fauxapi_system_stats ${fauxapi_host}
+
+# gateway_status
+fauxapi_gateway_status ${fauxapi_host}
 
 # send_event
 #fauxapi_send_event ${fauxapi_host} 'filter reload'
+#fauxapi_send_event ${fauxapi_host} 'interface all reload'
+
+# rule_get
+#fauxapi_rule_get ${fauxapi_host}
+#fauxapi_rule_get ${fauxapi_host} 5
+
+# alias_update_urltables
+#fauxapi_alias_update_urltables ${fauxapi_host}
 
 # system_reboot
 # fauxapi_system_reboot ${fauxapi_host}
-
-# fauxapi_system_stats
-fauxapi_system_stats ${fauxapi_host}
-
-# rule_get
-#fauxapi_rule_get ${fauxapi_host} 1

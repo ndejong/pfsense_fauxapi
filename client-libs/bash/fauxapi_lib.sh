@@ -139,3 +139,24 @@ fauxapi_rule_get() {
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=rule_get&rule_number=${fauxapi_rule_number}&__debug=${fauxapi_debug}"`
 }
+
+fauxapi_alias_update_urltables() {
+    fauxapi_host=${1}
+    fauxapi_table=${2}
+    echo `curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: ${fauxapi_auth}" \
+        "https://${fauxapi_host}/fauxapi/v1/?action=alias_update_urltables&table=${fauxapi_table}&__debug=${fauxapi_debug}"`
+}
+
+fauxapi_gateway_status() {
+    fauxapi_host=${1}
+    echo `curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: ${fauxapi_auth}" \
+        "https://${fauxapi_host}/fauxapi/v1/?action=gateway_status&__debug=${fauxapi_debug}"`
+}

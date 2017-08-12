@@ -1,4 +1,4 @@
-# FauxAPI - v1
+# FauxAPI - v1.1
 A REST API interface for pfSense to facilitate dev-ops:-
  - https://github.com/ndejong/pfsense_fauxapi
 
@@ -46,6 +46,22 @@ to, while no such cases have been observed (yet) there is nothing stopping this
 from occurring and thus package or system upgrades could cause breaking 
 configuration format changes.
 
+A common source of confusion is the <span style="color:blue">requirement to pass 
+the *FULL* configuration into the `config_set` call not just the portion of the 
+configuration you wish to adjust </span> - the reason for this is that FauxAPI
+is a utility that interfaces with the pfSense `config.xml` file without 
+attempting to reach into the pfSense control layers (function calls) too much.
+This is a deliberate position and helps make FauxAPI a low maintenance project 
+that should keep working with pfSense as new versions evolve.
+
+Because FauxAPI is a utility that interfaces with the pfSense `config.xml` there
+are some cases where reloading the configuration file is not enough and you 
+might need to "tickle" pfSense a little more to do what you want.  Good example
+cases of this are getting newly defined network interfaces or VLANs to be 
+recognized.  These situations are easily handled by doing a `send_event` with
+the payload `interface reload all` - see the example included below or refer
+to a the resolution to a user issue here - https://github.com/ndejong/pfsense_fauxapi/issues/10
+
 ---
 
 ### Versions and Testing
@@ -65,6 +81,16 @@ The FauxAPI REST call path has been name-spaced as v1 to accommodate future
 situations that may introduce breaking REST interface changes, in the event this
 occurs a new v2 release would be possible without breaking existing v1 
 implementations.
+
+### Releases
+#### v1.0 - 2016-11-20
+ - initial release
+
+#### v1.1 - 2017-08-12
+ - 2x new API calls `alias_update_urltables` and `get_gateway_status`
+ - update documentation to address common points of confusion, expecially the 
+   requirement to provide the _full_ config file not just the portion to be updated.
+ - testing against pfSense 2.3.3
 
 ---
 
@@ -150,6 +176,31 @@ provided, but as can be seen it is relatively easy to implement even in a Bash
 shell script - indeed a Bash include library `fauxapi_lib.sh` is provided that 
 does this for you.
 
+Getting the API credentials right seems to be a common source of confusion in
+getting started with FauxAPI because the rules about valid API keys and secret 
+values are pedantic to help make ensure poor choices are not made.
+
+The API key+secret values you create for yourself in `/etc/fauxapi/credentials.ini`
+have the following rules:-
+ - <apikey_value> and <apisecret_value> may have alphanumeric chars ONLY!
+ - <apikey_value> MUST start with the prefix PFFA (pfSense Faux API)
+ - <apikey_value> MUST be >= 12 chars AND <= 40 chars in total length
+ - <apisecret_value> MUST be >= 40 chars AND <= 128 chars in length
+ - you must not use the sample key/secret in the `credentials.ini` since they
+   are hard coded to fail.
+
+Consider using the following shell commands to generate valid values:-
+
+#### apikey_value
+```bash
+    echo PPFA`head /dev/urandom | base64 -w0 | tr -d /+= | head -c 32`
+```
+
+#### apisecret_value
+```bash
+    echo `head /dev/urandom | base64 -w0 | tr -d /+= | head -c 60`
+```
+
 NB: Make sure the client side clock is within 60 seconds of the pfSense host 
 clock else the auth token values calculated by the client will not be valid - 60 
 seconds seems tight, however, provided you are using NTP to look after your 
@@ -225,6 +276,8 @@ Hint: use `jq` to obtain the config only, as such:-
 ### `/fauxapi/v1/?action=config_set`
  - Sets a full system configuration and (by default) takes a system config
    backup and causes the system config to be reloaded once successfully written.
+   NB: be sure to pass the *FULL* system configuration in here, not just the 
+   piece you wish to adjust!
  - HTTP: **`POST`**
  - Params:
     - `do_backup` (optional, default = true)
@@ -376,62 +429,6 @@ Hint: use `jq` to obtain the config only, as such:-
 ```
 
 
-### `/fauxapi/v1/?action=send_event`
- - Performs a pfSense "send_event" command to cause various pfSense system 
-   actions, the following standard pfSense send_event combinations are permitted:-
-    - filter: reload, sync
-    - interface: all, newip, reconfigure
-    - service: reload, restart, sync
- - HTTP: **`POST`**
- - Params: none
-
-*Example Request*
-```bash
-    curl \
-        -X POST \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        --header "Content-Type: application/json" \
-        --data "[\"filter reload\"]" \
-        "https://192.168.10.10/fauxapi/v1/?action=send_event"
-```
-
-*Example Response*
-```javascript
-    {
-      "callid": "58312bb3398bc",
-      "action": "send_event",
-      "message": "ok"
-    }
-```
-
-
-### `/fauxapi/v1/?action=system_reboot`
- - Just as it says, reboots the system.
- - HTTP: **`GET`**
- - Params: none
-
-*Example Request*
-```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=system_reboot"
-```
-
-*Example Response*
-```javascript
-    {
-      "callid": "58312bb3487ac",
-      "action": "system_reboot",
-      "message": "ok"
-    }
-```
-
-
 ### `/fauxapi/v1/?action=system_stats`
  - Returns various system stats.
  - HTTP: **`GET`**
@@ -478,6 +475,75 @@ Hint: use `jq` to obtain the config only, as such:-
 ```
 
 
+### `/fauxapi/v1/?action=gateway_status`
+ - Returns gateway status data.
+ - HTTP: **`GET`**
+ - Params: none
+
+*Example Request*
+```bash
+    curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
+        "https://192.168.10.10/fauxapi/v1/?action=gateway_status"
+```
+
+*Example Response*
+```javascript
+    {
+      "callid": "598ecf3e7011e",
+      "action": "gateway_status",
+      "message": "ok",
+      "data": {
+        "gateway_status": {
+          "10.22.33.1": {
+            "monitorip": "8.8.8.8",
+            "srcip": "10.22.33.100",
+            "name": "GW_WAN",
+            "delay": "4.415ms",
+            "stddev": "3.239ms",
+            "loss": "0.0%",
+            "status": "none"
+          }
+        }
+      }
+    }
+```
+
+
+### `/fauxapi/v1/?action=send_event`
+ - Performs a pfSense "send_event" command to cause various pfSense system 
+   actions, the following standard pfSense send_event combinations are permitted:-
+    - filter: reload, sync
+    - interface: all, newip, reconfigure
+    - service: reload, restart, sync
+ - HTTP: **`POST`**
+ - Params: none
+
+*Example Request*
+```bash
+    curl \
+        -X POST \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
+        --header "Content-Type: application/json" \
+        --data "[\"interface reload all\"]" \
+        "https://192.168.10.10/fauxapi/v1/?action=send_event"
+```
+
+*Example Response*
+```javascript
+    {
+      "callid": "58312bb3398bc",
+      "action": "send_event",
+      "message": "ok"
+    }
+```
+
+
 ### `/fauxapi/v1/?action=rule_get`
  - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command 
    on the pfSense host.  An empty rule_number parameter causes all rules to be
@@ -493,30 +559,94 @@ Hint: use `jq` to obtain the config only, as such:-
         --silent \
         --insecure \
         --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=rule_get&rule_number=1"
+        "https://192.168.10.10/fauxapi/v1/?action=rule_get&rule_number=5"
 ```
 
 *Example Response*
 ```javascript
-{
-  "callid": "583c279b56958",
-  "action": "rule_get",
-  "message": "ok",
-  "data": {
-    "rules": [
-      {
-        "rule": "anchor \"openvpn/*\" all",
-        "evaluations": "14134",
-        "packets": "0",
-        "bytes": "0",
-        "states": "0",
-        "inserted": "21188",
-        "statecreations": "0"
+    {
+      "callid": "583c279b56958",
+      "action": "rule_get",
+      "message": "ok",
+      "data": {
+        "rules": [
+          {
+            "rule": "anchor \"openvpn/*\" all",
+            "evaluations": "14134",
+            "packets": "0",
+            "bytes": "0",
+            "states": "0",
+            "inserted": "21188",
+            "statecreations": "0"
+          }
+        ]
       }
-    ]
-  }
-}
+    }
 ```
+
+
+### `/fauxapi/v1/?action=alias_update_urltables`
+ - Causes the pfSense host to immediately update any urltable alias entries
+   from their (remote) source URLs.  Optionally update just one table by 
+   specifying the table name, else all tables are updated.
+ - HTTP: **`GET`**
+ - Params:
+    - `table` (optional, default = null)
+
+*Example Request*
+```bash
+    curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
+        "https://192.168.10.10/fauxapi/v1/?action=alias_update_urltables"
+```
+
+*Example Response*
+```javascript
+    {
+      "callid": "598ec756b4d09",
+      "action": "alias_update_urltables",
+      "message": "ok",
+      "data": {
+        "updates": {
+          "bruteforceblocker": {
+            "url": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset",
+            "status": [
+              "no changes."
+            ]
+          }
+        }
+      }
+    }
+```
+
+
+### `/fauxapi/v1/?action=system_reboot`
+ - Just as it says, reboots the system.
+ - HTTP: **`GET`**
+ - Params: none
+
+*Example Request*
+```bash
+    curl \
+        -X GET \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
+        "https://192.168.10.10/fauxapi/v1/?action=system_reboot"
+```
+
+*Example Response*
+```javascript
+    {
+      "callid": "58312bb3487ac",
+      "action": "system_reboot",
+      "message": "ok"
+    }
+```
+
 
 ---
 

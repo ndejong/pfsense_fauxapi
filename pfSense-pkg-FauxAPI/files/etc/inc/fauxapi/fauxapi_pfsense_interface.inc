@@ -482,5 +482,68 @@ class fauxApiPfsenseInterface {
         return $rules;
     }
     
+    /**
+     * alias_update_urltables()
+     * 
+     * @param string $table
+     * @return array
+     * @note based on /etc/rc.update_urltables
+     */
+    public function alias_update_urltables($table=NULL) {
+        fauxApiLogger::debug(__METHOD__, array(
+            'table' => $table
+        ));
+        
+        include_once '/etc/inc/config.inc';
+        include_once '/etc/inc/util.inc';
+        include_once '/etc/inc/pfsense-utils.inc';
+        
+        $config = $this->config_load($this->config_default_filename);
 
+        $urltables = array();
+        foreach ($config['aliases']['alias'] as $alias) {
+            if (preg_match('/urltable/i', $alias['type'])) {
+                $urltables[$alias['name']] = array(
+                    'url'  => $alias['url'],
+                    'type' => $alias['type'],
+                    'updatefreq' => $alias['updatefreq']
+                );
+            }
+        }
+        
+        $updates = array();
+        foreach ($urltables as $urltablename => $urltable) {
+            $updates[$urltablename] = array('url' => $urltable['url']);
+            if (empty($table) || $table === $urltablename) {
+                $result = \process_alias_urltable(
+                    $urltablename, $urltable['type'], $urltable['url'], $urltable['updatefreq'], TRUE
+                );
+                if ((int)$result === 1) {
+                    $exec_return = '';
+                    if ($urltable['type'] === 'urltable') {
+                        exec("/sbin/pfctl -t " . escapeshellarg($urltablename) . " -T replace -f /var/db/aliastables/" . escapeshellarg($urltablename) . ".txt 2>&1", $exec_return);
+                    }
+                    $updates[$urltablename]['status'] = $exec_return;
+                    fauxApiLogger::debug('Updated '.$urltablename.' content from '.$urltable['url'], $exec_return);
+                }
+            }
+        }
+        return $updates;
+    }
+    
+    /**
+     * gateway_status()
+     * 
+     * @return array
+     * @note calls pfsense return_gateways_status() from gwlb.inc
+     */
+    public function gateway_status() {
+        fauxApiLogger::debug(__METHOD__);
+        
+        include_once '/etc/inc/gwlb.inc';
+        
+        $byname = false;
+        return \return_gateways_status($byname);
+    }
+    
 }

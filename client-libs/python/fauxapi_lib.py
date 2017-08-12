@@ -113,10 +113,25 @@ class FauxapiLib:
             raise FauxapiLibException('unable to complete system_stats() request', json.loads(res.text))
         return json.loads(res.text)
 
+    def gateway_status(self):
+        res = self._api_request('GET', 'gateway_status')
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete gateway_status() request', json.loads(res.text))
+        return json.loads(res.text)
+
     def rule_get(self, rule_number=None):
         res = self._api_request('GET', 'rule_get', params={'rule_number': rule_number})
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete rule_get() request', json.loads(res.text))
+        return json.loads(res.text)
+
+    def alias_update_urltables(self, table=None):
+        if table is None:
+            res = self._api_request('GET', 'alias_update_urltables')
+        else:
+            res = self._api_request('GET', 'alias_update_urltables', params={'table': table})
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete alias_update_urltables() request', json.loads(res.text))
         return json.loads(res.text)
 
     def _api_request(self, method, action, params={}, data=None):
