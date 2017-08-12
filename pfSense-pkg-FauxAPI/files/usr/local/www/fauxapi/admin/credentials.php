@@ -67,7 +67,7 @@ function fauxapi_load_credentials_ini($filename) {
                     foreach(fauxapi_load_credentials_ini($fauxapi_credentials_ini_file) as $credential) {
                         print '<tr>';
                         print '<td>'.$credential['apikey'].'</td>';
-                        print '<td><div style="font-family:monospace;"> ['.$fauxapi_credentials_ini_file.'] </div></td>';
+                        print '<td><div style="font-family:monospace;"> [see file: '.$fauxapi_credentials_ini_file.'] </div></td>';
                         print '<td>'.$credential['apiowner'].'</td>';
                         print '</tr>';
                     }
