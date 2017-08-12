@@ -65,11 +65,11 @@ to a the resolution to a user issue here - https://github.com/ndejong/pfsense_fa
 ---
 
 ### Versions and Testing
-The FauxAPI has been developed against pfSense 2.3.2 and has not (yet) been 
-tested against 2.3.0 or 2.3.1 or the currently in development 2.4 releases.  Further, 
-it it understood that package packaging changed between pfSense 2.2 and 2.3 so 
-it seems unlikely that it will work with 2.2 - very happy to accept github pull 
-requests to resolve if anyone cares to provide.
+The FauxAPI has been developed against pfSense 2.3.2 and 2.3.3 - it has not (yet) 
+been tested against 2.3.0 or 2.3.1 or the currently in development 2.4 releases.  
+Further, it it understood that package packaging changed between pfSense 2.2 and 
+2.3 so it seems unlikely that it will work with 2.2 - very happy to accept 
+github pull requests to resolve if anyone cares to provide.
 
 Testing is not (yet) thorough, there are however two client side test scripts 
 (1x Bash, 1x Python) that test all possible server side actions.  The tests only 
@@ -90,7 +90,7 @@ implementations.
  - 2x new API calls `alias_update_urltables` and `get_gateway_status`
  - update documentation to address common points of confusion, expecially the 
    requirement to provide the _full_ config file not just the portion to be updated.
- - testing against pfSense 2.3.3
+ - testing against pfSense 2.3.2 and 2.3.3
 
 ---
 

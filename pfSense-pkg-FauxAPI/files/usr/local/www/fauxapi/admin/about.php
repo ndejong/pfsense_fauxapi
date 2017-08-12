@@ -94,11 +94,11 @@ to a the resolution to a user issue here - <a href="https://github.com/ndejong/p
 <hr>
 <h3>
 <a id="user-content-versions-and-testing" class="anchor" href="#versions-and-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Versions and Testing</h3>
-<p>The FauxAPI has been developed against pfSense 2.3.2 and has not (yet) been
-tested against 2.3.0 or 2.3.1 or the currently in development 2.4 releases.  Further,
-it it understood that package packaging changed between pfSense 2.2 and 2.3 so
-it seems unlikely that it will work with 2.2 - very happy to accept github pull
-requests to resolve if anyone cares to provide.</p>
+<p>The FauxAPI has been developed against pfSense 2.3.2 and 2.3.3 - it has not (yet)
+been tested against 2.3.0 or 2.3.1 or the currently in development 2.4 releases.<br>
+Further, it it understood that package packaging changed between pfSense 2.2 and
+2.3 so it seems unlikely that it will work with 2.2 - very happy to accept
+github pull requests to resolve if anyone cares to provide.</p>
 <p>Testing is not (yet) thorough, there are however two client side test scripts
 (1x Bash, 1x Python) that test all possible server side actions.  The tests only
 test for success and not all possible failure modes.  This said, many failure
@@ -122,7 +122,7 @@ implementations.</p>
 </li>
 <li>update documentation to address common points of confusion, expecially the
 requirement to provide the <em>full</em> config file not just the portion to be updated.</li>
-<li>testing against pfSense 2.3.3</li>
+<li>testing against pfSense 2.3.2 and 2.3.3</li>
 </ul>
 <hr>
 <p><a name="user-content-clientlibraries"></a></p>
