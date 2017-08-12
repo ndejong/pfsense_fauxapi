@@ -193,7 +193,7 @@ Consider using the following shell commands to generate valid values:-
 
 #### apikey_value
 ```bash
-    echo PPFA`head /dev/urandom | base64 -w0 | tr -d /+= | head -c 32`
+    echo PPFA`head /dev/urandom | base64 -w0 | tr -d /+= | head -c 20`
 ```
 
 #### apisecret_value
