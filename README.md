@@ -100,7 +100,7 @@ are provided in the file `SHA256SUMS`
  - initial release
 
 #### v1.1 - 2017-08-12
- - 2x new API calls `alias_update_urltables` and `get_gateway_status`
+ - 2x new API calls `alias_update_urltables` and `gateway_status`
  - update documentation to address common points of confusion, expecially the 
    requirement to provide the _full_ config file not just the portion to be updated.
  - testing against pfSense 2.3.2 and 2.3.3
@@ -665,7 +665,7 @@ Hint: use `jq` to obtain the config only, as such:-
 
 ### FauxAPI License
 ```
-Copyright 2016 Nicholas de Jong  
+Copyright 2017 Nicholas de Jong  
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

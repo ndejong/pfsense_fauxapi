@@ -109,6 +109,15 @@ situations that may introduce breaking REST interface changes, in the event this
 occurs a new v2 release would be possible without breaking existing v1
 implementations.</p>
 <h3>
+<a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
+<p>Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to
+install manually as shown:-</p>
+<div class="highlight highlight-source-shell"><pre>curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1.txz
+pkg install pfSense-pkg-FauxAPI-1.1.txz</pre></div>
+<p>Installation and de-installation examples can be found <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/package">here</a></p>
+<p>NB: take the time to ensure the package file SHA256 checksum is correct, these
+are provided in the file <code>SHA256SUMS</code></p>
+<h3>
 <a id="user-content-releases" class="anchor" href="#releases" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Releases</h3>
 <h4>
 <a id="user-content-v10---2016-11-20" class="anchor" href="#v10---2016-11-20" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.0 - 2016-11-20</h4>
@@ -118,7 +127,7 @@ implementations.</p>
 <h4>
 <a id="user-content-v11---2017-08-12" class="anchor" href="#v11---2017-08-12" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.1 - 2017-08-12</h4>
 <ul>
-<li>2x new API calls <code>alias_update_urltables</code> and <code>get_gateway_status</code>
+<li>2x new API calls <code>alias_update_urltables</code> and <code>gateway_status</code>
 </li>
 <li>update documentation to address common points of confusion, expecially the
 requirement to provide the <em>full</em> config file not just the portion to be updated.</li>
@@ -645,7 +654,7 @@ specifying the table name, else all tables are updated.</li>
 <hr>
 <h3>
 <a id="user-content-fauxapi-license" class="anchor" href="#fauxapi-license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI License</h3>
-<pre><code>Copyright 2016 Nicholas de Jong  
+<pre><code>Copyright 2017 Nicholas de Jong  
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
