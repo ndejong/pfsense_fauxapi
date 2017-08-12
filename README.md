@@ -90,7 +90,7 @@ curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/pack
 pkg install pfSense-pkg-FauxAPI-1.1.txz
 ```
 
-Installation and de-installation examples can be found [here|https://github.com/ndejong/pfsense_fauxapi/tree/master/package]
+Installation and de-installation examples can be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package)
 
 NB: take the time to ensure the package file SHA256 checksum is correct, these
 are provided in the file `SHA256SUMS`
