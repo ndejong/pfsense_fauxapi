@@ -84,7 +84,7 @@ class fauxApiActions {
         // save this new config
         if (!$this->PfsenseInterface->config_save($this->action_input_data, $do_backup, $do_reload)) {
             $this->response->http_code = 500;
-            $this->response->message = 'failed to save new config';
+            $this->response->message = 'failed to set new config';
             return FALSE;
         }
         $this->response->http_code = 200;
@@ -93,6 +93,23 @@ class fauxApiActions {
             'do_backup' => $do_backup, 
             'do_reload' => $do_reload);
         return TRUE;
+    }
+    
+    /**
+     * config_patch()
+     * 
+     * @param array $__args
+     * @return boolean
+     */
+    public function config_patch($__args) {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $do_backup = TRUE;
+        $do_reload = TRUE;
+        $path = NULL;
+        $value = NULL;
+        extract($__args, EXTR_IF_EXISTS);
+        
     }
     
     /**
@@ -322,6 +339,36 @@ class fauxApiActions {
         $this->response->message = 'ok';
         $this->response->data = array(
             'gateway_status' => $gateway_status
+        );
+        return TRUE;
+    }
+
+    /**
+     * function_call()
+     * 
+     * @return boolean
+     */
+    public function function_call($__args) {
+        fauxApiLogger::debug(__METHOD__);
+
+        $include = NULL;
+        $function = NULL;
+        $args = NULL;
+        extract($__args, EXTR_IF_EXISTS);
+        
+        try {
+            $return = $this->PfsenseInterface->function_call($include, $function, $args);
+        } catch (Exception $e) {
+            $this->response->http_code = 500;
+            $this->response->message = 'problem calling function';
+            $this->response->error = array('error' => $e);
+            return FALSE;
+        }
+        
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'return' => $return
         );
         return TRUE;
     }

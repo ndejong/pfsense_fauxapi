@@ -546,4 +546,21 @@ class fauxApiPfsenseInterface {
         return \return_gateways_status($byname);
     }
     
+    /**
+     * function_call()
+     * 
+     * @return array
+     * @note calls any (or most) functions available in pfSense if listed
+     */
+    public function function_call($include, $function, $args=array()) {
+        fauxApiLogger::debug(__METHOD__, array(
+            'include' => $include,
+            'function' => $function,
+            'args' => $args
+        ));
+        
+        throw('todo :: not yet implemented!');
+    }
+
+    
 }
