@@ -100,7 +100,6 @@ class fauxApiActions {
      * 
      * @param array $__args
      * @return boolean
-     */
     public function config_patch($__args) {
         fauxApiLogger::debug(__METHOD__);
         
@@ -111,6 +110,7 @@ class fauxApiActions {
         extract($__args, EXTR_IF_EXISTS);
         
     }
+     */
     
     /**
      * config_reload()

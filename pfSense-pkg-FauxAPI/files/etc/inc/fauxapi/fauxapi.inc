@@ -127,8 +127,8 @@ class fauxApi {
             'data' => NULL
         );
         
-        // confirm request is authenticated before we get too invloved with it
-        if (TRUE !== $this->Auth->is_auth()) {
+        // confirm request is authenticated before we get too involved with it
+        if (TRUE !== $this->Auth->is_authenticated()) {
             $checked->http_code = 401;
             $checked->message = 'authentication failed';
             fauxApiLogger::error($checked->message);
@@ -155,6 +155,14 @@ class fauxApi {
             fauxApiLogger::error($checked->message, array(
                 'checked_action' => $checked->action
             ));
+            return $checked;
+        }
+        
+        // check the request is authorized to be performed
+        if (TRUE !== $this->Auth->is_authorized($checked->action)) {
+            $checked->http_code = 401;
+            $checked->message = 'action authorization failed';
+            fauxApiLogger::error($checked->message);
             return $checked;
         }
         
