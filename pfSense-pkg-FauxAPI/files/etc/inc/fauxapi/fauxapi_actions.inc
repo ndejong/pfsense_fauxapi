@@ -358,7 +358,7 @@ class fauxApiActions {
         
         try {
             $return = $this->PfsenseInterface->function_call($include, $function, $args);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->http_code = 500;
             $this->response->message = 'problem calling function';
             $this->response->error = array('error' => $e);

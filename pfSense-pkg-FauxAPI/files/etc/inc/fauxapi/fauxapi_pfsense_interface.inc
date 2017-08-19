@@ -24,6 +24,7 @@ if (!defined('FAUXAPI_CALLID')) { echo 'FAUXAPI_CALLID missing'; exit; };
 include_once '/etc/inc/globals.inc';
 include_once '/etc/inc/util.inc';
 include_once '/etc/inc/xmlparse.inc';
+include_once '/etc/inc/notices.inc';
 include_once '/etc/inc/config.lib.inc';
 include_once '/etc/inc/system.inc';
 
@@ -559,7 +560,13 @@ class fauxApiPfsenseInterface {
             'args' => $args
         ));
         
-        throw('todo :: not yet implemented!');
+        throw new \Exception('not yet implemented !!');
+        return array(
+            'include' => $include,
+            'function' => $function,
+            'args' => $args,
+        );
+        
     }
 
     
