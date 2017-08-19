@@ -36,39 +36,39 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 
 # config_get
 # NB: must have the 'jq' binary to process the JSON response easily!
-#fauxapi_config_get ${fauxapi_host} | jq .data.config > /tmp/pfsense-fauxapi.json
+fauxapi_config_get ${fauxapi_host} | jq .data.config > /tmp/pfsense-fauxapi.json
 
 # config_set
 #fauxapi_config_set ${fauxapi_host} /tmp/pfsense-fauxapi.json
 
 # config_reload
-#fauxapi_config_reload ${fauxapi_host}
+fauxapi_config_reload ${fauxapi_host}
 
 # config_backup
-#fauxapi_config_backup ${fauxapi_host}
+fauxapi_config_backup ${fauxapi_host}
 
 # config_backup_list
-#fauxapi_config_backup_list ${fauxapi_host}
+fauxapi_config_backup_list ${fauxapi_host}
 
 # config_restore
-# fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1481190790.xml
+#fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1481190790.xml
 
 # fauxapi_system_stats
-#fauxapi_system_stats ${fauxapi_host}
+fauxapi_system_stats ${fauxapi_host}
 
 # gateway_status
 fauxapi_gateway_status ${fauxapi_host}
 
 # send_event
 #fauxapi_send_event ${fauxapi_host} 'filter reload'
-#fauxapi_send_event ${fauxapi_host} 'interface all reload'
+fauxapi_send_event ${fauxapi_host} 'interface all reload'
 
 # rule_get
 #fauxapi_rule_get ${fauxapi_host}
-#fauxapi_rule_get ${fauxapi_host} 5
+fauxapi_rule_get ${fauxapi_host} 5
 
 # alias_update_urltables
 #fauxapi_alias_update_urltables ${fauxapi_host}
 
 # system_reboot
-# fauxapi_system_reboot ${fauxapi_host}
+#fauxapi_system_reboot ${fauxapi_host}

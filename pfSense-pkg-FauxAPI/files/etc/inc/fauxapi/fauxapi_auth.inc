@@ -143,16 +143,17 @@ class fauxApiAuth {
         $permits = explode(',',str_replace(' ', '', $this->credentials[FAUXAPI_CALLID]['permit']));
         foreach($permits as $permit){
             if(fnmatch($permit, $action)) {
-                fauxApiLogger::debug('permit is fnmatch to action', array(
+                fauxApiLogger::debug('permit allows action', array(
                     'action' => $action,
                     'permit' => $permit,
+                    'permits' => $permits,
                 ));
                 return TRUE;
             }
         }
-        fauxApiLogger::debug('permit NOT fnmatch to action', array(
+        fauxApiLogger::debug('permits do NOT allow action!', array(
             'action' => $action,
-            'permit' => $permit,
+            'permits' => $permits,
         ));
         return FALSE;
     }

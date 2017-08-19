@@ -153,7 +153,7 @@ class fauxApi {
             $checked->http_code = 404;
             $checked->message = 'api action is not defined';
             fauxApiLogger::error($checked->message, array(
-                'checked_action' => $checked->action
+                'action' => $checked->action
             ));
             return $checked;
         }
@@ -162,7 +162,9 @@ class fauxApi {
         if (TRUE !== $this->Auth->is_authorized($checked->action)) {
             $checked->http_code = 401;
             $checked->message = 'action authorization failed';
-            fauxApiLogger::error($checked->message);
+            fauxApiLogger::error($checked->message, array(
+                'action' => $checked->action
+            ));
             return $checked;
         }
         
@@ -193,7 +195,7 @@ class fauxApi {
                 if('true'=== strtolower($arg_value)) {
                     $arg_value = TRUE;
                 }
-                elseif('false' === strtolower($arg_value)) {
+                if('false' === strtolower($arg_value)) {
                     $arg_value = FALSE;
                 }
                 if('__debug' === $arg_key) {
