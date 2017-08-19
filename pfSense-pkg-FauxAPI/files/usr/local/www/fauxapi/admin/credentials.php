@@ -37,8 +37,12 @@ function fauxapi_load_credentials_ini($filename) {
     $credentials = array();
     foreach($ini_credentials as $ini_section => $ini_section_items) {
         if(isset($ini_section_items['secret'])) {
+            if(!isset($ini_section_items['permit'])) {
+                $ini_section_items['permit'] = '&lt;none&gt;';
+            }
             $credentials[] = array(
                 'apikey' => $ini_section,
+                'permits' => explode(',',str_replace(' ', '', $ini_section_items['permit'])),
                 'apiowner' => array_key_exists('owner', $ini_section_items) ? $ini_section_items['owner'] : '-'
             );
         }
@@ -59,6 +63,7 @@ function fauxapi_load_credentials_ini($filename) {
                     <tr>
                         <th>key</th>
                         <th>secret</th>
+                        <th>permits</th>
                         <th>owner</th>
                     </tr>
                 </thead>
@@ -66,9 +71,14 @@ function fauxapi_load_credentials_ini($filename) {
                     <?php
                     foreach(fauxapi_load_credentials_ini($fauxapi_credentials_ini_file) as $credential) {
                         print '<tr>';
-                        print '<td>'.$credential['apikey'].'</td>';
-                        print '<td><div style="font-family:monospace;"> [see file: '.$fauxapi_credentials_ini_file.'] </div></td>';
-                        print '<td>'.$credential['apiowner'].'</td>';
+                        print '<td><div style="font-family:monospace;">'.$credential['apikey'].'</div></td>';
+                        print '<td><div style="font-family:monospace;">[hidden]</div></td>';
+                        print '<td><div style="font-family:monospace;">';
+                        foreach($credential['permits'] as $permit){
+                            print $permit.'<br />';
+                        } 
+                        print '</div></td>';
+                        print '<td><div style="font-family:monospace;">'.$credential['apiowner'].'</div></td>';
                         print '</tr>';
                     }
                     ?>
