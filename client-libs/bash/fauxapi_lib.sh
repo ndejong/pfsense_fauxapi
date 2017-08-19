@@ -160,3 +160,18 @@ fauxapi_gateway_status() {
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=gateway_status&__debug=${fauxapi_debug}"`
 }
+
+fauxapi_function_call() {
+    fauxapi_host=${1}
+    fauxapi_include=${2}
+    fauxapi_function=${3}
+    fauxapi_args=${4}
+    echo `curl \
+        -X POST \
+        --silent \
+        --insecure \
+        --header "fauxapi-auth: ${fauxapi_auth}" \
+        --header "Content-Type: application/json" \
+        --data "${fauxapi_args}" \
+        "https://${fauxapi_host}/fauxapi/v1/?action=function_call&include=${fauxapi_include}&function=${fauxapi_function}&__debug=${fauxapi_debug}"`
+}
