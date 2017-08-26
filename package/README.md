@@ -10,7 +10,7 @@ command to de-install if you need to.
 
 ## Current Version
  - pfSense-pkg-FauxAPI-1.1_2.txz
- - SHA256: 6697d25617b1fe1492fa1dc703e0d4cc918bf0c51a90f541a0508cd13a291c8e
+ - SHA256: edf773ab7a70e7b117125569eb3b495142eefd709b21e22eff8eb957ec7800ab
 
 ## Installation Example
 ```
