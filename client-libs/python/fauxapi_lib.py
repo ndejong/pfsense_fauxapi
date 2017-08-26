@@ -35,7 +35,7 @@ class FauxapiLib:
     debug = None
     apikey = None
     apisecret = None
-    use_snakeoil_https = None
+    use_verified_https = None
 
     def __init__(self, host, apikey, apisecret, use_verified_https=False, debug=False):
         self.proto = 'https'

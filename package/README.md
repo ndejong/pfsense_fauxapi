@@ -9,14 +9,14 @@ installation example below.  It take just 2x commands to install and just 1x
 command to de-install if you need to.
 
 ## Current Version
- - pfSense-pkg-FauxAPI-1.1.txz
- - SHA256: e06079b5ea7ec0dd32612c324e4dec3aa1720adf573a055b060d4f67344be552
+ - pfSense-pkg-FauxAPI-1.1_2.txz
+ - SHA256: edf773ab7a70e7b117125569eb3b495142eefd709b21e22eff8eb957ec7800ab
 
 ## Installation Example
 ```
 2.3.4-RELEASE][root@pfsense]/root: 
-[2.3.4-RELEASE][root@pfsense]/root: curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1.txz
-[2.3.4-RELEASE][root@pfsense]/root: pkg install pfSense-pkg-FauxAPI-1.1.txz
+[2.3.4-RELEASE][root@pfsense]/root: curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1_2.txz
+[2.3.4-RELEASE][root@pfsense]/root: pkg install pfSense-pkg-FauxAPI-1.1_2.txz
 Updating pfSense-core repository catalogue...
 pfSense-core repository is up to date.
 Updating pfSense repository catalogue...
@@ -26,13 +26,13 @@ Checking integrity... done (0 conflicting)
 The following 1 package(s) will be affected (of 0 checked):
 
 New packages to be INSTALLED:
-	pfSense-pkg-FauxAPI: 1.1 [unknown-repository]
+	pfSense-pkg-FauxAPI: 1.1_2 [unknown-repository]
 
 Number of packages to be installed: 1
 
 Proceed with this action? [y/N]: y
-[1/1] Installing pfSense-pkg-FauxAPI-1.1...
-Extracting pfSense-pkg-FauxAPI-1.1: 100%
+[1/1] Installing pfSense-pkg-FauxAPI-1.1_2...
+Extracting pfSense-pkg-FauxAPI-1.1_2: 100%
 Saving updated package information...
 overwrite!
 Loading package configuration... done.
@@ -45,8 +45,8 @@ Writing configuration... done.
 
 ## Uninstallation Example
 ```
-[2.3.4-RELEASE][root@pfsense.xxx.internal]/root: 
-[2.3.4-RELEASE][root@pfsense.xxx.internal]/root: pkg delete pfSense-pkg-FauxAPI
+[2.3.4-RELEASE][root@pfsense]/root: 
+[2.3.4-RELEASE][root@pfsense]/root: pkg delete pfSense-pkg-FauxAPI
 Checking integrity... done (0 conflicting)
 Deinstallation has been requested for the following 1 packages (of 0 packages in the universe):
 
@@ -62,7 +62,7 @@ Menu items... done.
 [1/1] Deleting files for pfSense-pkg-FauxAPI-1.1: 100%
 Removing FauxAPI components...
 Configuration... done.
-[2.3.4-RELEASE][root@pfsense.xxx.internal]/root: 
+[2.3.4-RELEASE][root@pfsense]/root: 
 ```
 
 ## FauxAPI - Menu
