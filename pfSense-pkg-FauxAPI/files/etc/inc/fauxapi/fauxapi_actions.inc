@@ -353,11 +353,14 @@ class fauxApiActions {
 
         $include = NULL;
         $function = NULL;
-        $args = NULL;
         extract($__args, EXTR_IF_EXISTS);
         
         try {
-            $return = $this->PfsenseInterface->function_call($include, $function, $args);
+            $return = $this->PfsenseInterface->function_call(
+                    $include, 
+                    $function, 
+                    $this->action_input_data
+            );
         } catch (\Exception $e) {
             $this->response->http_code = 500;
             $this->response->message = 'problem calling function';

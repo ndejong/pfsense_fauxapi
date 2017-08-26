@@ -35,6 +35,7 @@ class fauxApiPfsenseInterface {
     public $config_backup_path = '/cf/conf/backup';
     public $config_backup_cache = '/cf/conf/backup/backup.cache';
     public $config_fauxapi_backup_path = '/cf/conf/fauxapi';
+    public $config_fauxapi_function_calls = '/etc/fauxapi/pfsense_function_calls.txt';
     public $config_cache_filename = '/tmp/config.cache';
     public $config_default_filename = '/cf/conf/config.xml';
     public $config_reload_max_wait_secs = 60;
@@ -550,6 +551,9 @@ class fauxApiPfsenseInterface {
     /**
      * function_call()
      * 
+     * @param string $include
+     * @param string $function
+     * @param array $args
      * @return array
      * @note calls any (or most) functions available in pfSense if listed
      */
@@ -560,14 +564,69 @@ class fauxApiPfsenseInterface {
             'args' => $args
         ));
         
-        throw new \Exception('not yet implemented !!');
+        // load and parse pfsense_function_calls.txt
+        $pf_function_calls_raw = file_get_contents($this->config_fauxapi_function_calls);
+        $pf_function_calls = array();
+        foreach(explode("\n", str_replace("\r",'',$pf_function_calls_raw)) as $line) {
+            if(strlen($line) > 1 && strpos($line, '#') === FALSE && strpos($line, ':') !== FALSE ) {
+                $ln_parts = explode(':', rtrim($line));
+                if(count($ln_parts) !== 2) { 
+                    continue 1; 
+                }
+                $fn_parts = ltrim(str_replace('function', '', $ln_parts[1]));
+                preg_match('/^(.*?)\((.*?)\)/', $fn_parts, $fn_matches);
+                if(count($fn_matches) < 2) {
+                    continue 1; 
+                }
+                if (isset($fn_matches[2]) && strlen($fn_matches[2]) > 0) {
+                    $fn_args = split(',',str_replace(' ','', $fn_matches[2]));
+                } else {
+                    $fn_args = array();
+                }
+                $pf_function_calls[] = array(
+                    'include' => $ln_parts[0], 
+                    'function' => $fn_matches[1],
+                    'args' => $fn_args,
+                );
+            }
+        }
+        
+        // check if the include + function is valid
+        $pass = FALSE;
+        $fn_args = array();
+        foreach($pf_function_calls as $pf_function_call) {
+            if($pf_function_call['function'] === $function && $pf_function_call['include'] === $include) {
+                $pass = TRUE;
+                $fn_args = $pf_function_call['args'];
+                break;
+            }
+        }
+        if(FALSE === $pass) {
+            fauxApiLogger::error('function not found in supplied include file', array(
+                'include' => $include,
+                'function' => $function
+            ));
+            return array();
+        }
+        
+        // check if the required args are present
+        $pass = FALSE;
+        foreach($fn_args as $fn_arg) {
+            
+        }
+        
+        // include the requested include file
+        
+        // issue the function_call with supplied args
+        
+        
         return array(
             'include' => $include,
             'function' => $function,
             'args' => $args,
+            'function_calls' => $function_calls
         );
         
     }
-
     
 }

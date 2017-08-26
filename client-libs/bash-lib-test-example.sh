@@ -74,4 +74,4 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 #fauxapi_system_reboot ${fauxapi_host}
 
 # function_call
-fauxapi_function_call ${fauxapi_host} include function ''
+fauxapi_function_call ${fauxapi_host} include function '[ "a", "b" ]'

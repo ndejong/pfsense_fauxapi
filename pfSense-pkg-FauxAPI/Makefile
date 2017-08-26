@@ -34,6 +34,8 @@ do-install:
 	${MKDIR} ${STAGEDIR}/etc/fauxapi
 	${INSTALL_DATA} -m 0600 ${FILESDIR}/etc/fauxapi/credentials.ini \
 		${STAGEDIR}/etc/fauxapi
+	${INSTALL_DATA} -m 0644 ${FILESDIR}/etc/fauxapi/pfsense_function_calls.txt \
+		${STAGEDIR}/etc/fauxapi
 
 	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi
 	${MKDIR} ${STAGEDIR}${PREFIX}/www/fauxapi/v1
