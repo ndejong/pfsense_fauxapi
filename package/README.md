@@ -26,13 +26,13 @@ Checking integrity... done (0 conflicting)
 The following 1 package(s) will be affected (of 0 checked):
 
 New packages to be INSTALLED:
-	pfSense-pkg-FauxAPI: 1.1 [unknown-repository]
+	pfSense-pkg-FauxAPI: 1.1_2 [unknown-repository]
 
 Number of packages to be installed: 1
 
 Proceed with this action? [y/N]: y
-[1/1] Installing pfSense-pkg-FauxAPI-1.1...
-Extracting pfSense-pkg-FauxAPI-1.1: 100%
+[1/1] Installing pfSense-pkg-FauxAPI-1.1_2...
+Extracting pfSense-pkg-FauxAPI-1.1_2: 100%
 Saving updated package information...
 overwrite!
 Loading package configuration... done.
@@ -45,8 +45,8 @@ Writing configuration... done.
 
 ## Uninstallation Example
 ```
-[2.3.4-RELEASE][root@pfsense.xxx.internal]/root: 
-[2.3.4-RELEASE][root@pfsense.xxx.internal]/root: pkg delete pfSense-pkg-FauxAPI
+[2.3.4-RELEASE][root@pfsense]/root: 
+[2.3.4-RELEASE][root@pfsense]/root: pkg delete pfSense-pkg-FauxAPI
 Checking integrity... done (0 conflicting)
 Deinstallation has been requested for the following 1 packages (of 0 packages in the universe):
 
@@ -62,7 +62,7 @@ Menu items... done.
 [1/1] Deleting files for pfSense-pkg-FauxAPI-1.1: 100%
 Removing FauxAPI components...
 Configuration... done.
-[2.3.4-RELEASE][root@pfsense.xxx.internal]/root: 
+[2.3.4-RELEASE][root@pfsense]/root: 
 ```
 
 ## FauxAPI - Menu

@@ -86,8 +86,8 @@ implementations.
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to 
 install manually as shown:-
 ```bash
-curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1.txz
-pkg install pfSense-pkg-FauxAPI-1.1.txz
+curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1_2.txz
+pkg install pfSense-pkg-FauxAPI-1.1_2.txz
 ```
 
 Installation and de-installation examples can be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package)
