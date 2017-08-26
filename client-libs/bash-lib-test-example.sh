@@ -59,12 +59,16 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 # gateway_status
 #fauxapi_gateway_status ${fauxapi_host}
 
-# send_event
-#fauxapi_send_event ${fauxapi_host} 'filter reload'
-#fauxapi_send_event ${fauxapi_host} 'interface all reload'
+# send_event - filter reload
+#fauxapi_send_event ${fauxapi_host} '["filter reload"]'
 
-# rule_get
+# send_event - interface all reload
+#fauxapi_send_event ${fauxapi_host} '["interface all reload"]'
+
+# rule_get - get all rules
 #fauxapi_rule_get ${fauxapi_host}
+
+# rule_get - get rule number 5
 #fauxapi_rule_get ${fauxapi_host} 5
 
 # alias_update_urltables
@@ -73,5 +77,16 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 # system_reboot
 #fauxapi_system_reboot ${fauxapi_host}
 
-# function_call
-fauxapi_function_call ${fauxapi_host} include function '[ "a", "b" ]'
+# function_call examples
+#fauxapi_function_call ${fauxapi_host} '{"function": "return_gateways_status", "args": [false]}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "discover_last_backup"}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "return_gateways_status", "includes": ["gwlb.inc"]}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "return_gateways_status_text", "args": [true, false]}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "get_carp_status"}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "get_dns_servers"}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "get_system_pkg_version"}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "pkg_list_repos"}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "get_services"}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "get_service_status", "args": ["ntpd"]}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "is_service_enabled", "args": ["ntpd"]}'
+#fauxapi_function_call ${fauxapi_host} '{"function": "is_service_running", "args": ["ntpd"]}'

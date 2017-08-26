@@ -348,18 +348,43 @@ class fauxApiActions {
      * 
      * @return boolean
      */
-    public function function_call($__args) {
+    public function function_call() {
         fauxApiLogger::debug(__METHOD__);
+        
+        if(!is_array($this->action_input_data) || !isset($this->action_input_data['function'])) {
+            $this->response->http_code = 400;
+            $this->response->message = 'incorrectly formatted request data';
+            return FALSE;
+        }
+        
+        $function = $this->action_input_data['function'];
+        if(!is_string($function)) {
+            $this->response->http_code = 400;
+            $this->response->message = 'function is not a string value';
+            return FALSE;
+        }
 
-        $include = NULL;
-        $function = NULL;
-        extract($__args, EXTR_IF_EXISTS);
+        $args = array();
+        if(isset($this->action_input_data['args'])) {
+            $args = $this->action_input_data['args'];
+            if(is_string($args)) {
+                $args = array($args);
+            }
+        }
+        
+        $includes = array();
+        if(isset($this->action_input_data['includes'])) {
+            $includes = $this->action_input_data['includes'];
+            if(is_string($includes)) {
+                $includes = array($includes);
+            }
+        }
         
         try {
             $return = $this->PfsenseInterface->function_call(
-                    $include, 
-                    $function, 
-                    $this->action_input_data
+                    $function,
+                    $args,
+                    $includes
             );
         } catch (\Exception $e) {
             $this->response->http_code = 500;
@@ -375,5 +400,4 @@ class fauxApiActions {
         );
         return TRUE;
     }
-
 }

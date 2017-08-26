@@ -98,14 +98,14 @@ fauxapi_config_set() {
 
 fauxapi_send_event() {
     fauxapi_host=${1}
-    fauxapi_command=${2}
+    fauxapi_data=${2}
     echo `curl \
         -X POST \
         --silent \
         --insecure \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         --header "Content-Type: application/json" \
-        --data "[\"${fauxapi_command}\"]" \
+        --data "${fauxapi_data}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=send_event&__debug=${fauxapi_debug}"`
 }
 
@@ -163,15 +163,13 @@ fauxapi_gateway_status() {
 
 fauxapi_function_call() {
     fauxapi_host=${1}
-    fauxapi_include=${2}
-    fauxapi_function=${3}
-    fauxapi_args=${4}
+    fauxapi_data=${2}
     echo `curl \
         -X POST \
         --silent \
         --insecure \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         --header "Content-Type: application/json" \
-        --data "${fauxapi_args}" \
-        "https://${fauxapi_host}/fauxapi/v1/?action=function_call&include=${fauxapi_include}&function=${fauxapi_function}&__debug=${fauxapi_debug}"`
+        --data "${fauxapi_data}" \
+        "https://${fauxapi_host}/fauxapi/v1/?action=function_call&__debug=${fauxapi_debug}"`
 }

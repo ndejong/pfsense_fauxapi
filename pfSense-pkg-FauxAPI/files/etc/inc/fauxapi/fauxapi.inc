@@ -171,10 +171,13 @@ class fauxApi {
         // confirm any user_data provided is valid JSON
         if(!empty($user_data)) {
             $checked->data = @json_decode($user_data, TRUE);
-            if(NULL === $checked->data && json_last_error() !== JSON_ERROR_NONE) {
+            $json_last_error = json_last_error();
+            if(NULL === $checked->data && $json_last_error !== JSON_ERROR_NONE) {
                 $checked->http_code = 400;
                 $checked->message = 'user action data is not valid JSON';
-                fauxApiLogger::error($checked->message);
+                fauxApiLogger::error($checked->message, array(
+                    'json_last_error' => $json_last_error
+                ));
                 return $checked;
             }
         }

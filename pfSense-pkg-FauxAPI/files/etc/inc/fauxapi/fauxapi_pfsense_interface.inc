@@ -35,7 +35,8 @@ class fauxApiPfsenseInterface {
     public $config_backup_path = '/cf/conf/backup';
     public $config_backup_cache = '/cf/conf/backup/backup.cache';
     public $config_fauxapi_backup_path = '/cf/conf/fauxapi';
-    public $config_fauxapi_function_calls = '/etc/fauxapi/pfsense_function_calls.txt';
+    public $config_pfsense_function_calls = '/etc/fauxapi/pfsense_function_calls.txt';
+    public $config_pfsense_include_path = '/etc/inc';
     public $config_cache_filename = '/tmp/config.cache';
     public $config_default_filename = '/cf/conf/config.xml';
     public $config_reload_max_wait_secs = 60;
@@ -551,25 +552,37 @@ class fauxApiPfsenseInterface {
     /**
      * function_call()
      * 
-     * @param string $include
      * @param string $function
      * @param array $args
+     * @param array $includes
      * @return array
      * @note calls any (or most) functions available in pfSense if listed
      */
-    public function function_call($include, $function, $args=array()) {
+    public function function_call($function, $args, $includes) {
         fauxApiLogger::debug(__METHOD__, array(
-            'include' => $include,
             'function' => $function,
-            'args' => $args
+            'args' => $args,
+            'includes' => $includes,
         ));
         
         // load and parse pfsense_function_calls.txt
-        $pf_function_calls_raw = file_get_contents($this->config_fauxapi_function_calls);
+        $pf_function_calls_raw = file_get_contents($this->config_pfsense_function_calls);
         $pf_function_calls = array();
+        $pf_include_files = array();
         foreach(explode("\n", str_replace("\r",'',$pf_function_calls_raw)) as $line) {
             if(strlen($line) > 1 && strpos($line, '#') === FALSE && strpos($line, ':') !== FALSE ) {
                 $ln_parts = explode(':', rtrim($line));
+                $include_candidate = $this->config_pfsense_include_path . '/' . fauxApiUtils::sanitize($ln_parts[0], array('.', '-', '_'));
+                $include_candidate = str_replace('..','',$include_candidate);
+                if(!is_file($include_candidate)) {
+                    fauxApiLogger::warn('skipping include file because not found', array(
+                        'include' => $include_candidate,
+                    ));
+                    continue 1;
+                }
+                if(!in_array($include_candidate, $pf_include_files)) {
+                    $pf_include_files[] = $include_candidate;
+                }
                 if(count($ln_parts) !== 2) { 
                     continue 1; 
                 }
@@ -584,49 +597,89 @@ class fauxApiPfsenseInterface {
                     $fn_args = array();
                 }
                 $pf_function_calls[] = array(
-                    'include' => $ln_parts[0], 
+                    'include' => $include_candidate, 
                     'function' => $fn_matches[1],
                     'args' => $fn_args,
                 );
             }
         }
         
-        // check if the include + function is valid
+        // check if the function is valid and determine the include file it comes from
         $pass = FALSE;
         $fn_args = array();
+        $fn_include = NULL;
         foreach($pf_function_calls as $pf_function_call) {
-            if($pf_function_call['function'] === $function && $pf_function_call['include'] === $include) {
+            if($pf_function_call['function'] === $function) {
                 $pass = TRUE;
                 $fn_args = $pf_function_call['args'];
+                $fn_include = $pf_function_call['include'];
                 break;
             }
         }
         if(FALSE === $pass) {
-            fauxApiLogger::error('function not found in supplied include file', array(
-                'include' => $include,
-                'function' => $function
-            ));
-            return array();
+            $error_message = 'function not defined as valid in function calls reference file';
+            $error_data = array(
+                'function' => $function,
+                'function calls reference file' => $this->config_pfsense_function_calls,
+            );
+            fauxApiLogger::error($error_message, $error_data);
+            throw new \Exception($error_message);
         }
         
-        // check if the required args are present
-        $pass = FALSE;
+        // check if the number of args appears to be appropriate
+        $arg_count_required = 0;
+        $arg_count_optional = 0;
         foreach($fn_args as $fn_arg) {
-            
+            if(!strstr($fn_arg, '=')) {
+                $arg_count_required++;
+            } else {
+                $arg_count_optional++;
+            }
+        }
+        if(count($args) < $arg_count_required || count($args) > $arg_count_required + $arg_count_optional) {
+            $error_message = 'incorrect number of function args provided';
+            $error_data = array(
+                'function' => $function,
+                'args' => $args,
+            );
+            fauxApiLogger::error($error_message, $error_data);
+            throw new \Exception($error_message);
         }
         
-        // include the requested include file
+        // process the user supplied includes first
+        foreach($includes as $include) {
+            $include_candidate = $this->config_pfsense_include_path . '/' . fauxApiUtils::sanitize($include, array('.', '-', '_'));
+            $include_candidate = str_replace('..','',$include_candidate);
+            if(in_array($include_candidate, $pf_include_files) && is_file($include_candidate)) {
+                fauxApiLogger::debug('include_once('.$include.') by user includes');
+                include_once($include_candidate);
+            } else {
+                $error_message = 'failed to include file for function call';
+                $error_data = array(
+                    'function' => $function,
+                    'include file' => $include_candidate,
+                );
+                fauxApiLogger::error($error_message, $error_data);
+                throw new \Exception($error_message);
+            }
+        }
+        
+        // include the file for the underlaying function
+        if(is_file($fn_include)) {
+            fauxApiLogger::debug('include_once('.$fn_include.') implied by function');
+            include_once($fn_include);
+        } else {
+            $error_message = 'failed to include implied include file for function call';
+            $error_data = array(
+                'function' => $function,
+                'include file' => $fn_include,
+            );
+            fauxApiLogger::error($error_message, $error_data);
+            throw new \Exception($error_message);
+        }
         
         // issue the function_call with supplied args
-        
-        
-        return array(
-            'include' => $include,
-            'function' => $function,
-            'args' => $args,
-            'function_calls' => $function_calls
-        );
-        
+        return call_user_func_array($function, $args);
     }
     
 }
