@@ -9,14 +9,14 @@ installation example below.  It take just 2x commands to install and just 1x
 command to de-install if you need to.
 
 ## Current Version
- - pfSense-pkg-FauxAPI-1.1.txz
- - SHA256: e06079b5ea7ec0dd32612c324e4dec3aa1720adf573a055b060d4f67344be552
+ - pfSense-pkg-FauxAPI-1.1_2.txz
+ - SHA256: 6697d25617b1fe1492fa1dc703e0d4cc918bf0c51a90f541a0508cd13a291c8e
 
 ## Installation Example
 ```
 2.3.4-RELEASE][root@pfsense]/root: 
-[2.3.4-RELEASE][root@pfsense]/root: curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1.txz
-[2.3.4-RELEASE][root@pfsense]/root: pkg install pfSense-pkg-FauxAPI-1.1.txz
+[2.3.4-RELEASE][root@pfsense]/root: curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1_2.txz
+[2.3.4-RELEASE][root@pfsense]/root: pkg install pfSense-pkg-FauxAPI-1.1_2.txz
 Updating pfSense-core repository catalogue...
 pfSense-core repository is up to date.
 Updating pfSense repository catalogue...
