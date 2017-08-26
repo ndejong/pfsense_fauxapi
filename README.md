@@ -1,4 +1,4 @@
-# FauxAPI - v1.1
+# FauxAPI - v1.2
 A REST API interface for pfSense to facilitate dev-ops:-
  - https://github.com/ndejong/pfsense_fauxapi
 
@@ -11,17 +11,17 @@ more feasible.
 ### Intent
 The intent of FauxAPI is to provide a basic programmatic interface into pfSense 
 2.3+ to facilitate dev-ops tasks with pfSense until version 3.x comes around 
-offering a ground up API as has been indicated here - 
+offering a ground up API as has been indicated in Feb, 2015 here - 
 https://blog.pfsense.org/?p=1588
 
 ---
 
 ### Approach
 The FauxAPI provides basic interfaces to perform actions directly on the main 
-pfSense configuration file `/cf/config/config.xml`.  It should be obvious
-therefore that this provides the ability to write configurations that can break 
-your pfSense system.  The ability however to programmatically interface with a
-running pfSense host(s) is enormously useful.
+pfSense configuration file `/cf/config/config.xml`.  The ability to 
+programmatically interface with a running pfSense host(s) is enormously useful
+however it should be obvious that this provides the ability to create configurations 
+that can break your pfSense system.  
 
 At it's core FauxAPI simply reads the pfSense `config.xml` file, converts it to 
 JSON and returns to the caller.  Similarly it can take a JSON formatted config 
@@ -33,23 +33,25 @@ ordinarily occur through the regular GUI interface.  For those inclined to
 review the inner workings of the FauxAPI <> pfSense interface you can find them
 located in the file `/etc/inc/fauxapi/fauxapi_pfsense_interface.inc`
 
-There are several sanity checks in place to make sure a user provided JSON 
-config will convert into the (slightly quirky) pfSense XML `config.xml` format 
-and then reload as expected in the same way.  However, because it is not a real 
-per action API interface it is still possible for the API caller to create 
-configuration changes that make no sense and hence break your pfSense host - as 
-the package name states, it is a "Faux" API, it's still very useful indeed.
+There are multiple sanity checks that take place to make sure a user provided 
+JSON config will correctly convert into the (slightly quirky) pfSense XML 
+`config.xml` format and then reload as expected in the same way.  However, 
+because it is not a real per-action application-layer interface it is still 
+possible for the API caller to create configuration changes that make no sense 
+and hence break your pfSense host - as the package name states, it is a "Faux" 
+API yet it is still very useful indeed and fills a gap in functionality in the 
+pfSense product.
 
-Users of FauxAPI should also keep in mind that it is possible for pfSense (and 
-other packages) to change the arrangement of the configuration items they refer 
-to, while no such cases have been observed (yet) there is nothing stopping this 
-from occurring and thus package or system upgrades could cause breaking 
-configuration format changes.
+Because FauxAPI primarily interacts with the pfSense `config.xml` users should 
+keep in mind that it is possible for pfSense (and other packages) to change the 
+arrangement of the configuration items they refer to.  While no such cases have 
+been observed (yet) there is nothing stopping this from occurring and thus 
+package or system upgrades could cause breaking configuration format changes.
 
 A common source of confusion is the <span style="color:blue">requirement to pass 
 the *FULL* configuration into the `config_set` call not just the portion of the 
-configuration you wish to adjust </span> - the reason for this is that FauxAPI
-is a utility that interfaces with the pfSense `config.xml` file without 
+configuration you wish to adjust </span> - again, the reason for this is that 
+FauxAPI is a utility that interfaces with the pfSense `config.xml` file without 
 attempting to reach into the pfSense control layers (function calls) too much.
 This is a deliberate position and helps make FauxAPI a low maintenance project 
 that should keep working with pfSense as new versions evolve.
@@ -65,22 +67,26 @@ to a the resolution to a user issue here - https://github.com/ndejong/pfsense_fa
 ---
 
 ### Versions and Testing
-The FauxAPI has been developed against pfSense 2.3.2 and 2.3.3 - it has not (yet) 
-been tested against 2.3.0 or 2.3.1 or the currently in development 2.4 releases.  
-Further, it it understood that package packaging changed between pfSense 2.2 and 
-2.3 so it seems unlikely that it will work with 2.2 - very happy to accept 
-github pull requests to resolve if anyone cares to provide.
+The FauxAPI has been developed against pfSense 2.3.2, 2.3.3 and 2.3.4 - it has 
+not (yet) been tested against 2.3.0 or 2.3.1 or the currently in development 2.4 
+releases.  Further, it it apparent that the pfSense packaging technique changed
+significantly prior to 2.3 so it is unlikely that it will work with 2.2 - very 
+happy to accept github pull requests to resolve if anyone cares to provide.
 
-Testing is not (yet) thorough, there are however two client side test scripts 
-(1x Bash, 1x Python) that test all possible server side actions.  The tests only 
-test for success and not all possible failure modes.  This said, many failure 
-scenarios have been considered and tested in development to cause FauxAPI to 
-roll back if anything does not pass real-time sanity checks.
+Testing is reasonable but does not achieve 100% code coverage within the FauxAPI 
+codebase.  Two client side test scripts (1x Bash, 1x Python) that demonstrate and 
+test all possible server side actions are provided.  Under the hood FauxAPI, 
+performs real-time sanity tests and checks to make sure user supplied 
+configurations will save, load and reload as expected.
 
-The FauxAPI REST call path has been name-spaced as v1 to accommodate future 
+The FauxAPI REST call path has been name-spaced as "v1" to accommodate future 
 situations that may introduce breaking REST interface changes, in the event this
 occurs a new v2 release would be possible without breaking existing v1 
 implementations.
+
+### Debug
+
+
 
 ### Installation
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to 
@@ -95,6 +101,8 @@ Installation and de-installation examples can be found [here](https://github.com
 NB: take the time to ensure the package file SHA256 checksum is correct, these
 are provided in the file `SHA256SUMS`
 
+---
+
 ### Releases
 #### v1.0 - 2016-11-20
  - initial release
@@ -104,6 +112,14 @@ are provided in the file `SHA256SUMS`
  - update documentation to address common points of confusion, expecially the 
    requirement to provide the _full_ config file not just the portion to be updated.
  - testing against pfSense 2.3.2 and 2.3.3
+
+#### v1.2 - 2017-08-27
+ - new API call `function_call` allowing the user to reach deep into the inner 
+   code infrastructure of pfSense, this is for experts only.
+ - the `credentials.ini` file now provides a way to control the permitted API 
+   calls.
+ - various update documentation updates.
+ - testing against pfSense 2.3.4
 
 ---
 
