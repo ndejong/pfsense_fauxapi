@@ -15,6 +15,8 @@
 # limitations under the License.
 # 
 
+fauxapi_use_verified_https='--insecure'
+
 fauxapi_auth() {
 
     fauxapi_apikey=${1}
@@ -37,7 +39,7 @@ fauxapi_config_get() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=config_get&__debug=${fauxapi_debug}"`
 }
@@ -47,7 +49,7 @@ fauxapi_config_backup() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=config_backup&__debug=${fauxapi_debug}"`
 }
@@ -57,7 +59,7 @@ fauxapi_config_reload() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=config_reload&__debug=${fauxapi_debug}"`
 }
@@ -68,7 +70,7 @@ fauxapi_config_restore() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=config_restore&config_file=${fauxapi_configfile}&__debug=${fauxapi_debug}"`
 }
@@ -78,7 +80,7 @@ fauxapi_config_backup_list() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=config_backup_list&__debug=${fauxapi_debug}"`
 }
@@ -89,7 +91,7 @@ fauxapi_config_set() {
     echo `curl \
         -X POST \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         --header "Content-Type: application/json" \
         --data @${fauxapi_configfile} \
@@ -102,7 +104,7 @@ fauxapi_send_event() {
     echo `curl \
         -X POST \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         --header "Content-Type: application/json" \
         --data "[\"${fauxapi_command}\"]" \
@@ -114,7 +116,7 @@ fauxapi_system_reboot() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=system_reboot&__debug=${fauxapi_debug}"`
 }
@@ -124,7 +126,7 @@ fauxapi_system_stats() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=system_stats&__debug=${fauxapi_debug}"`
 }
@@ -135,7 +137,7 @@ fauxapi_rule_get() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=rule_get&rule_number=${fauxapi_rule_number}&__debug=${fauxapi_debug}"`
 }
@@ -146,7 +148,7 @@ fauxapi_alias_update_urltables() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=alias_update_urltables&table=${fauxapi_table}&__debug=${fauxapi_debug}"`
 }
@@ -156,7 +158,7 @@ fauxapi_gateway_status() {
     echo `curl \
         -X GET \
         --silent \
-        --insecure \
+        ${fauxapi_use_verified_https} \
         --header "fauxapi-auth: ${fauxapi_auth}" \
         "https://${fauxapi_host}/fauxapi/v1/?action=gateway_status&__debug=${fauxapi_debug}"`
 }
