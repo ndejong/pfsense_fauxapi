@@ -87,15 +87,80 @@ print(json.dumps(config))
 #print(json.dumps(FauxapiLib.system_reboot()))
 
 # function_call - examples
-#print(json.dumps(FauxapiLib.function_call( {'function':'return_gateways_status','args':[False]} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'discover_last_backup'} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'return_gateways_status','includes':['gwlb.inc']} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'return_gateways_status_text','args':[True,False]} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'get_carp_status'} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'get_dns_servers'} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'get_system_pkg_version'} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'pkg_list_repos'} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'get_services'} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'get_service_status', 'args': ['ntpd']} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'is_service_enabled', 'args': ['ntpd']} )))
-#print(json.dumps(FauxapiLib.function_call( {'function':'is_service_running', 'args': ['ntpd']} )))
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'return_gateways_status',
+#         'args': [False]
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'discover_last_backup'
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'return_gateways_status',
+#         'includes': ['gwlb.inc']
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'return_gateways_status_text',
+#         'args': [True, False]
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'get_carp_status',
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'get_dns_servers',
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'get_system_pkg_version',
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'pkg_list_repos',
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'get_services',
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'get_service_status',
+#         'args': ['ntpd']
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'is_service_enabled',
+#         'args': ['ntpd']
+#     }
+# )))
+#
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'is_service_running',
+#         'args': ['ntpd']
+#     }
+# )))
