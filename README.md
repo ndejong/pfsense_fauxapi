@@ -1,172 +1,138 @@
 # FauxAPI - v1.2
-A REST API interface for pfSense to facilitate dev-ops:-
+A REST API interface for pfSense 2.3+ to facilitate devops:-
  - https://github.com/ndejong/pfsense_fauxapi
 
-Additionally available are a set of [client libraries](#user-content-clientlibraries) 
-thus making programmatic access and update of pfSense hosts for dev-ops tasks 
-more feasible.
+Additionally available are a set of [client libraries](#user-content-client_libraries) 
+that hence make programmatic access and management of pfSense hosts for devops 
+tasks feasible.
 
 ---
 
-### Intent
-The intent of FauxAPI is to provide a basic programmatic interface into pfSense 
-2.3+ to facilitate dev-ops tasks with pfSense until version 3.x comes around 
-offering a ground up API as has been indicated in Feb, 2015 here - 
-https://blog.pfsense.org/?p=1588
+### API Action Summary
+ - [alias_update_urltables](#user-content-alias_update_urltables) - Causes the pfSense host to immediately update any urltable alias entries from their (remote) source URLs.
+ - [config_backup](#user-content-config_backup) - Causes the system to take a configuration backup and add it to the regular set of system change backups.
+ - [config_backup_list](#user-content-config_backup_list) - Returns a list of the currently available system configuration backups.
+ - [config_get](#user-content-config_get) - Returns the system configuration as a JSON formatted string.
+ - [config_reload](#user-content-config_reload) - Causes the pfSense system to perform a reload of the `config.xml` file.
+ - [config_restore](#user-content-config_restore) - Restores the pfSense system to the named backup configuration.
+ - [config_set](#user-content-config_set) - Sets a full system configuration and (by default) reloads once successfully written and tested.
+ - [function_call](#user-content-function_call) - Call directly a pfSense PHP function with API user supplied parameters.
+ - [gateway_status](#user-content-gateway_status) - Returns gateway status data.
+ - [rule_get](#user-content-rule_get) - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command on the pfSense host.
+ - [send_event](#user-content-send_event) - Performs a pfSense "send_event" command to cause various pfSense system actions.
+ - [system_reboot](#user-content-system_reboot) - Reboots the pfSense system.
+ - [system_stats](#user-content-system_stats) - Returns various useful system stats.
 
 ---
 
 ### Approach
-The FauxAPI provides basic interfaces to perform actions directly on the main 
-pfSense configuration file `/cf/config/config.xml`.  The ability to 
-programmatically interface with a running pfSense host(s) is enormously useful
-however it should be obvious that this provides the ability to create configurations 
-that can break your pfSense system.  
+At its core FauxAPI simply reads the core pfSense `config.xml` file, converts it 
+to JSON and returns to the API caller.  Similarly it can take a JSON formatted 
+configuration and write it to the pfSense `config.xml` and handles the required 
+reload operations.  The ability to programmatically interface with a running 
+pfSense host(s) is enormously useful however it should also be obvious that this 
+provides the API user the ability to create configurations that can break your 
+pfSense system.
 
-At it's core FauxAPI simply reads the pfSense `config.xml` file, converts it to 
-JSON and returns to the caller.  Similarly it can take a JSON formatted config 
-and write it to the pfSense `config.xml` and (by default) perform a config 
-backup and handle the required config reload.
+FauxAPI provides easy backup and restore API interfaces that by default store
+configuration backups on all configuration write operations thus it is very easy 
+to roll-back even if the API user manages to deploy a "very broken" configuration.
 
-FauxAPI loads core pfSense libraries to issue system functions as would 
-ordinarily occur through the regular GUI interface.  For those inclined to 
-review the inner workings of the FauxAPI <> pfSense interface you can find them
-located in the file `/etc/inc/fauxapi/fauxapi_pfsense_interface.inc`
+Multiple sanity checks take place to make sure a user provided JSON config will 
+correctly convert into the (slightly quirky) pfSense XML `config.xml` format and 
+then reload as expected in the same way.  However, because it is not a real 
+per-action application-layer interface it is still possible for the API caller 
+to create configuration changes that make no sense and can potentially disrupt 
+your pfSense system - as the package name states, it is a "Faux" API to pfSense
+filling a gap in functionality with the current pfSense product.
 
-There are multiple sanity checks that take place to make sure a user provided 
-JSON config will correctly convert into the (slightly quirky) pfSense XML 
-`config.xml` format and then reload as expected in the same way.  However, 
-because it is not a real per-action application-layer interface it is still 
-possible for the API caller to create configuration changes that make no sense 
-and hence break your pfSense host - as the package name states, it is a "Faux" 
-API yet it is still very useful indeed and fills a gap in functionality in the 
-pfSense product.
-
-Because FauxAPI primarily interacts with the pfSense `config.xml` users should 
-keep in mind that it is possible for pfSense (and other packages) to change the 
-arrangement of the configuration items they refer to.  While no such cases have 
-been observed (yet) there is nothing stopping this from occurring and thus 
-package or system upgrades could cause breaking configuration format changes.
-
-A common source of confusion is the <span style="color:blue">requirement to pass 
-the *FULL* configuration into the `config_set` call not just the portion of the 
-configuration you wish to adjust </span> - again, the reason for this is that 
-FauxAPI is a utility that interfaces with the pfSense `config.xml` file without 
-attempting to reach into the pfSense control layers (function calls) too much.
-This is a deliberate position and helps make FauxAPI a low maintenance project 
-that should keep working with pfSense as new versions evolve.
+A common source of confusion is the requirement to pass the _FULL_ configuration 
+into the **config_set** action and not just the portion of the configuration you 
+wish to adjust.  A **config_patch** action is in development and is expected in 
+a future release.
 
 Because FauxAPI is a utility that interfaces with the pfSense `config.xml` there
 are some cases where reloading the configuration file is not enough and you 
-might need to "tickle" pfSense a little more to do what you want.  Good example
-cases of this are getting newly defined network interfaces or VLANs to be 
-recognized.  These situations are easily handled by doing a `send_event` with
-the payload `interface reload all` - see the example included below or refer
-to a the resolution to a user issue here - https://github.com/ndejong/pfsense_fauxapi/issues/10
+may need to "tickle" pfSense a little more to do what you want.  This is not 
+common however a good example is getting newly defined network interfaces or 
+VLANs to be recognized.  These situations are easily handled by calling the
+**send_event** action with the payload **interface reload all** - see the example 
+included below and refer to a the resolution to [user issue #10](https://github.com/ndejong/pfsense_fauxapi/issues/10)
+
+__NB:__ *As at FauxAPI v1.2 the **function_call** action has been introduced that 
+now provides the ability to issue function calls directly into pfSense.*
 
 ---
-
-### Versions and Testing
-The FauxAPI has been developed against pfSense 2.3.2, 2.3.3 and 2.3.4 - it has 
-not (yet) been tested against 2.3.0 or 2.3.1 or the currently in development 2.4 
-releases.  Further, it it apparent that the pfSense packaging technique changed
-significantly prior to 2.3 so it is unlikely that it will work with 2.2 - very 
-happy to accept github pull requests to resolve if anyone cares to provide.
-
-Testing is reasonable but does not achieve 100% code coverage within the FauxAPI 
-codebase.  Two client side test scripts (1x Bash, 1x Python) that demonstrate and 
-test all possible server side actions are provided.  Under the hood FauxAPI, 
-performs real-time sanity tests and checks to make sure user supplied 
-configurations will save, load and reload as expected.
-
-The FauxAPI REST call path has been name-spaced as "v1" to accommodate future 
-situations that may introduce breaking REST interface changes, in the event this
-occurs a new v2 release would be possible without breaking existing v1 
-implementations.
-
-### Debug
-
-
 
 ### Installation
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to 
-install manually as shown:-
+install manually from **root** as shown:-
 ```bash
-curl -s -O https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-1.1_2.txz
-pkg install pfSense-pkg-FauxAPI-1.1_2.txz
+fetch https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-LATEST.txz
+pkg install pfSense-pkg-FauxAPI-LATEST.txz
 ```
 
-Installation and de-installation examples can be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package)
+Installation and de-installation is quite straight forward, further examples can 
+be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package).
 
-NB: take the time to ensure the package file SHA256 checksum is correct, these
-are provided in the file `SHA256SUMS`
-
----
-
-### Releases
-#### v1.0 - 2016-11-20
- - initial release
-
-#### v1.1 - 2017-08-12
- - 2x new API calls `alias_update_urltables` and `gateway_status`
- - update documentation to address common points of confusion, expecially the 
-   requirement to provide the _full_ config file not just the portion to be updated.
- - testing against pfSense 2.3.2 and 2.3.3
-
-#### v1.2 - 2017-08-27
- - new API call `function_call` allowing the user to reach deep into the inner 
-   code infrastructure of pfSense, this is for experts only.
- - the `credentials.ini` file now provides a way to control the permitted API 
-   calls.
- - various update documentation updates.
- - testing against pfSense 2.3.4
+Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS)
 
 ---
 
-<a name="clientlibraries"></a>
+### Debugging
+FauxAPI comes with awesome debug logging capability, simply insert `__debug=true` 
+as a URL request parameter and the response data will contain rich debugging log 
+data about the flow of the request.
+
+If you are looking for more debugging at various points feel free to submit a 
+pull request or lodge an issue describing your requirement and I'll see what
+can be done to accommodate.
+
+---
+
+<a name="client_libraries"></a>
 ### Client libraries
 
 #### Python
- - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs
-
-A Python interface to pfSense was perhaps the most desired end-goal at the onset
-of the FauxAPI package project.  Anyone that has tried to parse the pfSense 
-`config.xml` files using a Python based library will understand that things 
-don't quite work out as expected or desired.
+A [Python interface](https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs) 
+to pfSense was perhaps the most desired end-goal at the onset of the FauxAPI 
+package project.  Anyone that has tried to parse the pfSense `config.xml` files 
+using a Python based library will understand that things don't quite work out as 
+expected or desired.
 
 ```python
-    import pprint, sys
-    from fauxapi_lib import FauxapiLib
-    FauxapiLib = FauxapiLib('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
+import pprint, sys
+from fauxapi_lib import FauxapiLib
+FauxapiLib = FauxapiLib('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
 
-    aliases = FauxapiLib.config_get('aliases')
-    pprint.pprint(FauxapiLib.config_set(aliases, 'aliases'))
+aliases = FauxapiLib.config_get('aliases')
+## perform some kind of manipulation to `aliases` here ##
+pprint.pprint(FauxapiLib.config_set(aliases, 'aliases'))
 ```
 
-Again, it is recommended to review `python-lib-test-example.py` to observe 
-worked examples with the library.  Of small note is that the Python library
-supports the ability to get and set single sections of the pfSense system, not
-just the entire system configuration as with the Bash library.
+It is recommended to review [`python-lib-test-example.py`](https://github.com/ndejong/pfsense_fauxapi/blob/master/client-libs/python-lib-test-example.py)
+to observe worked examples with the library.  Of small note is that the Python 
+library supports the ability to get and set single sections of the pfSense 
+system, not just the entire system configuration as with the Bash library.
 
 #### Bash
- - https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs
-
-The Bash client library makes it possible to add a line with 
-`source fauxapi_lib.sh` to your bash script and then access a pfSense host 
-configuration directly as a JSON string
+The [Bash client library](https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs) 
+makes it possible to add a line with `source fauxapi_lib.sh` to your bash script 
+and then access a pfSense host configuration directly as a JSON string
 ```bash
-    source fauxapi_lib.sh
-    export fauxapi_auth=`fauxapi_auth <fauxapi-key> <fauxapi-secret>`
+source fauxapi_lib.sh
+export fauxapi_auth=`fauxapi_auth <fauxapi-key> <fauxapi-secret>`
 
-    fauxapi_config_get <host-address> | jq .data.config > /tmp/config.json
-    fauxapi_config_set <host-address> /tmp/config.json
+fauxapi_config_get <host-address> | jq .data.config > /tmp/config.json
+## perform some kind of manipulation to `/tmp/config.json` here ##
+fauxapi_config_set <host-address> /tmp/config.json
 ```
 
-It is recommended to review `bash-lib-test-example.sh` to get a better idea of
-how to use it.
+It is recommended to review [`bash-lib-test-example.sh`](https://github.com/ndejong/pfsense_fauxapi/blob/master/client-libs/bash-lib-test-example.sh)
+to get a better idea how to use it.
 
 #### PHP
-A PHP client does not yet exist, it should be fairly easy to develop by 
+A PHP interface does not yet exist, it should be fairly easy to develop by 
 observing the Bash and Python examples - if you do please submit it as a github 
 pull request, there are no doubt others that will appreciate a PHP interface.
 
@@ -176,9 +142,9 @@ pull request, there are no doubt others that will appreciate a PHP interface.
 A deliberate design decision to decouple FauxAPI authentication from both the 
 pfSense user authentication and the pfSense `config.xml` system.  This was done 
 to limit the possibility of an accidental API change that removes access to the 
-host.  It also seems more prudent to cause an API user to manually edit the 
-FauxAPI `credentials.ini` file located at `/etc/fauxapi/credentials.ini` - happy 
-to receive feedback about this.
+host.  It also seems more prudent to only establish API user(s) manually via the 
+FauxAPI `/etc/fauxapi/credentials.ini` file - happy to receive feedback about 
+this approach.
 
 The two sample FauxAPI keys (PFFAexample01 and PFFAexample02) and their 
 associated secrets in the sample `credentials.ini` file are hard-coded to be
@@ -186,30 +152,29 @@ inoperative, you must create entirely new values before your client scripts
 will be able to issue commands to FauxAPI.
 
 API authentication itself is performed on a per-call basis with the auth value 
-inserted as an additional `fauxapi-auth` HTTP request header, it can be 
+inserted as an additional **fauxapi-auth** HTTP request header, it can be 
 calculated as such:-
 ```
-    fauxapi-auth: <apikey>:<timestamp>:<nonce>:<hash>
+fauxapi-auth: <apikey>:<timestamp>:<nonce>:<hash>
 
-    For example:-
-    fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55
+For example:-
+fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55
 ```
 
-Where the `<hash>` value is calculated like so:-
+Where the &lt;hash&gt; value is calculated like so:-
 ```
-    <hash> = sha256(<apisecret><timestamp><nonce>)
+<hash> = sha256(<apisecret><timestamp><nonce>)
 ```
 
-This is all handled in the [client libraries](#user-content-clientlibraries) 
+This is all handled in the [client libraries](#user-content-client_libraries) 
 provided, but as can be seen it is relatively easy to implement even in a Bash 
-shell script - indeed a Bash include library `fauxapi_lib.sh` is provided that 
-does this for you.
+shell script.
 
 Getting the API credentials right seems to be a common source of confusion in
 getting started with FauxAPI because the rules about valid API keys and secret 
 values are pedantic to help make ensure poor choices are not made.
 
-The API key+secret values you create for yourself in `/etc/fauxapi/credentials.ini`
+The API key + API secret values that you will need to create in `/etc/fauxapi/credentials.ini`
 have the following rules:-
  - <apikey_value> and <apisecret_value> may have alphanumeric chars ONLY!
  - <apikey_value> MUST start with the prefix PFFA (pfSense Faux API)
@@ -218,16 +183,17 @@ have the following rules:-
  - you must not use the sample key/secret in the `credentials.ini` since they
    are hard coded to fail.
 
-Consider using the following shell commands to generate valid values:-
+To make things easier consider using the following shell commands to generate 
+valid values:-
 
 #### apikey_value
 ```bash
-    echo PFFA`head /dev/urandom | base64 -w0 | tr -d /+= | head -c 20`
+echo PFFA`head /dev/urandom | base64 -w0 | tr -d /+= | head -c 20`
 ```
 
 #### apisecret_value
 ```bash
-    echo `head /dev/urandom | base64 -w0 | tr -d /+= | head -c 60`
+echo `head /dev/urandom | base64 -w0 | tr -d /+= | head -c 60`
 ```
 
 NB: Make sure the client side clock is within 60 seconds of the pfSense host 
@@ -238,39 +204,159 @@ about this.
 
 ---
 
+### API Authorization
+The file `/etc/fauxapi/credentials.ini` additionally provides a method to restrict
+the API actions available to the API key using the **permit** configuration 
+parameter.  Permits are comma delimited and may contain * wildcards to match more
+than one rule as shown in the example below.
+
+```
+[PFFAexample01]
+secret = abcdefghijklmnopqrstuvwxyz0123456789abcd
+permit = alias_*, config_*, gateway_*, rule_*, send_*, system_*, function_*
+owner = example key PFFAexample01 - hardcoded to be inoperative
+```
+
+---
+
 ### API REST Actions
-The following REST based API actions are provided, cURL call request examples
-are provided for each.  The API user is perhaps more likely interface with the 
-[client libraries](#user-content-clientlibraries) as documented further below 
-rather than these REST end-points.
+The following REST based API actions are provided, example cURL call request 
+examples are provided for each.  The API user is perhaps more likely to interface 
+with the [client libraries](#user-content-client_libraries) as documented above 
+rather than directly with these REST end-points.
 
 The framework around the FauxAPI has been put together with the idea of being
 able to easily add more actions at a later time, if you have ideas for actions 
 that might be useful be sure to get in contact.
 
 NB: the cURL requests below use the '--insecure' switch because many pfSense
-deployments do not deploy certificate chain signed SSL certificates, a 
-reasonable improvement in this regard might be to implement certificate pinning
-at the client side to hence remove scope for man-in-middle concerns.
-
-NB2: the API user may append a `__debug=true` URL request parameter to 
-retrieve debug logs within the response data when required.
+deployments do not deploy certificate chain signed SSL certificates.  A reasonable 
+improvement in this regard might be to implement certificate pinning at the 
+client side to hence remove scope for man-in-middle concerns.
 
 
-### `/fauxapi/v1/?action=config_get`
- - Returns the current system configuration as a JSON formatted string.
- - HTTP: **`GET`**
+<br><a name="alias_update_urltables"></a>
+#### alias_update_urltables
+ - Causes the pfSense host to immediately update any urltable alias entries
+   from their (remote) source URLs.  Optionally update just one table by 
+   specifying the table name, else all tables are updated.
+ - HTTP: **GET**
  - Params:
-    - `config_file` (optional, default=/cf/config/config.xml)
+    - **table** (optional, default = null)
 
 *Example Request*
 ```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=config_get"
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=alias_update_urltables"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "598ec756b4d09",
+  "action": "alias_update_urltables",
+  "message": "ok",
+  "data": {
+    "updates": {
+      "bruteforceblocker": {
+        "url": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset",
+        "status": [
+          "no changes."
+        ]
+      }
+    }
+  }
+}
+```
+
+
+<br><a name="config_backup"></a>
+#### config_backup
+ - Causes the system to take a configuration backup and add it to the regular 
+   set of pfSense system backups at `/cf/conf/backup/`
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=config_backup"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "583012fea254f",
+  "action": "config_backup",
+  "message": "ok",
+  "data": {
+    "backup_config_file": "/cf/conf/backup/config-1479545598.xml"
+  }
+}
+```
+
+
+<br><a name="config_backup_list"></a>
+#### config_backup_list
+ - Returns a list of the currently available pfSense system configuration backups.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=config_backup_list"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "583065cb670db",
+  "action": "config_backup_list",
+  "message": "ok",
+  "data": {
+    "backup_files": [
+      {
+        "filename": "/cf/conf/backup/config-1479545598.xml",
+        "timestamp": "20161119Z144635",
+        "description": "fauxapi-PFFA4797d073@192.168.10.10: update via fauxapi for callid: 583012fea254f",
+        "version": "15.5",
+        "filesize": 18535
+      },
+      ....
+```
+
+
+<br><a name="config_get"></a>
+#### config_get
+ - Returns the system configuration as a JSON formatted string.  Additionally, 
+   using the optional **config_file** parameter it is possible to retrieve backup
+   configurations by providing the full path to it under the `/cf/conf/backup` 
+   path.
+ - HTTP: **GET**
+ - Params:
+    - **config_file** (optional, default=`/cf/config/config.xml`)
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=config_get"
 ```
 
 *Example Response*
@@ -296,386 +382,382 @@ retrieve debug logs within the response data when required.
              ....
 ```
 
-Hint: use `jq` to obtain the config only, as such:-
+Hint: use `jq` to parse the response JSON and obtain the config only, as such:-
 ```bash
-    cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.json
+cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.json
 ```
 
 
-### `/fauxapi/v1/?action=config_set`
- - Sets a full system configuration and (by default) takes a system config
-   backup and causes the system config to be reloaded once successfully written.
-   NB: be sure to pass the *FULL* system configuration in here, not just the 
-   piece you wish to adjust!
- - HTTP: **`POST`**
- - Params:
-    - `do_backup` (optional, default = true)
-    - `do_reload` (optional, default = true)
-
-*Example Request*
-```bash
-    curl \
-        -X POST \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        --header "Content-Type: application/json" \
-        --data @/tmp/config.json \
-        "https://192.168.10.10/fauxapi/v1/?action=config_set"
-```
-
-*Example Response*
-```javascript
-    {
-      "callid": "583065cae8993",
-      "action": "config_set",
-      "message": "ok",
-      "data": {
-        "do_backup": true,
-        "do_reload": true
-      }
-    }
-```
-
-
-### `/fauxapi/v1/?action=config_reload`
+<br><a name="config_reload"></a>
+#### config_reload
  - Causes the pfSense system to perform a reload of the `config.xml` file, by 
-   default this already happens when the config_set action occurs hence there
-   is normally no need to explicitly call this after a config_set action.
- - HTTP: **`GET`**
+   default this happens when the **config_set** action occurs hence there is 
+   normally no need to explicitly call this after a **config_set** action.
+ - HTTP: **GET**
  - Params: none
 
 *Example Request*
 ```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=config_reload"
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=config_reload"
 ```
 
 *Example Response*
 ```javascript
-    {
-      "callid": "5831226e18326",
-      "action": "config_reload",
-      "message": "ok"
-    }
+{
+  "callid": "5831226e18326",
+  "action": "config_reload",
+  "message": "ok"
+}
 ```
 
 
-### `/fauxapi/v1/?action=config_backup`
- - Causes the system to take a configuration backup and add it to the regular 
-   set of system change backups located on the host here `/cf/conf/backup/`
- - HTTP: **`GET`**
- - Params: none
-
-*Example Request*
-```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://<fauxapi_host>/fauxapi/v1/?action=config_backup"
-```
-
-*Example Response*
-```javascript
-    {
-      "callid": "583012fea254f",
-      "action": "config_backup",
-      "message": "ok",
-      "data": {
-        "backup_config_file": "/cf/conf/backup/config-1479545598.xml"
-      }
-    }
-```
-
-
-### `/fauxapi/v1/?action=config_backup_list`
- - Returns a list of the currently available system configuration backups
-   located in the `/cf/conf/backup/` host path.
- - HTTP: **`GET`**
- - Params: none
-
-*Example Request*
-```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=config_backup_list"
-```
-
-*Example Response*
-```javascript
-    {
-      "callid": "583065cb670db",
-      "action": "config_backup_list",
-      "message": "ok",
-      "data": {
-        "backup_files": [
-          {
-            "filename": "/cf/conf/backup/config-1479545598.xml",
-            "timestamp": "20161119Z144635",
-            "description": "fauxapi-PFFA4797d073@192.168.10.10: update via fauxapi for callid: 583012fea254f",
-            "version": "15.5",
-            "filesize": 18535
-          },
-          ....
-```
-
-
-### `/fauxapi/v1/?action=config_restore`
- - Returns a list of the currently available system configuration backups
- - HTTP: **`GET`**
+<br><a name="config_restore"></a>
+#### config_restore
+ - Restores the pfSense system to the named backup configuration.
+ - HTTP: **GET**
  - Params:
-    - `config_file` (required, full path to the backup file to restore)
+    - **config_file** (required, full path to the backup file to restore)
 
 *Example Request*
 ```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=config_restore&config_file=/cf/conf/backup/config-1479545598.xml"
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=config_restore&config_file=/cf/conf/backup/config-1479545598.xml"
 ```
 
 *Example Response*
 ```javascript
-    {
-      "callid": "583126192a789",
-      "action": "config_restore",
-      "message": "ok",
-      "data": {
-        "config_file": "/cf/conf/backup/config-1479545598.xml"
-      }
-    }
+{
+  "callid": "583126192a789",
+  "action": "config_restore",
+  "message": "ok",
+  "data": {
+    "config_file": "/cf/conf/backup/config-1479545598.xml"
+  }
+}
 ```
 
 
-### `/fauxapi/v1/?action=system_stats`
- - Returns various system stats.
- - HTTP: **`GET`**
+<br><a name="config_set"></a>
+#### config_set
+ - Sets a full system configuration and (by default) takes a system config
+   backup and (by default) causes the system config to be reloaded once 
+   successfully written and tested.
+ - NB: be sure to pass the *FULL* system configuration in here, not just the 
+   piece you wish to adjust!
+ - HTTP: **POST**
+ - Params:
+    - **do_backup** (optional, default = true)
+    - **do_reload** (optional, default = true)
+
+*Example Request*
+```bash
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --header "Content-Type: application/json" \
+    --data @/tmp/config.json \
+    "https://<host-address>/fauxapi/v1/?action=config_set"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "583065cae8993",
+  "action": "config_set",
+  "message": "ok",
+  "data": {
+    "do_backup": true,
+    "do_reload": true
+  }
+}
+```
+
+
+<br><a name="function_call"></a>
+#### function_call
+ - Call directly a pfSense PHP function with API user supplied parameters.  Note
+   that is action is a *VERY* raw interface into the inner workings of pfSense 
+   and it is not recommended for API users that do not have a solid understanding 
+   of PHP and pfSense.  Additionally, not all pfSense functions are appropriate 
+   to be called through the FauxAPI and only very limited testing has been 
+   performed against the possible outcomes and responses.  It is possible to 
+   harm your pfSense system if you do not 100% understand what is going on.
+ - Functions to be called via this interface *MUST* be defined in the file 
+   `/etc/inc/fauxapi/pfsense_function_calls.txt` only a handful very basic and 
+   read-only pfSense functions are enabled by default.
+ - HTTP: **POST**
  - Params: none
 
 *Example Request*
 ```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=system_stats"
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --header "Content-Type: application/json" \
+    --data "{\"function\": \"get_services\"}" \
+    "https://<host-address>/fauxapi/v1/?action=function_call"
 ```
 
 *Example Response*
 ```javascript
-    {
-      "callid": "583d5ce3301f4",
-      "action": "system_stats",
-      "message": "ok",
-      "data": {
-        "stats": {
-          "cpu": "2",
-          "mem": "16",
-          "uptime": "9 Days 20 Hours 02 Minutes 08 Seconds",
-          "states": "364/48000",
-          "temp": "",
-          "datetime": "20161129Z104804",
-          "interfacestatistics": "",
-          "interfacestatus": "",
-          "cpufreq": "",
-          "load_average": [
-            "0.29",
-            "0.29",
-            "0.28"
-          ],
-          "mbuf": "1016/30414",
-          "mbufpercent": "3",
-          "statepercent": "1"
-        }
-      }
-    }
+{
+  "callid": "59a29e5017905",
+  "action": "function_call",
+  "message": "ok",
+  "data": {
+    "return": [
+      {
+        "name": "unbound",
+        "description": "DNS Resolver"
+      },
+      {
+        "name": "ntpd",
+        "description": "NTP clock sync"
+      },
+      ....
+
 ```
 
 
-### `/fauxapi/v1/?action=gateway_status`
+<br><a name="gateway_status"></a>
+#### gateway_status
  - Returns gateway status data.
- - HTTP: **`GET`**
+ - HTTP: **GET**
  - Params: none
 
 *Example Request*
 ```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=gateway_status"
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=gateway_status"
 ```
 
 *Example Response*
 ```javascript
-    {
-      "callid": "598ecf3e7011e",
-      "action": "gateway_status",
-      "message": "ok",
-      "data": {
-        "gateway_status": {
-          "10.22.33.1": {
-            "monitorip": "8.8.8.8",
-            "srcip": "10.22.33.100",
-            "name": "GW_WAN",
-            "delay": "4.415ms",
-            "stddev": "3.239ms",
-            "loss": "0.0%",
-            "status": "none"
-          }
-        }
+{
+  "callid": "598ecf3e7011e",
+  "action": "gateway_status",
+  "message": "ok",
+  "data": {
+    "gateway_status": {
+      "10.22.33.1": {
+        "monitorip": "8.8.8.8",
+        "srcip": "10.22.33.100",
+        "name": "GW_WAN",
+        "delay": "4.415ms",
+        "stddev": "3.239ms",
+        "loss": "0.0%",
+        "status": "none"
       }
     }
+  }
+}
 ```
 
 
-### `/fauxapi/v1/?action=send_event`
- - Performs a pfSense "send_event" command to cause various pfSense system 
-   actions, the following standard pfSense send_event combinations are permitted:-
-    - filter: reload, sync
-    - interface: all, newip, reconfigure
-    - service: reload, restart, sync
- - HTTP: **`POST`**
- - Params: none
-
-*Example Request*
-```bash
-    curl \
-        -X POST \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        --header "Content-Type: application/json" \
-        --data "[\"interface reload all\"]" \
-        "https://192.168.10.10/fauxapi/v1/?action=send_event"
-```
-
-*Example Response*
-```javascript
-    {
-      "callid": "58312bb3398bc",
-      "action": "send_event",
-      "message": "ok"
-    }
-```
-
-
-### `/fauxapi/v1/?action=rule_get`
+<br><a name="rule_get"></a>
+#### rule_get
  - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command 
    on the pfSense host.  An empty rule_number parameter causes all rules to be
    returned.
- - HTTP: **`GET`**
+ - HTTP: **GET**
  - Params:
-    - `rule_number` (optional, default = null)
+    - **rule_number** (optional, default = null)
 
 *Example Request*
 ```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=rule_get&rule_number=5"
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=rule_get&rule_number=5"
 ```
 
 *Example Response*
 ```javascript
-    {
-      "callid": "583c279b56958",
-      "action": "rule_get",
-      "message": "ok",
-      "data": {
-        "rules": [
-          {
-            "rule": "anchor \"openvpn/*\" all",
-            "evaluations": "14134",
-            "packets": "0",
-            "bytes": "0",
-            "states": "0",
-            "inserted": "21188",
-            "statecreations": "0"
-          }
-        ]
+{
+  "callid": "583c279b56958",
+  "action": "rule_get",
+  "message": "ok",
+  "data": {
+    "rules": [
+      {
+        "rule": "anchor \"openvpn/*\" all",
+        "evaluations": "14134",
+        "packets": "0",
+        "bytes": "0",
+        "states": "0",
+        "inserted": "21188",
+        "statecreations": "0"
       }
-    }
+    ]
+  }
+}
 ```
 
 
-### `/fauxapi/v1/?action=alias_update_urltables`
- - Causes the pfSense host to immediately update any urltable alias entries
-   from their (remote) source URLs.  Optionally update just one table by 
-   specifying the table name, else all tables are updated.
- - HTTP: **`GET`**
- - Params:
-    - `table` (optional, default = null)
-
-*Example Request*
-```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=alias_update_urltables"
-```
-
-*Example Response*
-```javascript
-    {
-      "callid": "598ec756b4d09",
-      "action": "alias_update_urltables",
-      "message": "ok",
-      "data": {
-        "updates": {
-          "bruteforceblocker": {
-            "url": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset",
-            "status": [
-              "no changes."
-            ]
-          }
-        }
-      }
-    }
-```
-
-
-### `/fauxapi/v1/?action=system_reboot`
- - Just as it says, reboots the system.
- - HTTP: **`GET`**
+<br><a name="send_event"></a>
+#### send_event
+ - Performs a pfSense "send_event" command to cause various pfSense system 
+   actions as is also available through the pfSense console interface.  The 
+   following standard pfSense send_event combinations are permitted:-
+    - filter: reload, sync
+    - interface: all, newip, reconfigure
+    - service: reload, restart, sync
+ - HTTP: **POST**
  - Params: none
 
 *Example Request*
 ```bash
-    curl \
-        -X GET \
-        --silent \
-        --insecure \
-        --header "fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1ae40adc68dd9fd6b158fb82c99f3aaa2bb55" \
-        "https://192.168.10.10/fauxapi/v1/?action=system_reboot"
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --header "Content-Type: application/json" \
+    --data "[\"interface reload all\"]" \
+    "https://<host-address>/fauxapi/v1/?action=send_event"
 ```
 
 *Example Response*
 ```javascript
-    {
-      "callid": "58312bb3487ac",
-      "action": "system_reboot",
-      "message": "ok"
-    }
+{
+  "callid": "58312bb3398bc",
+  "action": "send_event",
+  "message": "ok"
+}
 ```
 
+
+<br><a name="system_reboot"></a>
+#### system_reboot
+ - Just as it says, reboots the system.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=system_reboot"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "58312bb3487ac",
+  "action": "system_reboot",
+  "message": "ok"
+}
+```
+
+
+<br><a name="system_stats"></a>
+#### system_stats
+ - Returns various useful system stats.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=system_stats"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "583d5ce3301f4",
+  "action": "system_stats",
+  "message": "ok",
+  "data": {
+    "stats": {
+      "cpu": "2",
+      "mem": "16",
+      "uptime": "9 Days 20 Hours 02 Minutes 08 Seconds",
+      "states": "364/48000",
+      "temp": "",
+      "datetime": "20161129Z104804",
+      "interfacestatistics": "",
+      "interfacestatus": "",
+      "cpufreq": "",
+      "load_average": [
+        "0.29",
+        "0.29",
+        "0.28"
+      ],
+      "mbuf": "1016/30414",
+      "mbufpercent": "3",
+      "statepercent": "1"
+    }
+  }
+}
+```
+
+---
+
+### Versions and Testing
+The FauxAPI has been developed against pfSense 2.3.2, 2.3.3 and 2.3.4 it has 
+not (yet) been tested against 2.3.0 or 2.3.1 or the (currently) in development 
+2.4 releases.  Further, it is apparent that the pfSense packaging technique 
+changed significantly prior to 2.3.x so it is unlikely that it will be 
+backported to anything prior to 2.3.0.
+
+Testing is reasonable but does not achieve 100% code coverage within the FauxAPI 
+codebase.  Two client side test scripts (1x Bash, 1x Python) that both 
+demonstrate and test all possible server side actions are provided.  Under the 
+hood FauxAPI, performs real-time sanity checks and tests to make sure the user 
+supplied configurations will save, load and reload as expected.
+
+__Shout Out:__ *Anyone that happens to know of _any_ test harness or test code 
+for pfSense please get in touch - I'd very much prefer to integrate with existing 
+pfSense test infrastructure if it already exists.*
+
+---
+
+### Releases
+#### v1.0 - 2016-11-20
+ - initial release
+
+#### v1.1 - 2017-08-12
+ - 2x new API actions **alias_update_urltables** and **gateway_status**
+ - update documentation to address common points of confusion, especially the 
+   requirement to provide the _full_ config file not just the portion to be 
+   updated.
+ - testing against pfSense 2.3.2 and 2.3.3
+
+#### v1.2 - 2017-08-27
+ - new API action **function_call** allowing the user to reach deep into the inner 
+   code infrastructure of pfSense, this feature is intended for people with a 
+   solid understanding of PHP and pfSense.
+ - the `credentials.ini` file now provides a way to control the permitted API 
+   actions.
+ - various update documentation updates.
+ - testing against pfSense 2.3.4
 
 ---
 
