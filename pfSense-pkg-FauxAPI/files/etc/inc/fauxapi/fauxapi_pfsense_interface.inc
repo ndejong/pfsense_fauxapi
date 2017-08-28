@@ -261,8 +261,15 @@ class fauxApiPfsenseInterface {
             $config_file = $this->config_default_filename;
         }
         
-        if(strpos($config_file, $this->config_base_path) !== 0 || strpos($config_file, '..') !== FALSE){
+        if(strpos($config_file, $this->config_base_path) === FALSE || strpos($config_file, '..') !== FALSE){
             fauxApiLogger::error('attempting to load config file from non-supported path', array(
+                'config_file' => $config_file,
+            ));
+            return FALSE;
+        }
+        
+        if(!is_file($config_file)) {
+            fauxApiLogger::error('attempting to load config file that does not exist', array(
                 'config_file' => $config_file,
             ));
             return FALSE;
