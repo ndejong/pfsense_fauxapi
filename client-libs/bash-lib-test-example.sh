@@ -20,7 +20,12 @@ source $(dirname ${0})/bash/fauxapi_lib.sh
 
 # check args exist
 if [ -z ${1} ] || [ -z ${2} ] || [ -z ${3} ]; then
+    echo ''
     echo 'usage: '$0' <host> <apikey> <apisecret>'
+    echo ''
+    echo 'pipe JSON output through jq for easy pretty print output:-'
+    echo ' $ '$0' <host> <apikey> <apisecret> | jq .'
+    echo ''
     exit 1
 fi
 
@@ -30,15 +35,18 @@ fauxapi_apikey=${2}
 fauxapi_apisecret=${3}
 
 # establish the debug and auth then export
-export fauxapi_debug=true
+export fauxapi_debug=FALSE
 export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 
 
 # config_get
+fauxapi_config_get ${fauxapi_host}
+
+# config_get - and write the config to file /tmp/pfsense-fauxapi.json
 # NB: must have the 'jq' binary to process the JSON response easily!
 #fauxapi_config_get ${fauxapi_host} | jq .data.config > /tmp/pfsense-fauxapi.json
 
-# config_set
+# config_set - set the config from file /tmp/pfsense-fauxapi.json
 #fauxapi_config_set ${fauxapi_host} /tmp/pfsense-fauxapi.json
 
 # config_reload
@@ -51,7 +59,7 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 #fauxapi_config_backup_list ${fauxapi_host}
 
 # config_restore
-#fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1481190790.xml
+#fauxapi_config_restore ${fauxapi_host} /cf/conf/backup/config-1503920085.xml
 
 # fauxapi_system_stats
 #fauxapi_system_stats ${fauxapi_host}
@@ -71,13 +79,13 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 # rule_get - get rule number 5
 #fauxapi_rule_get ${fauxapi_host} 5
 
-# alias_update_urltables
+# alias_update_urltables - reload all urltables
 #fauxapi_alias_update_urltables ${fauxapi_host}
 
-# system_reboot
+# system_reboot - reboot the system
 #fauxapi_system_reboot ${fauxapi_host}
 
-# function_call examples
+# function_call - examples
 #fauxapi_function_call ${fauxapi_host} '{"function": "return_gateways_status", "args": [false]}'
 #fauxapi_function_call ${fauxapi_host} '{"function": "discover_last_backup"}'
 #fauxapi_function_call ${fauxapi_host} '{"function": "return_gateways_status", "includes": ["gwlb.inc"]}'

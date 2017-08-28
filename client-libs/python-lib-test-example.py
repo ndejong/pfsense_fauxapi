@@ -15,12 +15,17 @@
 # limitations under the License.
 # 
 
-import pprint, sys
+import sys, json
 from python.fauxapi_lib import FauxapiLib
 
 # check args exist
 if(len(sys.argv) < 4):
+    print()
     print('usage: ' + sys.argv[0] + ' <host> <apikey> <apisecret>')
+    print()
+    print('pipe JSON output through jq for easy pretty print output:-')
+    print(' $ ' + sys.argv[0] + ' <host> <apikey> <apisecret> | jq .')
+    print()
     sys.exit(1)
 
 # config
@@ -33,43 +38,64 @@ FauxapiLib = FauxapiLib(fauxapi_host, fauxapi_apikey, fauxapi_apisecret, debug=F
 
 # config get
 config = FauxapiLib.config_get()
-config_filter = FauxapiLib.config_get('filter')  # get 'filter' section only
+print(json.dumps(config))
+
+# config get - filter section only
+#config_filter = FauxapiLib.config_get('filter')  # get 'filter' section only
 
 # config set
-pprint.pprint(FauxapiLib.config_set(config))
+#print(json.dumps(FauxapiLib.config_set(config)))
 
-# config set just the section under 'aliases'
-config_aliases = FauxapiLib.config_get('aliases')
-pprint.pprint(FauxapiLib.config_set(config_aliases, 'aliases'))
+# config get and set within the 'aliases' section only
+#config_aliases = FauxapiLib.config_get('aliases')
+#print(json.dumps(FauxapiLib.config_set(config_aliases, 'aliases')))
 
 # config reload
-pprint.pprint(FauxapiLib.config_reload())
+#print(json.dumps(FauxapiLib.config_reload()))
 
 # config backuo
-pprint.pprint(FauxapiLib.config_backup())
+#print(json.dumps(FauxapiLib.config_backup()))
 
 # config_backup_list
-pprint.pprint(FauxapiLib.config_backup_list())
+#print(json.dumps(FauxapiLib.config_backup_list()))
 
 # config_restore
-#pprint.pprint(FauxapiLib.config_restore('/cf/conf/backup/config-1480337444.xml'))
+#print(json.dumps(FauxapiLib.config_restore('/cf/conf/backup/config-1503921775.xml')))
 
 # system_stats
-pprint.pprint(FauxapiLib.system_stats())
+#print(json.dumps(FauxapiLib.system_stats()))
 
 # gateway_status
-pprint.pprint(FauxapiLib.gateway_status())
+#print(json.dumps(FauxapiLib.gateway_status()))
 
-# send_event
-#pprint.pprint(FauxapiLib.send_event('filter reload'))
-pprint.pprint(FauxapiLib.send_event('interface all reload'))
+# send_event - filter reload
+#print(json.dumps(FauxapiLib.send_event('filter reload')))
 
-# rule_get
-#pprint.pprint(FauxapiLib.rule_get())
-pprint.pprint(FauxapiLib.rule_get(5))
+# send_event - interface all reload
+#print(json.dumps(FauxapiLib.send_event('interface all reload')))
+
+# rule_get - get all rules
+#print(json.dumps(FauxapiLib.rule_get()))
+
+# rule_get - get rule number 5
+#print(json.dumps(FauxapiLib.rule_get(5)))
 
 # alias_update_urltables
-pprint.pprint(FauxapiLib.alias_update_urltables())
+#print(json.dumps(FauxapiLib.alias_update_urltables()))
 
-# system reboot
-#pprint.pprint(FauxapiLib.system_reboot())
+# # system reboot
+#print(json.dumps(FauxapiLib.system_reboot()))
+
+# function_call - examples
+#print(json.dumps(FauxapiLib.function_call( {'function':'return_gateways_status','args':[False]} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'discover_last_backup'} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'return_gateways_status','includes':['gwlb.inc']} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'return_gateways_status_text','args':[True,False]} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'get_carp_status'} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'get_dns_servers'} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'get_system_pkg_version'} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'pkg_list_repos'} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'get_services'} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'get_service_status', 'args': ['ntpd']} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'is_service_enabled', 'args': ['ntpd']} )))
+#print(json.dumps(FauxapiLib.function_call( {'function':'is_service_running', 'args': ['ntpd']} )))

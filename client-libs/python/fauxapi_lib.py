@@ -134,6 +134,12 @@ class FauxapiLib:
             raise FauxapiLibException('unable to complete alias_update_urltables() request', json.loads(res.text))
         return json.loads(res.text)
 
+    def function_call(self, data):
+        res = self._api_request('POST', 'function_call', data=json.dumps(data))
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete send_event() request', json.loads(res.text))
+        return json.loads(res.text)
+
     def _api_request(self, method, action, params={}, data=None):
         if self.debug:
             params['__debug'] = 'true'
