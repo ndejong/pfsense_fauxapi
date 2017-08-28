@@ -9,8 +9,8 @@ installation example below.  It take just 2x commands to install and just 1x
 command to de-install if you need to.
 
 ## Current Version
- - pfSense-pkg-FauxAPI-1.1_2.txz
- - SHA256: edf773ab7a70e7b117125569eb3b495142eefd709b21e22eff8eb957ec7800ab
+ - pfSense-pkg-FauxAPI-1.2_1.txz
+ - SHA256: 4e93e8ba4266b6524d6347bb15fd7214a8c64a2061517706939f5dc7261d7408
 
 ## Installation Example
 ```

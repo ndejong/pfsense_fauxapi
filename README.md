@@ -68,8 +68,10 @@ now provides the ability to issue function calls directly into pfSense.*
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to 
 install manually from **root** as shown:-
 ```bash
-fetch https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package/pfSense-pkg-FauxAPI-LATEST.txz
-pkg install pfSense-pkg-FauxAPI-LATEST.txz
+set fauxapi_baseurl='https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package'
+set fauxapi_latest=`curl --silent $fauxapi_baseurl/LATEST`
+fetch $fauxapi_baseurl/$fauxapi_latest
+pkg install $fauxapi_latest
 ```
 
 Installation and de-installation is quite straight forward, further examples can 
