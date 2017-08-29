@@ -40,53 +40,82 @@ FauxapiLib = FauxapiLib(fauxapi_host, fauxapi_apikey, fauxapi_apisecret, debug=F
 config = FauxapiLib.config_get()
 print(json.dumps(config))
 
-# config get - filter section only
-#config_filter = FauxapiLib.config_get('filter')  # get 'filter' section only
-
-# config set
-#print(json.dumps(FauxapiLib.config_set(config)))
-
-# config get and set within the 'aliases' section only
-#config_aliases = FauxapiLib.config_get('aliases')
-#print(json.dumps(FauxapiLib.config_set(config_aliases, 'aliases')))
-
-# config reload
-#print(json.dumps(FauxapiLib.config_reload()))
-
-# config backuo
-#print(json.dumps(FauxapiLib.config_backup()))
-
-# config_backup_list
-#print(json.dumps(FauxapiLib.config_backup_list()))
-
-# config_restore
-#print(json.dumps(FauxapiLib.config_restore('/cf/conf/backup/config-1503921775.xml')))
-
-# system_stats
-#print(json.dumps(FauxapiLib.system_stats()))
-
-# gateway_status
-#print(json.dumps(FauxapiLib.gateway_status()))
-
-# send_event - filter reload
-#print(json.dumps(FauxapiLib.send_event('filter reload')))
-
-# send_event - interface all reload
-#print(json.dumps(FauxapiLib.send_event('interface all reload')))
-
-# rule_get - get all rules
-#print(json.dumps(FauxapiLib.rule_get()))
-
-# rule_get - get rule number 5
-#print(json.dumps(FauxapiLib.rule_get(5)))
-
-# alias_update_urltables
-#print(json.dumps(FauxapiLib.alias_update_urltables()))
-
+# # config get - filter section only
+# config_filter = FauxapiLib.config_get('filter')  # get 'filter' section only
+#
+# # config set
+# print(json.dumps(
+#     FauxapiLib.config_set(config))
+# )
+#
+# # config get and set within the 'aliases' section only
+# config_aliases = FauxapiLib.config_get('aliases')
+# print(json.dumps(
+#     FauxapiLib.config_set(config_aliases, 'aliases'))
+# )
+#
+# # config reload
+# print(json.dumps(
+#     FauxapiLib.config_reload())
+# )
+#
+# # config backuo
+# print(json.dumps(
+#     FauxapiLib.config_backup())
+# )
+#
+# # config_backup_list
+# print(json.dumps(
+#     FauxapiLib.config_backup_list())
+# )
+#
+# # config_restore
+# print(json.dumps(
+#     FauxapiLib.config_restore('/cf/conf/backup/config-1503921775.xml'))
+# )
+#
+# # system_stats
+# print(json.dumps(
+#     FauxapiLib.system_stats())
+# )
+#
+# # gateway_status
+# print(json.dumps(
+#     FauxapiLib.gateway_status())
+# )
+#
+# # send_event - filter reload
+# print(json.dumps(
+#     FauxapiLib.send_event('filter reload'))
+# )
+#
+# # send_event - interface all reload
+# print(json.dumps(
+#     FauxapiLib.send_event('interface all reload'))
+# )
+#
+# # rule_get - get all rules
+# print(json.dumps(
+#     FauxapiLib.rule_get())
+# )
+#
+# # rule_get - get rule number 5
+# print(json.dumps(
+#     FauxapiLib.rule_get(5))
+# )
+#
+# # alias_update_urltables
+# print(json.dumps(
+#     FauxapiLib.alias_update_urltables())
+# )
+#
 # # system reboot
-#print(json.dumps(FauxapiLib.system_reboot()))
+# print(json.dumps(
+#     FauxapiLib.system_reboot())
+# )
 
-# function_call - examples
+
+# # function_call - examples
 # print(json.dumps(
 #     FauxapiLib.function_call({
 #         'function': 'return_gateways_status',
