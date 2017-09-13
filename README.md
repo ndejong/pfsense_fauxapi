@@ -8,7 +8,7 @@ tasks feasible.
 
 ---
 
-### API Action Summary
+## API Action Summary
  - [alias_update_urltables](#user-content-alias_update_urltables) - Causes the pfSense host to immediately update any urltable alias entries from their (remote) source URLs.
  - [config_backup](#user-content-config_backup) - Causes the system to take a configuration backup and add it to the regular set of system change backups.
  - [config_backup_list](#user-content-config_backup_list) - Returns a list of the currently available system configuration backups.
@@ -25,7 +25,7 @@ tasks feasible.
 
 ---
 
-### Approach
+## Approach
 At its core FauxAPI simply reads the core pfSense `config.xml` file, converts it 
 to JSON and returns to the API caller.  Similarly it can take a JSON formatted 
 configuration and write it to the pfSense `config.xml` and handles the required 
@@ -64,7 +64,7 @@ now provides the ability to issue function calls directly into pfSense.*
 
 ---
 
-### Installation
+## Installation
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to 
 install manually from **root** as shown:-
 ```bash
@@ -81,7 +81,7 @@ Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense
 
 ---
 
-### Debugging
+## Debugging
 FauxAPI comes with awesome debug logging capability, simply insert `__debug=true` 
 as a URL request parameter and the response data will contain rich debugging log 
 data about the flow of the request.
@@ -93,7 +93,7 @@ can be done to accommodate.
 ---
 
 <a name="client_libraries"></a>
-### Client libraries
+## Client libraries
 
 #### Python
 A [Python interface](https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs) 
@@ -140,7 +140,7 @@ pull request, there are no doubt others that will appreciate a PHP interface.
 
 ---
 
-### API Authentication
+## API Authentication
 A deliberate design decision to decouple FauxAPI authentication from both the 
 pfSense user authentication and the pfSense `config.xml` system.  This was done 
 to limit the possibility of an accidental API change that removes access to the 
@@ -206,7 +206,7 @@ about this.
 
 ---
 
-### API Authorization
+## API Authorization
 The file `/etc/fauxapi/credentials.ini` additionally provides a method to restrict
 the API actions available to the API key using the **permit** configuration 
 parameter.  Permits are comma delimited and may contain * wildcards to match more
@@ -221,7 +221,7 @@ owner = example key PFFAexample01 - hardcoded to be inoperative
 
 ---
 
-### API REST Actions
+## API REST Actions
 The following REST based API actions are provided, example cURL call request 
 examples are provided for each.  The API user is perhaps more likely to interface 
 with the [client libraries](#user-content-client_libraries) as documented above 
@@ -238,7 +238,7 @@ client side to hence remove scope for man-in-middle concerns.
 
 
 <br><a name="alias_update_urltables"></a>
-#### alias_update_urltables
+### alias_update_urltables
  - Causes the pfSense host to immediately update any urltable alias entries
    from their (remote) source URLs.  Optionally update just one table by 
    specifying the table name, else all tables are updated.
@@ -277,7 +277,7 @@ curl \
 
 
 <br><a name="config_backup"></a>
-#### config_backup
+### config_backup
  - Causes the system to take a configuration backup and add it to the regular 
    set of pfSense system backups at `/cf/conf/backup/`
  - HTTP: **GET**
@@ -307,7 +307,7 @@ curl \
 
 
 <br><a name="config_backup_list"></a>
-#### config_backup_list
+### config_backup_list
  - Returns a list of the currently available pfSense system configuration backups.
  - HTTP: **GET**
  - Params: none
@@ -342,7 +342,7 @@ curl \
 
 
 <br><a name="config_get"></a>
-#### config_get
+### config_get
  - Returns the system configuration as a JSON formatted string.  Additionally, 
    using the optional **config_file** parameter it is possible to retrieve backup
    configurations by providing the full path to it under the `/cf/conf/backup` 
@@ -391,7 +391,7 @@ cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.j
 
 
 <br><a name="config_reload"></a>
-#### config_reload
+### config_reload
  - Causes the pfSense system to perform a reload of the `config.xml` file, by 
    default this happens when the **config_set** action occurs hence there is 
    normally no need to explicitly call this after a **config_set** action.
@@ -419,7 +419,7 @@ curl \
 
 
 <br><a name="config_restore"></a>
-#### config_restore
+### config_restore
  - Restores the pfSense system to the named backup configuration.
  - HTTP: **GET**
  - Params:
@@ -449,7 +449,7 @@ curl \
 
 
 <br><a name="config_set"></a>
-#### config_set
+### config_set
  - Sets a full system configuration and (by default) takes a system config
    backup and (by default) causes the system config to be reloaded once 
    successfully written and tested.
@@ -487,7 +487,7 @@ curl \
 
 
 <br><a name="function_call"></a>
-#### function_call
+### function_call
  - Call directly a pfSense PHP function with API user supplied parameters.  Note
    that is action is a *VERY* raw interface into the inner workings of pfSense 
    and it is not recommended for API users that do not have a solid understanding 
@@ -535,7 +535,7 @@ curl \
 
 
 <br><a name="gateway_status"></a>
-#### gateway_status
+### gateway_status
  - Returns gateway status data.
  - HTTP: **GET**
  - Params: none
@@ -574,7 +574,7 @@ curl \
 
 
 <br><a name="rule_get"></a>
-#### rule_get
+### rule_get
  - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command 
    on the pfSense host.  An empty rule_number parameter causes all rules to be
    returned.
@@ -616,7 +616,7 @@ curl \
 
 
 <br><a name="send_event"></a>
-#### send_event
+### send_event
  - Performs a pfSense "send_event" command to cause various pfSense system 
    actions as is also available through the pfSense console interface.  The 
    following standard pfSense send_event combinations are permitted:-
@@ -649,7 +649,7 @@ curl \
 
 
 <br><a name="system_reboot"></a>
-#### system_reboot
+### system_reboot
  - Just as it says, reboots the system.
  - HTTP: **GET**
  - Params: none
@@ -675,7 +675,7 @@ curl \
 
 
 <br><a name="system_stats"></a>
-#### system_stats
+### system_stats
  - Returns various useful system stats.
  - HTTP: **GET**
  - Params: none
@@ -722,7 +722,7 @@ curl \
 
 ---
 
-### Versions and Testing
+## Versions and Testing
 The FauxAPI has been developed against pfSense 2.3.2, 2.3.3 and 2.3.4 it has 
 not (yet) been tested against 2.3.0 or 2.3.1 or the (currently) in development 
 2.4 releases.  Further, it is apparent that the pfSense packaging technique 
@@ -741,7 +741,7 @@ pfSense test infrastructure if it already exists.*
 
 ---
 
-### Releases
+## Releases
 #### v1.0 - 2016-11-20
  - initial release
 
@@ -763,7 +763,7 @@ pfSense test infrastructure if it already exists.*
 
 ---
 
-### FauxAPI License
+## FauxAPI License
 ```
 Copyright 2017 Nicholas de Jong  
 
