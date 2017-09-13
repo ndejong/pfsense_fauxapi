@@ -164,9 +164,9 @@ Where the &lt;hash&gt; value is calculated like so:-
 
 NB: that the timestamp value is internally passed to the PHP `strtotime` function 
 which can interpret a wide variety of timestamp formats together with a timezone.
-A tidy timestamp format that the `strtotime` PHP function can be obtained in 
-bash using `date --utc +%Y%m%dZ%H%M%S` where the `Z` date-time seperator also 
-specifies the UTC timezone.  
+A nice tidy timestamp format that the `strtotime` PHP function is able to process
+can be obtained using bash command `date --utc +%Y%m%dZ%H%M%S` where the `Z` 
+date-time seperator hence also specifies the UTC timezone.  
 
 This is all handled in the [client libraries](#user-content-client_libraries) 
 provided, but as can be seen it is relatively easy to implement even in a Bash 
