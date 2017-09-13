@@ -228,9 +228,7 @@ deployments do not deploy certificate chain signed SSL certificates.  A reasonab
 improvement in this regard might be to implement certificate pinning at the 
 client side to hence remove scope for man-in-middle concerns.
 
-<br>
 ---
-<a name="alias_update_urltables"></a>
 ### alias_update_urltables
  - Causes the pfSense host to immediately update any urltable alias entries
    from their (remote) source URLs.  Optionally update just one table by 
