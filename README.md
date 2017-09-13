@@ -266,9 +266,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="config_backup"></a>
 ### config_backup
  - Causes the system to take a configuration backup and add it to the regular 
    set of pfSense system backups at `/cf/conf/backup/`
@@ -297,9 +295,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="config_backup_list"></a>
 ### config_backup_list
  - Returns a list of the currently available pfSense system configuration backups.
  - HTTP: **GET**
@@ -333,9 +329,7 @@ curl \
       ....
 ```
 
-<br>
 ---
-<a name="config_get"></a>
 ### config_get
  - Returns the system configuration as a JSON formatted string.  Additionally, 
    using the optional **config_file** parameter it is possible to retrieve backup
@@ -383,9 +377,7 @@ Hint: use `jq` to parse the response JSON and obtain the config only, as such:-
 cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.json
 ```
 
-<br>
 ---
-<a name="config_reload"></a>
 ### config_reload
  - Causes the pfSense system to perform a reload of the `config.xml` file, by 
    default this happens when the **config_set** action occurs hence there is 
@@ -412,9 +404,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="config_restore"></a>
 ### config_restore
  - Restores the pfSense system to the named backup configuration.
  - HTTP: **GET**
@@ -443,9 +433,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="config_set"></a>
 ### config_set
  - Sets a full system configuration and (by default) takes a system config
    backup and (by default) causes the system config to be reloaded once 
@@ -482,9 +470,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="function_call"></a>
 ### function_call
  - Call directly a pfSense PHP function with API user supplied parameters.  Note
    that is action is a *VERY* raw interface into the inner workings of pfSense 
@@ -531,9 +517,7 @@ curl \
 
 ```
 
-<br>
 ---
-<a name="gateway_status"></a>
 ### gateway_status
  - Returns gateway status data.
  - HTTP: **GET**
@@ -571,9 +555,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="rule_get"></a>
 ### rule_get
  - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command 
    on the pfSense host.  An empty rule_number parameter causes all rules to be
@@ -614,9 +596,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="send_event"></a>
 ### send_event
  - Performs a pfSense "send_event" command to cause various pfSense system 
    actions as is also available through the pfSense console interface.  The 
@@ -648,9 +628,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="system_reboot"></a>
 ### system_reboot
  - Just as it says, reboots the system.
  - HTTP: **GET**
@@ -675,9 +653,7 @@ curl \
 }
 ```
 
-<br>
 ---
-<a name="system_stats"></a>
 ### system_stats
  - Returns various useful system stats.
  - HTTP: **GET**
