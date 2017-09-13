@@ -6,7 +6,6 @@ Additionally available are a set of [client libraries](#user-content-client_libr
 that hence make programmatic access and management of pfSense hosts for devops 
 tasks feasible.
 
----
 
 ## API Action Summary
  - [alias_update_urltables](#user-content-alias_update_urltables) - Causes the pfSense host to immediately update any urltable alias entries from their (remote) source URLs.
@@ -23,7 +22,6 @@ tasks feasible.
  - [system_reboot](#user-content-system_reboot) - Reboots the pfSense system.
  - [system_stats](#user-content-system_stats) - Returns various useful system stats.
 
----
 
 ## Approach
 At its core FauxAPI simply reads the core pfSense `config.xml` file, converts it 
@@ -62,7 +60,6 @@ included below and refer to a the resolution to [user issue #10](https://github.
 __NB:__ *As at FauxAPI v1.2 the **function_call** action has been introduced that 
 now provides the ability to issue function calls directly into pfSense.*
 
----
 
 ## Installation
 Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to 
@@ -79,7 +76,6 @@ be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package).
 
 Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS)
 
----
 
 ## Debugging
 FauxAPI comes with awesome debug logging capability, simply insert `__debug=true` 
@@ -90,7 +86,6 @@ If you are looking for more debugging at various points feel free to submit a
 pull request or lodge an issue describing your requirement and I'll see what
 can be done to accommodate.
 
----
 
 <a name="client_libraries"></a>
 ## Client libraries
@@ -138,7 +133,6 @@ A PHP interface does not yet exist, it should be fairly easy to develop by
 observing the Bash and Python examples - if you do please submit it as a github 
 pull request, there are no doubt others that will appreciate a PHP interface.
 
----
 
 ## API Authentication
 A deliberate design decision to decouple FauxAPI authentication from both the 
@@ -204,7 +198,6 @@ seconds seems tight, however, provided you are using NTP to look after your
 system time it's quite unlikely to cause issues - happy to receive feedback 
 about this.
 
----
 
 ## API Authorization
 The file `/etc/fauxapi/credentials.ini` additionally provides a method to restrict
@@ -219,7 +212,6 @@ permit = alias_*, config_*, gateway_*, rule_*, send_*, system_*, function_*
 owner = example key PFFAexample01 - hardcoded to be inoperative
 ```
 
----
 
 ## API REST Actions
 The following REST based API actions are provided, example cURL call request 
@@ -236,7 +228,7 @@ deployments do not deploy certificate chain signed SSL certificates.  A reasonab
 improvement in this regard might be to implement certificate pinning at the 
 client side to hence remove scope for man-in-middle concerns.
 
-
+---
 <br><a name="alias_update_urltables"></a>
 ### alias_update_urltables
  - Causes the pfSense host to immediately update any urltable alias entries
@@ -275,7 +267,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="config_backup"></a>
 ### config_backup
  - Causes the system to take a configuration backup and add it to the regular 
@@ -305,7 +297,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="config_backup_list"></a>
 ### config_backup_list
  - Returns a list of the currently available pfSense system configuration backups.
@@ -340,7 +332,7 @@ curl \
       ....
 ```
 
-
+---
 <br><a name="config_get"></a>
 ### config_get
  - Returns the system configuration as a JSON formatted string.  Additionally, 
@@ -389,7 +381,7 @@ Hint: use `jq` to parse the response JSON and obtain the config only, as such:-
 cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.json
 ```
 
-
+---
 <br><a name="config_reload"></a>
 ### config_reload
  - Causes the pfSense system to perform a reload of the `config.xml` file, by 
@@ -417,7 +409,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="config_restore"></a>
 ### config_restore
  - Restores the pfSense system to the named backup configuration.
@@ -447,7 +439,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="config_set"></a>
 ### config_set
  - Sets a full system configuration and (by default) takes a system config
@@ -485,7 +477,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="function_call"></a>
 ### function_call
  - Call directly a pfSense PHP function with API user supplied parameters.  Note
@@ -533,7 +525,7 @@ curl \
 
 ```
 
-
+---
 <br><a name="gateway_status"></a>
 ### gateway_status
  - Returns gateway status data.
@@ -572,7 +564,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="rule_get"></a>
 ### rule_get
  - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command 
@@ -614,7 +606,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="send_event"></a>
 ### send_event
  - Performs a pfSense "send_event" command to cause various pfSense system 
@@ -647,7 +639,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="system_reboot"></a>
 ### system_reboot
  - Just as it says, reboots the system.
@@ -673,7 +665,7 @@ curl \
 }
 ```
 
-
+---
 <br><a name="system_stats"></a>
 ### system_stats
  - Returns various useful system stats.
@@ -719,7 +711,6 @@ curl \
   }
 }
 ```
-
 ---
 
 ## Versions and Testing
@@ -739,7 +730,6 @@ __Shout Out:__ *Anyone that happens to know of _any_ test harness or test code
 for pfSense please get in touch - I'd very much prefer to integrate with existing 
 pfSense test infrastructure if it already exists.*
 
----
 
 ## Releases
 #### v1.0 - 2016-11-20
@@ -761,7 +751,6 @@ pfSense test infrastructure if it already exists.*
  - various update documentation updates.
  - testing against pfSense 2.3.4
 
----
 
 ## FauxAPI License
 ```
