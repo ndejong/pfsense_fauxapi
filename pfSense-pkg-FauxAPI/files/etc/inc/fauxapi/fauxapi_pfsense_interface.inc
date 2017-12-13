@@ -409,8 +409,7 @@ class fauxApiPfsenseInterface {
         $stats['interfacestatus']       = strip_tags(\get_interfacestatus());
         $stats['cpufreq']               = strip_tags(\get_cpufreq());
         $stats['load_average']          = explode(',',str_replace(' ','',strip_tags(\get_load_average())));
-        $stats['mbuf']                  = strip_tags(\get_mbuf());
-        $stats['mbufpercent']           = strip_tags(\get_mbuf(true));
+        strip_tags(\get_mbuf($stats['mbuf'],$stats['mbufpercent']));
         $stats['statepercent']          = strip_tags(\get_pfstate(true));
         
         return $stats;
