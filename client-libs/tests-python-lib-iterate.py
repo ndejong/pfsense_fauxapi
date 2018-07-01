@@ -35,25 +35,24 @@ fauxapi_apisecret=sys.argv[3]
 
 FauxapiLib = FauxapiLib(fauxapi_host, fauxapi_apikey, fauxapi_apisecret, debug=False)
 
-
-# config get
+# config get the full configuration
 config = FauxapiLib.config_get()
-print(json.dumps(config))
+print(json.dumps(
+    config
+))
 
-# # config get - filter section only
-# config_filter = FauxapiLib.config_get('filter')  # get 'filter' section only
-#
-# # config set
-# print(json.dumps(
-#     FauxapiLib.config_set(config))
-# )
-#
-# # config get and set within the 'aliases' section only
-# config_aliases = FauxapiLib.config_get('aliases')
-# print(json.dumps(
-#     FauxapiLib.config_set(config_aliases, 'aliases'))
-# )
-#
+# config set the full configuration
+print(json.dumps(
+    FauxapiLib.config_set(config)
+))
+
+# config get and set within the 'aliases' section only - in this example we are simply setting the same aliases
+# back again, of course this could be far more elaborate
+config_aliases = FauxapiLib.config_get('aliases')
+print(json.dumps(
+    FauxapiLib.config_set(config_aliases, 'aliases'))
+)
+
 # # config reload
 # print(json.dumps(
 #     FauxapiLib.config_reload())
@@ -172,7 +171,16 @@ print(json.dumps(config))
 #         'function': 'get_services',
 #     }
 # )))
-#
+#l
+
+# print(json.dumps(
+#     FauxapiLib.function_call({
+#         'function': 'easyrule_block_alias_getid',
+#         'args': ['wan']
+#     }
+# )))
+
+
 # print(json.dumps(
 #     FauxapiLib.function_call({
 #         'function': 'get_service_status',
