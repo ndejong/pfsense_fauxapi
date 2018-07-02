@@ -40,10 +40,22 @@ function fauxapi_load_credentials_ini($filename) {
             if(!isset($ini_section_items['permit'])) {
                 $ini_section_items['permit'] = '&lt;none&gt;';
             }
+            
+            if(array_key_exists('comment', $ini_section_items)) {
+                $comment = $ini_section_items['comment'];
+            }
+            elseif(array_key_exists('owner', $ini_section_items)) {
+                // legacy 
+                $comment = $ini_section_items['owner'];
+            }
+            else {
+                $comment = '-';
+            }
+            
             $credentials[] = array(
                 'apikey' => $ini_section,
                 'permits' => explode(',',str_replace(' ', '', $ini_section_items['permit'])),
-                'apiowner' => array_key_exists('owner', $ini_section_items) ? $ini_section_items['owner'] : '-'
+                'comment' => $comment
             );
         }
     }
@@ -64,7 +76,7 @@ function fauxapi_load_credentials_ini($filename) {
                         <th>key</th>
                         <th>secret</th>
                         <th>permits</th>
-                        <th>owner</th>
+                        <th>comment</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,7 +90,7 @@ function fauxapi_load_credentials_ini($filename) {
                             print $permit.'<br />';
                         } 
                         print '</div></td>';
-                        print '<td><div style="font-family:monospace;">'.$credential['apiowner'].'</div></td>';
+                        print '<td><div style="font-family:monospace;">'.$credential['comment'].'</div></td>';
                         print '</tr>';
                     }
                     ?>

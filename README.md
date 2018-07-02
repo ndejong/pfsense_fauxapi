@@ -211,6 +211,9 @@ seconds seems tight, however, provided you are using NTP to look after your
 system time it's quite unlikely to cause issues - happy to receive feedback 
 about this.
 
+__Shout Out:__ *Seeking feedback on the API authentication, many developers 
+seem to stumble here.*
+
 
 ## API Authorization
 The file `/etc/fauxapi/credentials.ini` additionally provides a method to restrict
@@ -222,7 +225,7 @@ than one rule as shown in the example below.
 [PFFAexample01]
 secret = abcdefghijklmnopqrstuvwxyz0123456789abcd
 permit = alias_*, config_*, gateway_*, rule_*, send_*, system_*, function_*
-owner = example key PFFAexample01 - hardcoded to be inoperative
+comment = example key PFFAexample01 - hardcoded to be inoperative
 ```
 
 
@@ -801,6 +804,8 @@ pfSense test infrastructure if it already exists.*
  - addressed a bug with the `system_stats` function that was preventing it from returning, cause by an upstream 
    change(s) in the pfSense code.
  - small dcoumentation fixes
+ - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 
+   better place to keep non-package files, client-libs, examples, build tools etc
  - testing against pfSense 2.3.5
  - testing against pfSense 2.4.3
 

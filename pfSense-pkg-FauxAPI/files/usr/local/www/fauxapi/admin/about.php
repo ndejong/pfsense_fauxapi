@@ -235,6 +235,8 @@ clock else the auth token values calculated by the client will not be valid - 60
 seconds seems tight, however, provided you are using NTP to look after your
 system time it's quite unlikely to cause issues - happy to receive feedback
 about this.</p>
+<p><strong>Shout Out:</strong> <em>Seeking feedback on the API authentication, many developers
+seem to stumble here.</em></p>
 <h2>
 <a id="user-content-api-authorization" class="anchor" href="#api-authorization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authorization</h2>
 <p>The file <code>/etc/fauxapi/credentials.ini</code> additionally provides a method to restrict
@@ -244,7 +246,7 @@ than one rule as shown in the example below.</p>
 <pre><code>[PFFAexample01]
 secret = abcdefghijklmnopqrstuvwxyz0123456789abcd
 permit = alias_*, config_*, gateway_*, rule_*, send_*, system_*, function_*
-owner = example key PFFAexample01 - hardcoded to be inoperative
+comment = example key PFFAexample01 - hardcoded to be inoperative
 </code></pre>
 <h2>
 <a id="user-content-api-rest-actions" class="anchor" href="#api-rest-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API REST Actions</h2>
@@ -812,6 +814,8 @@ interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxap
 <li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, cause by an upstream
 change(s) in the pfSense code.</li>
 <li>small dcoumentation fixes</li>
+<li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path in the project repo as a
+better place to keep non-package files, client-libs, examples, build tools etc</li>
 <li>testing against pfSense 2.3.5</li>
 <li>testing against pfSense 2.4.3</li>
 </ul>
