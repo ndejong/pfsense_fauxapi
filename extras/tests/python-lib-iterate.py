@@ -56,21 +56,20 @@ print(json.dumps(
     FauxapiLib.config_set(config_aliases, 'aliases'))
 )
 
+# config reload
+print(json.dumps(
+    FauxapiLib.config_reload())
+)
 
-# # config reload
-# print(json.dumps(
-#     FauxapiLib.config_reload())
-# )
-#
-# # config backuo
-# print(json.dumps(
-#     FauxapiLib.config_backup())
-# )
-#
-# # config_backup_list
-# print(json.dumps(
-#     FauxapiLib.config_backup_list())
-# )
+# config backuo
+print(json.dumps(
+    FauxapiLib.config_backup())
+)
+
+# config_backup_list
+print(json.dumps(
+    FauxapiLib.config_backup_list())
+)
 
 # # config_restore
 # print(json.dumps(
@@ -81,10 +80,6 @@ print(json.dumps(
 print(json.dumps(
     FauxapiLib.system_stats())
 )
-
-exit()
-
-
 
 # gateway_status
 print(json.dumps(
@@ -120,7 +115,6 @@ print(json.dumps(
 # print(json.dumps(
 #     FauxapiLib.system_reboot())
 # )
-
 
 # function_call - examples
 print(json.dumps(
