@@ -71,6 +71,9 @@ fi
 # fauxapi_system_stats
 #fauxapi_system_stats ${fauxapi_host}
 
+# fauxapi_interface_stats - NB: the real interface name, not an alias such as "wan"
+#fauxapi_interface_stats ${fauxapi_host} em0
+
 # gateway_status
 #fauxapi_gateway_status ${fauxapi_host}
 

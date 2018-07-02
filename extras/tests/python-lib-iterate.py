@@ -38,11 +38,12 @@ fauxapi_apisecret=sys.argv[3]
 
 FauxapiLib = FauxapiLib(fauxapi_host, fauxapi_apikey, fauxapi_apisecret, debug=False)
 
+
 # config get the full configuration
 config = FauxapiLib.config_get()
-# print(json.dumps(
-#     config
-# ))
+print(json.dumps(
+    config
+))
 
 # config set the full configuration
 print(json.dumps(
@@ -50,7 +51,8 @@ print(json.dumps(
 ))
 
 # config get and set within the 'aliases' section only - in this example we are simply setting the same aliases
-# back again, of course this could be far more elaborate
+# back again, of course this could be far more elaborate by injecting aliases values etc - take a look at the example
+# code in update-aws-aliases.py that implements a useful example
 config_aliases = FauxapiLib.config_get('aliases')
 print(json.dumps(
     FauxapiLib.config_set(config_aliases, 'aliases'))
@@ -79,6 +81,11 @@ print(json.dumps(
 # system_stats
 print(json.dumps(
     FauxapiLib.system_stats())
+)
+
+# interface_stats - NB: the real interface name, not an alias such as "wan"
+print(json.dumps(
+    FauxapiLib.interface_stats('em0'))
 )
 
 # gateway_status
