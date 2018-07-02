@@ -32,20 +32,28 @@ display_top_tabs($tab_array, true);
 
 ?>
 
+<script type="text/javascript">
+// Kludge to cause the <pre> background to be white making it easier to read
+//<![CDATA[
+events.push(function() {
+    $('pre').css('background-color', '#fff')
+})
+//]]>
+</script>
+
 <div>
 <!--READMESTART-->
 <h1>
-<a id="user-content-fauxapi---v12" class="anchor" href="#fauxapi---v12" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI - v1.2</h1>
-<p>A REST API interface for pfSense 2.3+ to facilitate devops:-</p>
+<a id="user-content-fauxapi---v13" class="anchor" href="#fauxapi---v13" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI - v1.3</h1>
+<p>A REST API interface for pfSense 2.3.x and 2.4.x to facilitate devops:-</p>
 <ul>
 <li><a href="https://github.com/ndejong/pfsense_fauxapi">https://github.com/ndejong/pfsense_fauxapi</a></li>
 </ul>
 <p>Additionally available are a set of <a href="#user-content-client_libraries">client libraries</a>
 that hence make programmatic access and management of pfSense hosts for devops
 tasks feasible.</p>
-<hr>
-<h3>
-<a id="user-content-api-action-summary" class="anchor" href="#api-action-summary" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Action Summary</h3>
+<h2>
+<a id="user-content-api-action-summary" class="anchor" href="#api-action-summary" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Action Summary</h2>
 <ul>
 <li>
 <a href="#user-content-alias_update_urltables">alias_update_urltables</a> - Causes the pfSense host to immediately update any urltable alias entries from their (remote) source URLs.</li>
@@ -66,6 +74,8 @@ tasks feasible.</p>
 <li>
 <a href="#user-content-gateway_status">gateway_status</a> - Returns gateway status data.</li>
 <li>
+<a href="#user-content-interface_stats">interface_stats</a> - Returns statistics and information about an interface.</li>
+<li>
 <a href="#user-content-rule_get">rule_get</a> - Returns the numbered list of loaded pf rules from a <code>pfctl -sr -vv</code> command on the pfSense host.</li>
 <li>
 <a href="#user-content-send_event">send_event</a> - Performs a pfSense "send_event" command to cause various pfSense system actions.</li>
@@ -74,9 +84,8 @@ tasks feasible.</p>
 <li>
 <a href="#user-content-system_stats">system_stats</a> - Returns various useful system stats.</li>
 </ul>
-<hr>
-<h3>
-<a id="user-content-approach" class="anchor" href="#approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Approach</h3>
+<h2>
+<a id="user-content-approach" class="anchor" href="#approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Approach</h2>
 <p>At its core FauxAPI simply reads the core pfSense <code>config.xml</code> file, converts it
 to JSON and returns to the API caller.  Similarly it can take a JSON formatted
 configuration and write it to the pfSense <code>config.xml</code> and handles the required
@@ -104,12 +113,11 @@ may need to "tickle" pfSense a little more to do what you want.  This is not
 common however a good example is getting newly defined network interfaces or
 VLANs to be recognized.  These situations are easily handled by calling the
 <strong>send_event</strong> action with the payload <strong>interface reload all</strong> - see the example
-included below and refer to a the resolution to <a href="https://github.com/ndejong/pfsense_fauxapi/issues/10">user issue #10</a></p>
+included below and refer to a the resolution to <a href="https://github.com/ndejong/pfsense_fauxapi/issues/10">Issue #10</a></p>
 <p><strong>NB:</strong> <em>As at FauxAPI v1.2 the <strong>function_call</strong> action has been introduced that
 now provides the ability to issue function calls directly into pfSense.</em></p>
-<hr>
-<h3>
-<a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
+<h2>
+<a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 <p>Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to
 install manually from <strong>root</strong> as shown:-</p>
 <div class="highlight highlight-source-shell"><pre><span class="pl-c1">set</span> fauxapi_baseurl=<span class="pl-s"><span class="pl-pds">'</span>https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package<span class="pl-pds">'</span></span>
@@ -119,22 +127,20 @@ pkg install <span class="pl-smi">$fauxapi_latest</span></pre></div>
 <p>Installation and de-installation is quite straight forward, further examples can
 be found <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/package">here</a>.</p>
 <p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS"><code>SHA256SUMS</code></a></p>
-<hr>
-<h3>
-<a id="user-content-debugging" class="anchor" href="#debugging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Debugging</h3>
+<h2>
+<a id="user-content-debugging" class="anchor" href="#debugging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Debugging</h2>
 <p>FauxAPI comes with awesome debug logging capability, simply insert <code>__debug=true</code>
 as a URL request parameter and the response data will contain rich debugging log
 data about the flow of the request.</p>
 <p>If you are looking for more debugging at various points feel free to submit a
 pull request or lodge an issue describing your requirement and I'll see what
 can be done to accommodate.</p>
-<hr>
 <p><a name="user-content-client_libraries"></a></p>
-<h3>
-<a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h3>
+<h2>
+<a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h2>
 <h4>
 <a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
-<p>A <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs">Python interface</a>
+<p>A <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs">Python interface</a>
 to pfSense was perhaps the most desired end-goal at the onset of the FauxAPI
 package project.  Anyone that has tried to parse the pfSense <code>config.xml</code> files
 using a Python based library will understand that things don't quite work out as
@@ -146,13 +152,17 @@ FauxapiLib <span class="pl-k">=</span> FauxapiLib(<span class="pl-s"><span class
 aliases <span class="pl-k">=</span> FauxapiLib.config_get(<span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>)
 <span class="pl-c"><span class="pl-c">#</span># perform some kind of manipulation to `aliases` here ##</span>
 pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>))</pre></div>
-<p>It is recommended to review <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/client-libs/python-lib-test-example.py"><code>python-lib-test-example.py</code></a>
+<p>It is recommended to review <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/python-lib-iterate.py"><code>python-lib-iterate.py</code></a>
 to observe worked examples with the library.  Of small note is that the Python
 library supports the ability to get and set single sections of the pfSense
 system, not just the entire system configuration as with the Bash library.</p>
+<p><strong>update-aws-aliases.py</strong> - example</p>
+<p>An reasonable Python based worked example using the API can be found with <code>update-aws-aliases.py</code>
+under the <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples"><code>extras/examples</code></a> path - the tool
+pulls in the latest AWS <code>ip-ranges.json</code> parses them and injects them into the aliases section if required.</p>
 <h4>
 <a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
-<p>The <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs">Bash client library</a>
+<p>The <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs">Bash client library</a>
 makes it possible to add a line with <code>source fauxapi_lib.sh</code> to your bash script
 and then access a pfSense host configuration directly as a JSON string</p>
 <div class="highlight highlight-source-shell"><pre><span class="pl-c1">source</span> fauxapi_lib.sh
@@ -161,16 +171,15 @@ and then access a pfSense host configuration directly as a JSON string</p>
 fauxapi_config_get <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json
 <span class="pl-c"><span class="pl-c">#</span># perform some kind of manipulation to `/tmp/config.json` here ##</span>
 fauxapi_config_set <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
-<p>It is recommended to review <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/client-libs/bash-lib-test-example.sh"><code>bash-lib-test-example.sh</code></a>
+<p>It is recommended to review <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/bash-lib-iterate.sh"><code>bash-lib-iterate.sh</code></a>
 to get a better idea how to use it.</p>
 <h4>
 <a id="user-content-php" class="anchor" href="#php" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PHP</h4>
 <p>A PHP interface does not yet exist, it should be fairly easy to develop by
 observing the Bash and Python examples - if you do please submit it as a github
 pull request, there are no doubt others that will appreciate a PHP interface.</p>
-<hr>
-<h3>
-<a id="user-content-api-authentication" class="anchor" href="#api-authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authentication</h3>
+<h2>
+<a id="user-content-api-authentication" class="anchor" href="#api-authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authentication</h2>
 <p>A deliberate design decision to decouple FauxAPI authentication from both the
 pfSense user authentication and the pfSense <code>config.xml</code> system.  This was done
 to limit the possibility of an accidental API change that removes access to the
@@ -192,6 +201,11 @@ fauxapi-auth: PFFA4797d073:20161119Z144328:833a45d8:9c4f96ab042f5140386178618be1
 <p>Where the &lt;hash&gt; value is calculated like so:-</p>
 <pre><code>&lt;hash&gt; = sha256(&lt;apisecret&gt;&lt;timestamp&gt;&lt;nonce&gt;)
 </code></pre>
+<p>NB: that the timestamp value is internally passed to the PHP <code>strtotime</code> function
+which can interpret a wide variety of timestamp formats together with a timezone.
+A nice tidy timestamp format that the <code>strtotime</code> PHP function is able to process
+can be obtained using bash command <code>date --utc +%Y%m%dZ%H%M%S</code> where the <code>Z</code>
+date-time seperator hence also specifies the UTC timezone.</p>
 <p>This is all handled in the <a href="#user-content-client_libraries">client libraries</a>
 provided, but as can be seen it is relatively easy to implement even in a Bash
 shell script.</p>
@@ -221,9 +235,8 @@ clock else the auth token values calculated by the client will not be valid - 60
 seconds seems tight, however, provided you are using NTP to look after your
 system time it's quite unlikely to cause issues - happy to receive feedback
 about this.</p>
-<hr>
-<h3>
-<a id="user-content-api-authorization" class="anchor" href="#api-authorization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authorization</h3>
+<h2>
+<a id="user-content-api-authorization" class="anchor" href="#api-authorization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authorization</h2>
 <p>The file <code>/etc/fauxapi/credentials.ini</code> additionally provides a method to restrict
 the API actions available to the API key using the <strong>permit</strong> configuration
 parameter.  Permits are comma delimited and may contain * wildcards to match more
@@ -233,9 +246,8 @@ secret = abcdefghijklmnopqrstuvwxyz0123456789abcd
 permit = alias_*, config_*, gateway_*, rule_*, send_*, system_*, function_*
 owner = example key PFFAexample01 - hardcoded to be inoperative
 </code></pre>
-<hr>
-<h3>
-<a id="user-content-api-rest-actions" class="anchor" href="#api-rest-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API REST Actions</h3>
+<h2>
+<a id="user-content-api-rest-actions" class="anchor" href="#api-rest-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API REST Actions</h2>
 <p>The following REST based API actions are provided, example cURL call request
 examples are provided for each.  The API user is perhaps more likely to interface
 with the <a href="#user-content-client_libraries">client libraries</a> as documented above
@@ -247,9 +259,9 @@ that might be useful be sure to get in contact.</p>
 deployments do not deploy certificate chain signed SSL certificates.  A reasonable
 improvement in this regard might be to implement certificate pinning at the
 client side to hence remove scope for man-in-middle concerns.</p>
-<p><br><a name="user-content-alias_update_urltables"></a></p>
-<h4>
-<a id="user-content-alias_update_urltables" class="anchor" href="#alias_update_urltables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>alias_update_urltables</h4>
+<hr>
+<h3>
+<a id="user-content-alias_update_urltables" class="anchor" href="#alias_update_urltables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>alias_update_urltables</h3>
 <ul>
 <li>Causes the pfSense host to immediately update any urltable alias entries
 from their (remote) source URLs.  Optionally update just one table by
@@ -286,9 +298,9 @@ specifying the table name, else all tables are updated.</li>
     }
   }
 }</pre></div>
-<p><br><a name="user-content-config_backup"></a></p>
-<h4>
-<a id="user-content-config_backup" class="anchor" href="#config_backup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_backup</h4>
+<hr>
+<h3>
+<a id="user-content-config_backup" class="anchor" href="#config_backup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_backup</h3>
 <ul>
 <li>Causes the system to take a configuration backup and add it to the regular
 set of pfSense system backups at <code>/cf/conf/backup/</code>
@@ -313,9 +325,9 @@ set of pfSense system backups at <code>/cf/conf/backup/</code>
     <span class="pl-s"><span class="pl-pds">"</span>backup_config_file<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/backup/config-1479545598.xml<span class="pl-pds">"</span></span>
   }
 }</pre></div>
-<p><br><a name="user-content-config_backup_list"></a></p>
-<h4>
-<a id="user-content-config_backup_list" class="anchor" href="#config_backup_list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_backup_list</h4>
+<hr>
+<h3>
+<a id="user-content-config_backup_list" class="anchor" href="#config_backup_list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_backup_list</h3>
 <ul>
 <li>Returns a list of the currently available pfSense system configuration backups.</li>
 <li>HTTP: <strong>GET</strong>
@@ -344,9 +356,9 @@ set of pfSense system backups at <code>/cf/conf/backup/</code>
         <span class="pl-s"><span class="pl-pds">"</span>filesize<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">18535</span>
       },
       <span class="pl-k">...</span>.</pre></div>
-<p><br><a name="user-content-config_get"></a></p>
-<h4>
-<a id="user-content-config_get" class="anchor" href="#config_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_get</h4>
+<hr>
+<h3>
+<a id="user-content-config_get" class="anchor" href="#config_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_get</h3>
 <ul>
 <li>Returns the system configuration as a JSON formatted string.  Additionally,
 using the optional <strong>config_file</strong> parameter it is possible to retrieve backup
@@ -390,9 +402,9 @@ path.</li>
              <span class="pl-k">...</span>.</pre></div>
 <p>Hint: use <code>jq</code> to parse the response JSON and obtain the config only, as such:-</p>
 <div class="highlight highlight-source-shell"><pre>cat /tmp/faux-config-get-output-from-curl.json <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
-<p><br><a name="user-content-config_reload"></a></p>
-<h4>
-<a id="user-content-config_reload" class="anchor" href="#config_reload" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_reload</h4>
+<hr>
+<h3>
+<a id="user-content-config_reload" class="anchor" href="#config_reload" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_reload</h3>
 <ul>
 <li>Causes the pfSense system to perform a reload of the <code>config.xml</code> file, by
 default this happens when the <strong>config_set</strong> action occurs hence there is
@@ -414,9 +426,9 @@ normally no need to explicitly call this after a <strong>config_set</strong> act
   <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_reload<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>
 }</pre></div>
-<p><br><a name="user-content-config_restore"></a></p>
-<h4>
-<a id="user-content-config_restore" class="anchor" href="#config_restore" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_restore</h4>
+<hr>
+<h3>
+<a id="user-content-config_restore" class="anchor" href="#config_restore" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_restore</h3>
 <ul>
 <li>Restores the pfSense system to the named backup configuration.</li>
 <li>HTTP: <strong>GET</strong>
@@ -444,15 +456,18 @@ normally no need to explicitly call this after a <strong>config_set</strong> act
     <span class="pl-s"><span class="pl-pds">"</span>config_file<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/backup/config-1479545598.xml<span class="pl-pds">"</span></span>
   }
 }</pre></div>
-<p><br><a name="user-content-config_set"></a></p>
-<h4>
-<a id="user-content-config_set" class="anchor" href="#config_set" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_set</h4>
+<hr>
+<h3>
+<a id="user-content-config_set" class="anchor" href="#config_set" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_set</h3>
 <ul>
 <li>Sets a full system configuration and (by default) takes a system config
 backup and (by default) causes the system config to be reloaded once
 successfully written and tested.</li>
-<li>NB: be sure to pass the <em>FULL</em> system configuration in here, not just the
+<li>NB1: be sure to pass the <em>FULL</em> system configuration in here, not just the
 piece you wish to adjust!</li>
+<li>NB2: if you are pulling the result of a <code>config_get</code> call, be sure to parse the response
+data to obtain the config data only under the key <code>data.config</code>
+</li>
 <li>HTTP: <strong>POST</strong>
 </li>
 <li>Params:
@@ -483,9 +498,9 @@ piece you wish to adjust!</li>
     <span class="pl-s"><span class="pl-pds">"</span>do_reload<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>
   }
 }</pre></div>
-<p><br><a name="user-content-function_call"></a></p>
-<h4>
-<a id="user-content-function_call" class="anchor" href="#function_call" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>function_call</h4>
+<hr>
+<h3>
+<a id="user-content-function_call" class="anchor" href="#function_call" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>function_call</h3>
 <ul>
 <li>Call directly a pfSense PHP function with API user supplied parameters.  Note
 that is action is a <em>VERY</em> raw interface into the inner workings of pfSense
@@ -495,7 +510,7 @@ to be called through the FauxAPI and only very limited testing has been
 performed against the possible outcomes and responses.  It is possible to
 harm your pfSense system if you do not 100% understand what is going on.</li>
 <li>Functions to be called via this interface <em>MUST</em> be defined in the file
-<code>/etc/inc/fauxapi/pfsense_function_calls.txt</code> only a handful very basic and
+<code>/etc/pfsense_function_calls.txt</code> only a handful very basic and
 read-only pfSense functions are enabled by default.</li>
 <li>HTTP: <strong>POST</strong>
 </li>
@@ -527,9 +542,9 @@ read-only pfSense functions are enabled by default.</li>
       },
       <span class="pl-k">...</span>.
 </pre></div>
-<p><br><a name="user-content-gateway_status"></a></p>
-<h4>
-<a id="user-content-gateway_status" class="anchor" href="#gateway_status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gateway_status</h4>
+<hr>
+<h3>
+<a id="user-content-gateway_status" class="anchor" href="#gateway_status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gateway_status</h3>
 <ul>
 <li>Returns gateway status data.</li>
 <li>HTTP: <strong>GET</strong>
@@ -562,9 +577,52 @@ read-only pfSense functions are enabled by default.</li>
     }
   }
 }</pre></div>
-<p><br><a name="user-content-rule_get"></a></p>
-<h4>
-<a id="user-content-rule_get" class="anchor" href="#rule_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>rule_get</h4>
+<hr>
+<h3>
+<a id="user-content-interface_stats" class="anchor" href="#interface_stats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>interface_stats</h3>
+<ul>
+<li>Returns interface statistics data and information - the real interface name must be provided
+not an alias of the interface such as "WAN" or "LAN"</li>
+<li>HTTP: <strong>GET</strong>
+</li>
+<li>Params:
+<ul>
+<li>
+<strong>interface</strong> (required)</li>
+</ul>
+</li>
+</ul>
+<p><em>Example Request</em></p>
+<div class="highlight highlight-source-shell"><pre>curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
+    <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=interface_stats&amp;interface=em0<span class="pl-pds">"</span></span></pre></div>
+<p><em>Example Response</em></p>
+<div class="highlight highlight-source-js"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5b3a5bce65d01<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>interface_stats<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>stats<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+      <span class="pl-s"><span class="pl-pds">"</span>inpkts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">267017</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>inbytes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">21133408</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>outpkts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">205860</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>outbytes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">8923046</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>inerrs<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>outerrs<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>collisions<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>inmcasts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">61618</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>outmcasts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">73</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>unsuppproto<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
+      <span class="pl-s"><span class="pl-pds">"</span>mtu<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">1500</span>
+    }
+  }
+}</pre></div>
+<hr>
+<h3>
+<a id="user-content-rule_get" class="anchor" href="#rule_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>rule_get</h3>
 <ul>
 <li>Returns the numbered list of loaded pf rules from a <code>pfctl -sr -vv</code> command
 on the pfSense host.  An empty rule_number parameter causes all rules to be
@@ -604,9 +662,9 @@ returned.</li>
     ]
   }
 }</pre></div>
-<p><br><a name="user-content-send_event"></a></p>
-<h4>
-<a id="user-content-send_event" class="anchor" href="#send_event" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>send_event</h4>
+<hr>
+<h3>
+<a id="user-content-send_event" class="anchor" href="#send_event" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>send_event</h3>
 <ul>
 <li>Performs a pfSense "send_event" command to cause various pfSense system
 actions as is also available through the pfSense console interface.  The
@@ -636,9 +694,9 @@ following standard pfSense send_event combinations are permitted:-
   <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>send_event<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>
 }</pre></div>
-<p><br><a name="user-content-system_reboot"></a></p>
-<h4>
-<a id="user-content-system_reboot" class="anchor" href="#system_reboot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_reboot</h4>
+<hr>
+<h3>
+<a id="user-content-system_reboot" class="anchor" href="#system_reboot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_reboot</h3>
 <ul>
 <li>Just as it says, reboots the system.</li>
 <li>HTTP: <strong>GET</strong>
@@ -658,9 +716,9 @@ following standard pfSense send_event combinations are permitted:-
   <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>system_reboot<span class="pl-pds">"</span></span>,
   <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>
 }</pre></div>
-<p><br><a name="user-content-system_stats"></a></p>
-<h4>
-<a id="user-content-system_stats" class="anchor" href="#system_stats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_stats</h4>
+<hr>
+<h3>
+<a id="user-content-system_stats" class="anchor" href="#system_stats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_stats</h3>
 <ul>
 <li>Returns various useful system stats.</li>
 <li>HTTP: <strong>GET</strong>
@@ -702,12 +760,11 @@ following standard pfSense send_event combinations are permitted:-
   }
 }</pre></div>
 <hr>
-<h3>
-<a id="user-content-versions-and-testing" class="anchor" href="#versions-and-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Versions and Testing</h3>
-<p>The FauxAPI has been developed against pfSense 2.3.2, 2.3.3 and 2.3.4 it has
-not (yet) been tested against 2.3.0 or 2.3.1 or the (currently) in development
-2.4 releases.  Further, it is apparent that the pfSense packaging technique
-changed significantly prior to 2.3.x so it is unlikely that it will be
+<h2>
+<a id="user-content-versions-and-testing" class="anchor" href="#versions-and-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Versions and Testing</h2>
+<p>The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5 and 2.4.3 it has
+not (yet) been tested against 2.3.0 or 2.3.1.  Further, it is apparent that the pfSense
+packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be
 backported to anything prior to 2.3.0.</p>
 <p>Testing is reasonable but does not achieve 100% code coverage within the FauxAPI
 codebase.  Two client side test scripts (1x Bash, 1x Python) that both
@@ -717,9 +774,8 @@ supplied configurations will save, load and reload as expected.</p>
 <p><strong>Shout Out:</strong> <em>Anyone that happens to know of <em>any</em> test harness or test code
 for pfSense please get in touch - I'd very much prefer to integrate with existing
 pfSense test infrastructure if it already exists.</em></p>
-<hr>
-<h3>
-<a id="user-content-releases" class="anchor" href="#releases" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Releases</h3>
+<h2>
+<a id="user-content-releases" class="anchor" href="#releases" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Releases</h2>
 <h4>
 <a id="user-content-v10---2016-11-20" class="anchor" href="#v10---2016-11-20" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.0 - 2016-11-20</h4>
 <ul>
@@ -746,10 +802,22 @@ actions.</li>
 <li>various update documentation updates.</li>
 <li>testing against pfSense 2.3.4</li>
 </ul>
-<hr>
-<h3>
-<a id="user-content-fauxapi-license" class="anchor" href="#fauxapi-license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI License</h3>
-<pre><code>Copyright 2017 Nicholas de Jong  
+<h4>
+<a id="user-content-v13---2018-07-02" class="anchor" href="#v13---2018-07-02" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.3 - 2018-07-02</h4>
+<ul>
+<li>add the <strong>interface_stats</strong> function call to help in determining the usage of an
+interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxapi/issues/20">Issue #20</a>
+</li>
+<li>added a <code>number</code> attibute to the <code>rules</code> output making the actual rule number more explict</li>
+<li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, cause by an upstream
+change(s) in the pfSense code.</li>
+<li>small dcoumentation fixes</li>
+<li>testing against pfSense 2.3.5</li>
+<li>testing against pfSense 2.4.3</li>
+</ul>
+<h2>
+<a id="user-content-fauxapi-license" class="anchor" href="#fauxapi-license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI License</h2>
+<pre><code>Copyright 2016-2018 Nicholas de Jong  
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
