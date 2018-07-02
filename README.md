@@ -1,5 +1,5 @@
-# FauxAPI - v1.2
-A REST API interface for pfSense 2.3+ to facilitate devops:-
+# FauxAPI - v1.3
+A REST API interface for pfSense 2.3.x and 2.4.x to facilitate devops:-
  - https://github.com/ndejong/pfsense_fauxapi
 
 Additionally available are a set of [client libraries](#user-content-client_libraries) 
@@ -17,6 +17,7 @@ tasks feasible.
  - [config_set](#user-content-config_set) - Sets a full system configuration and (by default) reloads once successfully written and tested.
  - [function_call](#user-content-function_call) - Call directly a pfSense PHP function with API user supplied parameters.
  - [gateway_status](#user-content-gateway_status) - Returns gateway status data.
+ - [interface_stats](#user-content-interface_stats) - Returns statistics and information about an interface.
  - [rule_get](#user-content-rule_get) - Returns the numbered list of loaded pf rules from a `pfctl -sr -vv` command on the pfSense host.
  - [send_event](#user-content-send_event) - Performs a pfSense "send_event" command to cause various pfSense system actions.
  - [system_reboot](#user-content-system_reboot) - Reboots the pfSense system.
@@ -55,7 +56,7 @@ may need to "tickle" pfSense a little more to do what you want.  This is not
 common however a good example is getting newly defined network interfaces or 
 VLANs to be recognized.  These situations are easily handled by calling the
 **send_event** action with the payload **interface reload all** - see the example 
-included below and refer to a the resolution to [user issue #10](https://github.com/ndejong/pfsense_fauxapi/issues/10)
+included below and refer to a the resolution to [Issue #10](https://github.com/ndejong/pfsense_fauxapi/issues/10)
 
 __NB:__ *As at FauxAPI v1.2 the **function_call** action has been introduced that 
 now provides the ability to issue function calls directly into pfSense.*
@@ -91,7 +92,7 @@ can be done to accommodate.
 ## Client libraries
 
 #### Python
-A [Python interface](https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs) 
+A [Python interface](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs) 
 to pfSense was perhaps the most desired end-goal at the onset of the FauxAPI 
 package project.  Anyone that has tried to parse the pfSense `config.xml` files 
 using a Python based library will understand that things don't quite work out as 
@@ -107,13 +108,19 @@ aliases = FauxapiLib.config_get('aliases')
 pprint.pprint(FauxapiLib.config_set(aliases, 'aliases'))
 ```
 
-It is recommended to review [`python-lib-test-example.py`](https://github.com/ndejong/pfsense_fauxapi/blob/master/client-libs/python-lib-test-example.py)
+It is recommended to review [`python-lib-iterate.py`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/python-lib-iterate.py)
 to observe worked examples with the library.  Of small note is that the Python 
 library supports the ability to get and set single sections of the pfSense 
 system, not just the entire system configuration as with the Bash library.
 
+**update-aws-aliases.py** - example
+
+An reasonable Python based worked example using the API can be found with `update-aws-aliases.py` 
+under the [`extras/examples`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples) path - the tool 
+pulls in the latest AWS `ip-ranges.json` parses them and injects them into the aliases section if required. 
+
 #### Bash
-The [Bash client library](https://github.com/ndejong/pfsense_fauxapi/tree/master/client-libs) 
+The [Bash client library](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs) 
 makes it possible to add a line with `source fauxapi_lib.sh` to your bash script 
 and then access a pfSense host configuration directly as a JSON string
 ```bash
@@ -125,7 +132,7 @@ fauxapi_config_get <host-address> | jq .data.config > /tmp/config.json
 fauxapi_config_set <host-address> /tmp/config.json
 ```
 
-It is recommended to review [`bash-lib-test-example.sh`](https://github.com/ndejong/pfsense_fauxapi/blob/master/client-libs/bash-lib-test-example.sh)
+It is recommended to review [`bash-lib-iterate.sh`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/bash-lib-iterate.sh)
 to get a better idea how to use it.
 
 #### PHP
@@ -444,8 +451,10 @@ curl \
  - Sets a full system configuration and (by default) takes a system config
    backup and (by default) causes the system config to be reloaded once 
    successfully written and tested.
- - NB: be sure to pass the *FULL* system configuration in here, not just the 
+ - NB1: be sure to pass the *FULL* system configuration in here, not just the 
    piece you wish to adjust!
+ - NB2: if you are pulling the result of a `config_get` call, be sure to parse the response
+   data to obtain the config data only under the key `data.config`
  - HTTP: **POST**
  - Params:
     - **do_backup** (optional, default = true)
@@ -486,7 +495,7 @@ curl \
    performed against the possible outcomes and responses.  It is possible to 
    harm your pfSense system if you do not 100% understand what is going on.
  - Functions to be called via this interface *MUST* be defined in the file 
-   `/etc/inc/fauxapi/pfsense_function_calls.txt` only a handful very basic and 
+   `/etc/pfsense_function_calls.txt` only a handful very basic and 
    read-only pfSense functions are enabled by default.
  - HTTP: **POST**
  - Params: none
@@ -556,6 +565,48 @@ curl \
         "loss": "0.0%",
         "status": "none"
       }
+    }
+  }
+}
+```
+
+---
+### interface_stats
+ - Returns interface statistics data and information - the real interface name must be provided 
+   not an alias of the interface such as "WAN" or "LAN"
+ - HTTP: **GET**
+ - Params:
+    - **interface** (required)
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=interface_stats&interface=em0"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "5b3a5bce65d01",
+  "action": "interface_stats",
+  "message": "ok",
+  "data": {
+    "stats": {
+      "inpkts": 267017,
+      "inbytes": 21133408,
+      "outpkts": 205860,
+      "outbytes": 8923046,
+      "inerrs": 0,
+      "outerrs": 0,
+      "collisions": 0,
+      "inmcasts": 61618,
+      "outmcasts": 73,
+      "unsuppproto": 0,
+      "mtu": 1500
     }
   }
 }
@@ -707,10 +758,9 @@ curl \
 ---
 
 ## Versions and Testing
-The FauxAPI has been developed against pfSense 2.3.2, 2.3.3 and 2.3.4 it has 
-not (yet) been tested against 2.3.0 or 2.3.1 or the (currently) in development 
-2.4 releases.  Further, it is apparent that the pfSense packaging technique 
-changed significantly prior to 2.3.x so it is unlikely that it will be 
+The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5 and 2.4.3 it has 
+not (yet) been tested against 2.3.0 or 2.3.1.  Further, it is apparent that the pfSense 
+packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be 
 backported to anything prior to 2.3.0.
 
 Testing is reasonable but does not achieve 100% code coverage within the FauxAPI 
@@ -744,10 +794,20 @@ pfSense test infrastructure if it already exists.*
  - various update documentation updates.
  - testing against pfSense 2.3.4
 
+#### v1.3 - 2018-07-02
+ - add the **interface_stats** function call to help in determining the usage of an 
+   interface to (partly) address [Issue #20](https://github.com/ndejong/pfsense_fauxapi/issues/20)
+ - added a `number` attibute to the `rules` output making the actual rule number more explict 
+ - addressed a bug with the `system_stats` function that was preventing it from returning, cause by an upstream 
+   change(s) in the pfSense code.
+ - small dcoumentation fixes
+ - testing against pfSense 2.3.5
+ - testing against pfSense 2.4.3
+
 
 ## FauxAPI License
 ```
-Copyright 2017 Nicholas de Jong  
+Copyright 2016-2018 Nicholas de Jong  
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
