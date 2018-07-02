@@ -131,6 +131,17 @@ fauxapi_system_stats() {
         "https://${fauxapi_host}/fauxapi/v1/?action=system_stats&__debug=${fauxapi_debug}"`
 }
 
+fauxapi_interface_stats() {
+    fauxapi_host=${1}
+    fauxapi_interface=${2}
+    echo `curl \
+        -X GET \
+        --silent \
+        ${fauxapi_use_verified_https} \
+        --header "fauxapi-auth: ${fauxapi_auth}" \
+        "https://${fauxapi_host}/fauxapi/v1/?action=interface_stats&interface=${fauxapi_interface}&__debug=${fauxapi_debug}"`
+}
+
 fauxapi_rule_get() {
     fauxapi_host=${1}
     fauxapi_rule_number=${2}
