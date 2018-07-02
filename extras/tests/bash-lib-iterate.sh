@@ -16,7 +16,7 @@
 # 
 
 # include source library
-source $(dirname ${0})/bash/fauxapi_lib.sh
+source $(realpath $(dirname ${0}))/../client-libs/bash/fauxapi_lib.sh
 
 # check args exist
 if [ -z ${1} ] || [ -z ${2} ] || [ -z ${3} ]; then
@@ -40,7 +40,14 @@ export fauxapi_auth=`fauxapi_auth ${fauxapi_apikey} ${fauxapi_apisecret}`
 
 
 # config_get
-fauxapi_config_get ${fauxapi_host}
+system_config=$(fauxapi_config_get ${fauxapi_host})
+
+# make the output look pretty if jq is available on th is system
+if [ $(which jq | wc -l) -gt 0 ]; then
+    echo "${system_config}" | jq .data.config
+else
+    echo "${system_config}"
+fi
 
 # config_get - and write the config to file /tmp/pfsense-fauxapi.json
 # NB: must have the 'jq' binary to process the JSON response easily!
