@@ -111,6 +111,7 @@ class FauxapiLib:
         res = self._api_request('GET', 'system_stats')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete system_stats() request', json.loads(res.text))
+        print(res.text)
         return json.loads(res.text)
 
     def gateway_status(self):
