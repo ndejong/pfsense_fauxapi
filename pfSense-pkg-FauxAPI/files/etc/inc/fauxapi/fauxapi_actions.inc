@@ -272,6 +272,32 @@ class fauxApiActions {
     }
     
     /**
+     * interface_stats()
+     * 
+     * @return boolean
+     */
+    public function interface_stats($__args) {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $interface = NULL;
+        extract($__args, EXTR_IF_EXISTS);
+        
+        $stats = $this->PfsenseInterface->interface_stats($interface);
+        
+        if (empty($stats)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get interface stats';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'stats' => $stats
+        );
+        return TRUE;
+    }
+    
+    /**
      * rule_get()
      * 
      * @param array $__args
