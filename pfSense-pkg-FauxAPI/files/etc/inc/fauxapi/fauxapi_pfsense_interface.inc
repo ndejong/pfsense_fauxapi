@@ -399,9 +399,9 @@ class fauxApiPfsenseInterface {
         include_once '/usr/local/www/includes/functions.inc.php';
         
         // Mostly as per the get_stats() in functions.inc.php
-        // NB: calls are now wrapped in function_exists() because some functions 
+        // NB: calls are now wrapped in function_exists() because some functions
         // have been removed in later versions of pfSense
-        
+
         if (function_exists('cpu_usage')) { 
             $stats['cpu'] = strip_tags(\cpu_usage()); 
         }
@@ -505,7 +505,7 @@ class fauxApiPfsenseInterface {
             } elseif (strpos($line,'[') && strpos($line,']')) {
                 // Hack to make the output more easily parseable
                 $line = str_replace(': pid ', ': ', $line);
-                $line = str_replace('State Creations: ', 'StateCreations: ', $line);
+                $line = str_replace('State Creations: ', 'State_Creations: ', $line);
                 $line = strtolower($line);
                 
                 preg_match_all('/(\w+)\: ([0-9]+)/', $line, $m);
@@ -515,6 +515,7 @@ class fauxApiPfsenseInterface {
                     ));
                     return array();
                 } else {
+                    $rules[$rule]['number'] = $rule;
                     foreach($m[1] as $index=>$attribute) {
                         $rules[$rule][$attribute] = $m[2][$index];
                     }
@@ -599,13 +600,25 @@ class fauxApiPfsenseInterface {
     }
     
     /**
+     * interface_stats()
+     * 
+     * @param array $interface
+     * @return array
+     */
+    public function interface_stats($interface){
+        fauxApiLogger::debug(__METHOD__);
+        
+        return \pfSense_get_interface_stats($interface);
+    }
+    
+    /**
      * function_call()
      * 
      * @param string $function
      * @param array $args
      * @param array $includes
      * @return array
-     * @note calls any (or most) functions available in pfSense if listed
+     * @note calls any (or most) functions available in pfSense if whitelisted in /etc/fauxapi_pfsense_interface.txt
      */
     public function function_call($function, $args, $includes) {
         fauxApiLogger::debug(__METHOD__, array(
