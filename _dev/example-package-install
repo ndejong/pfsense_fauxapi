@@ -1,0 +1,255 @@
+
+
+>>> Installing pfSense-pkg-Notes... 
+Updating pfSense-core repository catalogue...
+pfSense-core repository is up-to-date.
+Updating pfSense repository catalogue...
+pfSense repository is up-to-date.
+All repositories are up-to-date.
+New version of pkg detected; it needs to be installed first.
+The following 1 package(s) will be affected (of 0 checked):
+
+Installed packages to be UPGRADED:
+	pkg: 1.8.7 -> 1.8.7_1 [pfSense]
+
+Number of packages to be upgraded: 1
+
+2 MiB to be downloaded.
+Fetching pkg-1.8.7_1.txz: .......... done
+Checking integrity... done (0 conflicting)
+[1/1] Upgrading pkg from 1.8.7 to 1.8.7_1...
+[1/1] Extracting pkg-1.8.7_1: .......... done
+You may need to manually remove /usr/local/etc/pkg.conf if it is no longer needed.
+pkg: option EVENT_PIPE is defined in the environment to '/tmp/pfSense-upgrade.sock' but command line option redefines it
+pkg: Connect event pipe(/tmp/pfSense-upgrade.sock): Connection refused
+Updating pfSense-core repository catalogue...
+pfSense-core repository is up-to-date.
+Updating pfSense repository catalogue...
+pfSense repository is up-to-date.
+All repositories are up-to-date.
+The following 1 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	pfSense-pkg-Notes: 0.2.9_2 [pfSense]
+
+Number of packages to be installed: 1
+
+3 KiB to be downloaded.
+Fetching pfSense-pkg-Notes-0.2.9_2.txz: . done
+Checking integrity... done (0 conflicting)
+[1/1] Installing pfSense-pkg-Notes-0.2.9_2...
+[1/1] Extracting pfSense-pkg-Notes-0.2.9_2: ....... done
+Saving updated package information...
+done.
+Loading package configuration... done.
+Configuring package components...
+Custom commands...
+Menu items... done.
+Writing configuration... done.
+>>> Cleaning up cache... done.
+Success
+
+===============================================================================
+
+>>> Installing pfSense-pkg-AutoConfigBackup... 
+Updating pfSense-core repository catalogue...
+pfSense-core repository is up-to-date.
+Updating pfSense repository catalogue...
+pfSense repository is up-to-date.
+All repositories are up-to-date.
+The following 1 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	pfSense-pkg-AutoConfigBackup: 1.45 [pfSense]
+
+Number of packages to be installed: 1
+
+9 KiB to be downloaded.
+Fetching pfSense-pkg-AutoConfigBackup-1.45.txz: . done
+Checking integrity... done (0 conflicting)
+[1/1] Installing pfSense-pkg-AutoConfigBackup-1.45...
+[1/1] Extracting pfSense-pkg-AutoConfigBackup-1.45: .......... done
+Saving updated package information...
+done.
+Loading package configuration... done.
+Configuring package components...
+Loading package instructions...
+Custom commands...
+Executing custom_php_resync_config_command()...done.
+Menu items... done.
+Writing configuration... done.
+>>> Cleaning up cache... done.
+Success
+
+===============================================================================
+
+
+>>> Installing pfSense-pkg-Status_Traffic_Totals... 
+Updating pfSense-core repository catalogue...
+pfSense-core repository is up-to-date.
+Updating pfSense repository catalogue...
+pfSense repository is up-to-date.
+All repositories are up-to-date.
+The following 8 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	pfSense-pkg-Status_Traffic_Totals: 1.1_1 [pfSense]
+	vnstat: 1.14 [pfSense]
+	libgd: 2.1.0_7,1 [pfSense]
+	png: 1.6.21 [pfSense]
+	jpeg-turbo: 1.4.2 [pfSense]
+	freetype2: 2.6.3 [pfSense]
+	tiff: 4.0.6_2 [pfSense]
+	jbigkit: 2.1_1 [pfSense]
+
+Number of packages to be installed: 8
+
+The process will require 8 MiB more space.
+2 MiB to be downloaded.
+Fetching pfSense-pkg-Status_Traffic_Totals-1.1_1.txz: .. done
+Fetching vnstat-1.14.txz: .......... done
+Fetching libgd-2.1.0_7,1.txz: .......... done
+Fetching png-1.6.21.txz: .......... done
+Fetching jpeg-turbo-1.4.2.txz: .......... done
+Fetching freetype2-2.6.3.txz: .......... done
+Fetching tiff-4.0.6_2.txz: .......... done
+Fetching jbigkit-2.1_1.txz: ...... done
+Checking integrity... done (0 conflicting)
+[1/8] Installing jpeg-turbo-1.4.2...
+[1/8] Extracting jpeg-turbo-1.4.2: .......... done
+[2/8] Installing jbigkit-2.1_1...
+[2/8] Extracting jbigkit-2.1_1: .......... done
+[3/8] Installing png-1.6.21...
+[3/8] Extracting png-1.6.21: .......... done
+[4/8] Installing freetype2-2.6.3...
+[4/8] Extracting freetype2-2.6.3: .......... done
+[5/8] Installing tiff-4.0.6_2...
+[5/8] Extracting tiff-4.0.6_2: .......... done
+[6/8] Installing libgd-2.1.0_7,1...
+[6/8] Extracting libgd-2.1.0_7,1: .......... done
+[7/8] Installing vnstat-1.14...
+===> Creating groups.
+Creating group 'vnstat' with gid '284'.
+===> Creating users
+Creating user 'vnstat' with uid '284'.
+[7/8] Extracting vnstat-1.14: .......... done
+[8/8] Installing pfSense-pkg-Status_Traffic_Totals-1.1_1...
+[8/8] Extracting pfSense-pkg-Status_Traffic_Totals-1.1_1: ........ done
+Message from vnstat-1.14:
+###########################################################################
+vnstat has been installed.
+
+A sample configuration file has been installed in /usr/local/etc/
+Please add your default network interface in the 'Interface' line there
+before starting vnstat service.
+You can add any number of additional interfaces either in
+vnstat_additional_ifaces variable in /etc/rc.conf, or with this command:
+su -m vnstat -c "/usr/local/bin/vnstat --create --iface <your interface>"
+and restart vnstat service:
+service vnstat restart
+
+For more information about vnStat use "man vnstat" or visit:
+http://humdi.net/vnstat/
+###########################################################################
+>>> Cleaning up cache... done.
+Success
+
+
+===============================================================================
+
+
+>>> Installing pfSense-pkg-pfBlockerNG... 
+Updating pfSense-core repository catalogue...
+pfSense-core repository is up-to-date.
+Updating pfSense repository catalogue...
+pfSense repository is up-to-date.
+All repositories are up-to-date.
+The following 6 package(s) will be affected (of 0 checked):
+
+New packages to be INSTALLED:
+	pfSense-pkg-pfBlockerNG: 2.1.1_4 [pfSense]
+	whois: 5.1.5 [pfSense]
+	GeoIP: 1.6.9 [pfSense]
+	lighttpd: 1.4.39_1 [pfSense]
+	grepcidr: 2.0 [pfSense]
+	aggregate: 1.6_1 [pfSense]
+
+Number of packages to be installed: 6
+
+The process will require 2 MiB more space.
+515 KiB to be downloaded.
+Fetching pfSense-pkg-pfBlockerNG-2.1.1_4.txz: .......... done
+Fetching whois-5.1.5.txz: ...... done
+Fetching GeoIP-1.6.9.txz: .......... done
+Fetching lighttpd-1.4.39_1.txz: .......... done
+Fetching grepcidr-2.0.txz: .. done
+Fetching aggregate-1.6_1.txz: .. done
+Checking integrity... done (0 conflicting)
+[1/6] Installing whois-5.1.5...
+[1/6] Extracting whois-5.1.5: .......... done
+[2/6] Installing GeoIP-1.6.9...
+[2/6] Extracting GeoIP-1.6.9: .......... done
+[3/6] Installing lighttpd-1.4.39_1...
+[3/6] Extracting lighttpd-1.4.39_1: .......... done
+[4/6] Installing grepcidr-2.0...
+[4/6] Extracting grepcidr-2.0: ..... done
+[5/6] Installing aggregate-1.6_1...
+[5/6] Extracting aggregate-1.6_1: .... done
+[6/6] Installing pfSense-pkg-pfBlockerNG-2.1.1_4...
+[6/6] Extracting pfSense-pkg-pfBlockerNG-2.1.1_4: .......... done
+Saving updated package information...
+done.
+Loading package configuration... done.
+Configuring package components...
+Loading package instructions...
+Custom commands...
+Executing custom_php_install_command()...
+Downloading MaxMind GeoIP databases. This may take a minute...
+ GeoIP.dat... done.
+ GeoIPv6.dat... done.
+ GeoLite2-Country-CSV.zip... done.
+Downloading MaxMind GeoIP databases... done.
+Converting MaxMind GeoIP databases for pfBlockerNG.
+ This may take a few minutes...
+Country code update Start [ 10/30/16 03:13:54 ]
+ Converting MaxMind Country databases for pfBlockerNG.
+ Processing ISO IPv4 Continent/Country Data
+ Processing ISO IPv6 Continent/Country Data [ 10/30/16 03:14:04 ]
+Creating pfBlockerNG Continent XML files...
+ Creating pfBlockerNG Continent XML files
+ IPv4 Africa			 [ 10/30/16 03:14:06 ]
+ IPv6 Africa			
+ IPv4 Antarctica		
+ IPv6 Antarctica		
+ IPv4 Asia			
+ IPv6 Asia			 [ 10/30/16 03:14:07 ]
+ IPv4 Europe			 [ 10/30/16 03:14:08 ]
+ IPv6 Europe			 [ 10/30/16 03:14:11 ]
+ IPv4 North America		 [ 10/30/16 03:14:12 ]
+ IPv6 North America		 [ 10/30/16 03:14:14 ]
+ IPv4 Oceania			
+ IPv6 Oceania			
+ IPv4 South America		 [ 10/30/16 03:14:15 ]
+ IPv6 South America		
+ IPv4 Proxy and Satellite	
+ IPv6 Proxy and Satellite	
+ IPv4 TOP 20			
+ IPv6 TOP 20			
+ pfBlockerNG Reputation Tab
+Country Code Update Ended
+
+Adding pfBlockerNG Widget to the Dashboard... done.
+Remove any existing and create link for DNSBL lighttpd executable... done.
+Creating DNSBL web server start-up script... done.
+Upgrading Adv. Inbound firewall rule settings ... no changes required ... done.
+Custom commands completed ... done.
+Executing custom_php_resync_config_command()...done.
+Menu items... done.
+Services... done.
+Writing configuration... done.
+Message from GeoIP-1.6.9:
+GeoIP does not ship with the actual data files. You must download
+them yourself! Please run:
+# /usr/local/bin/geoipupdate.sh
+>>> Cleaning up cache... done.
+Success
