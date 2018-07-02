@@ -15,8 +15,11 @@
 # limitations under the License.
 # 
 
-import sys, json
-from python.fauxapi_lib import FauxapiLib
+import os, sys, json
+
+sys.path.append(os.path.abspath(os.path.join(os.path.curdir, '../client-libs/python')))     # hack to make this work in-place
+from fauxapi_lib import FauxapiLib
+
 
 # check args exist
 if(len(sys.argv) < 4):
@@ -53,6 +56,7 @@ print(json.dumps(
     FauxapiLib.config_set(config_aliases, 'aliases'))
 )
 
+
 # # config reload
 # print(json.dumps(
 #     FauxapiLib.config_reload())
@@ -79,6 +83,7 @@ print(json.dumps(
 )
 
 exit()
+
 
 
 # gateway_status

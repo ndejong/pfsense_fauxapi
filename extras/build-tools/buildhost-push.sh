@@ -2,7 +2,7 @@
 
 remote_host=${1}
 remote_user=root
-local_base_path=~/personal/projects/pfsense_fauxapi
+local_base_path=$(realpath $(dirname $(realpath $0))/../../)
 
 if [ -z ${remote_host} ]; then
     echo 'usage: '$0' <host-address>'

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source_md_filename=$(realpath $(dirname $(realpath $0))/../README.md)
-target_php_filename=$(realpath $(dirname $(realpath $0))/../pfSense-pkg-FauxAPI/files/usr/local/www/fauxapi/admin/about.php)
+source_md_filename=$(realpath $(dirname $(realpath $0))/../../README.md)
+target_php_filename=$(realpath $(dirname $(realpath $0))/../../pfSense-pkg-FauxAPI/files/usr/local/www/fauxapi/admin/about.php)
 
 # ===
 

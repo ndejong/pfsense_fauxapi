@@ -15,14 +15,16 @@
 # limitations under the License.
 #
 
-import os, json, urllib.request, tempfile
-from python.fauxapi_lib import FauxapiLib
+import os, sys, json, urllib.request
+
+sys.path.append(os.path.abspath(os.path.join(os.path.curdir, '../client-libs/python')))     # hack to make this work in-place
+from  fauxapi_lib import FauxapiLib
 
 
 # parameters used to create the instance of FauxapiLib
-fauxapi_host = '192.168.1.100'                  # set this to your pfsense host with the fauxapi package installed
-fauxapi_apikey = 'PFFAMhbX5tCDHxVbFbnBiqda'     # set this to your own API key
-fauxapi_apisecret = 'vXyzJ14U1sgb1Q3rSDPHnXCiwZoKXYfaATeUutO495HlejtyGamL1zTmnpbW' # set this to your own API secret
+fauxapi_host = '192.168.1.200'      # set this to your pfsense host with the fauxapi package installed
+fauxapi_apikey = 'PFFAdevtrash'     # set this to your own API key
+fauxapi_apisecret = 'devtrashdevtrashdevtrashdevtrashdevtrash' # set this to your own API secret
 
 # parameters used in the call to UpdateAwsAliasesFauxapi.update() function below
 update_regions_match='ap-*'     # all regions in Asia Pacific

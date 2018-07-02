@@ -2,10 +2,10 @@
 
 remote_host=${1}
 remote_user=root
-local_base_path=~/personal/projects/pfsense_fauxapi
+local_base_path=$(realpath $(dirname $(realpath $0))/../../)
 
 if [ -z ${remote_host} ]; then
-    echo 'usage: '$0' <host-address>'
+    echo 'usage: '${0}' <host-address>'
     exit 1
 fi
 
@@ -33,7 +33,7 @@ scp ${FILESDIR}/etc/inc/priv/fauxapi.priv.inc \
 
 # scp ${FILESDIR}/etc/fauxapi/credentials.ini \
 #                 ${STAGEDIR}/etc/fauxapi
-scp ${local_base_path}/dev/credentials.ini \
+scp ${local_base_path}/extras/dev-tools/credentials.ini \
                 ${STAGEDIR}/etc/fauxapi
 
 scp ${FILESDIR}/etc/fauxapi/pfsense_function_calls.txt \
