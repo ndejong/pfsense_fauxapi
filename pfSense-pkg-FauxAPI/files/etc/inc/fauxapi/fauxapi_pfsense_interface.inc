@@ -398,23 +398,62 @@ class fauxApiPfsenseInterface {
         
         include_once '/usr/local/www/includes/functions.inc.php';
         
-        // as per get_stats() in functions.inc.php
-        // NB: wrapped in function_exists() because some functions have been removed in
-        // later versions of pfSense
+        // Mostly as per the get_stats() in functions.inc.php
+        // NB: calls are now wrapped in function_exists() because some functions 
+        // have been removed in later versions of pfSense
         
-        if (function_exists('cpu_usage')) { $stats['cpu'] = strip_tags(\cpu_usage()); }
-        if (function_exists('mem_usage')) { $stats['mem'] = strip_tags(\mem_usage()); }
-        if (function_exists('get_uptime')) { $stats['uptime'] = strip_tags(\get_uptime()); }
-        if (function_exists('get_pfstate')) { $stats['states'] = strip_tags(\get_pfstate()); }
-        if (function_exists('get_temp')) { $stats['temp'] = strip_tags(\get_temp()); }
-        if (function_exists('update_date_time')) { $stats['datetime'] = gmdate('Ymd\ZHis', strtotime((\update_date_time()))); }
-        if (function_exists('get_interfacestats')) { $stats['interfacestatistics'] = strip_tags(\get_interfacestats()); }
-        if (function_exists('get_interfacestatus')) { $stats['interfacestatus'] = strip_tags(\get_interfacestatus()); }
-        if (function_exists('get_cpufreq')) { $stats['cpufreq'] = strip_tags(\get_cpufreq()); }
-        if (function_exists('get_load_average')) { $stats['load_average'] = explode(',',str_replace(' ','',strip_tags(\get_load_average()))); }
-        if (function_exists('get_mbuf')) { $stats['mbuf'] = strip_tags(\get_mbuf()); }
-        if (function_exists('get_mbuf')) { $stats['mbufpercent'] = strip_tags(\get_mbuf(true)); }
-        if (function_exists('get_pfstate')) { $stats['pfstatepercent'] = strip_tags(\get_pfstate(true)); }
+        if (function_exists('cpu_usage')) { 
+            $stats['cpu'] = strip_tags(\cpu_usage()); 
+        }
+        if (function_exists('mem_usage')) {
+            $stats['mem'] = strip_tags(\mem_usage());
+        }
+        if (function_exists('get_uptime')) {
+            $stats['uptime'] = strip_tags(\get_uptime());
+        }
+        if (function_exists('get_pfstate')) { 
+            $stats['pfstate'] = strip_tags(\get_pfstate());
+            $stats['pfstatepercent'] = strip_tags(\get_pfstate(true));
+        }
+        if (function_exists('get_temp')) {
+            $stats['temp'] = strip_tags(\get_temp()); 
+        }
+        if (function_exists('update_date_time')) { 
+            $stats['datetime'] = gmdate('Ymd\ZHis', strtotime((\update_date_time()))); 
+        }
+        if (function_exists('get_interfacestats')) { 
+            $stats['interfacestatistics'] = strip_tags(\get_interfacestats()); 
+        }
+        if (function_exists('get_interfacestatus')) { 
+            $stats['interfacestatus'] = strip_tags(\get_interfacestatus()); 
+        }
+        if (function_exists('get_cpufreq')) { 
+            $stats['cpufreq'] = strip_tags(\get_cpufreq()); 
+        }
+        if (function_exists('get_load_average')) { 
+            $stats['load_average'] = explode(',',str_replace(' ','',strip_tags(\get_load_average()))); 
+        }
+        
+        if (function_exists('get_mbuf')) {
+            
+            // Might be the worst hack work-around in history, but I'd love to 
+            // understand why pfSense developers decided to make the get_mbuf()
+            // function a pass-by-reference function in 2.4.x - if there is a 
+            // better way than this, drop me line!
+            
+            $content = file_get_contents('/usr/local/www/includes/functions.inc.php');
+            if (strpos($content, 'function get_mbuf(&$mbuf')) {
+                // pfSense 2.4.x
+                \get_mbuf($stats['mbuf'], $stats['mbufpercent']);
+                $stats['mbuf'] = strip_tags($stats['mbuf']);
+                $stats['mbufpercent'] = strip_tags($stats['mbufpercent']);
+            } else {
+                // pfSense 2.3.x
+                $stats['mbuf'] = strip_tags(\get_mbuf());
+                $stats['mbufpercent'] = strip_tags(\get_mbuf(true));
+                
+            }
+        }
         
         return $stats;
     }
