@@ -212,7 +212,8 @@ system time it's quite unlikely to cause issues - happy to receive feedback
 about this.
 
 __Shout Out:__ *Seeking feedback on the API authentication, many developers 
-seem to stumble here.*
+seem to stumble here - if you feel something could be improved without compromising
+security then submit an Issue ticket via Github.*
 
 
 ## API Authorization
@@ -803,6 +804,7 @@ pfSense test infrastructure if it already exists.*
  - added a `number` attibute to the `rules` output making the actual rule number more explict 
  - addressed a bug with the `system_stats` function that was preventing it from returning, cause by an upstream 
    change(s) in the pfSense code.
+ - rename the confusing "owner" field in `credentials.ini` to "comment", legacy files are still supported. 
  - small dcoumentation fixes
  - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 
    better place to keep non-package files, client-libs, examples, build tools etc

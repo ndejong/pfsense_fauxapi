@@ -236,7 +236,8 @@ seconds seems tight, however, provided you are using NTP to look after your
 system time it's quite unlikely to cause issues - happy to receive feedback
 about this.</p>
 <p><strong>Shout Out:</strong> <em>Seeking feedback on the API authentication, many developers
-seem to stumble here.</em></p>
+seem to stumble here - if you feel something could be improved without compromising
+security then submit an Issue ticket via Github.</em></p>
 <h2>
 <a id="user-content-api-authorization" class="anchor" href="#api-authorization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authorization</h2>
 <p>The file <code>/etc/fauxapi/credentials.ini</code> additionally provides a method to restrict
@@ -813,6 +814,7 @@ interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxap
 <li>added a <code>number</code> attibute to the <code>rules</code> output making the actual rule number more explict</li>
 <li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, cause by an upstream
 change(s) in the pfSense code.</li>
+<li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy files are still supported.</li>
 <li>small dcoumentation fixes</li>
 <li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path in the project repo as a
 better place to keep non-package files, client-libs, examples, build tools etc</li>
