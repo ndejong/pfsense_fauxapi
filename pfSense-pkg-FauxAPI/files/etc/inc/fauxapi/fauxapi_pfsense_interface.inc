@@ -398,20 +398,23 @@ class fauxApiPfsenseInterface {
         
         include_once '/usr/local/www/includes/functions.inc.php';
         
-        // NB: as per get_stats() in functions.inc.php
-        $stats['cpu']                   = strip_tags(\cpu_usage());
-        $stats['mem']                   = strip_tags(\mem_usage());
-        $stats['uptime']                = strip_tags(\get_uptime());
-        $stats['states']                = strip_tags(\get_pfstate());
-        $stats['temp']                  = strip_tags(\get_temp());
-        $stats['datetime']              = gmdate('Ymd\ZHis', strtotime((\update_date_time())));
-        $stats['interfacestatistics']   = strip_tags(\get_interfacestats());
-        $stats['interfacestatus']       = strip_tags(\get_interfacestatus());
-        $stats['cpufreq']               = strip_tags(\get_cpufreq());
-        $stats['load_average']          = explode(',',str_replace(' ','',strip_tags(\get_load_average())));
-        $stats['mbuf']                  = strip_tags(\get_mbuf());
-        $stats['mbufpercent']           = strip_tags(\get_mbuf(true));
-        $stats['statepercent']          = strip_tags(\get_pfstate(true));
+        // as per get_stats() in functions.inc.php
+        // NB: wrapped in function_exists() because some functions have been removed in
+        // later versions of pfSense
+        
+        if (function_exists('cpu_usage')) { $stats['cpu'] = strip_tags(\cpu_usage()); }
+        if (function_exists('mem_usage')) { $stats['mem'] = strip_tags(\mem_usage()); }
+        if (function_exists('get_uptime')) { $stats['uptime'] = strip_tags(\get_uptime()); }
+        if (function_exists('get_pfstate')) { $stats['states'] = strip_tags(\get_pfstate()); }
+        if (function_exists('get_temp')) { $stats['temp'] = strip_tags(\get_temp()); }
+        if (function_exists('update_date_time')) { $stats['datetime'] = gmdate('Ymd\ZHis', strtotime((\update_date_time()))); }
+        if (function_exists('get_interfacestats')) { $stats['interfacestatistics'] = strip_tags(\get_interfacestats()); }
+        if (function_exists('get_interfacestatus')) { $stats['interfacestatus'] = strip_tags(\get_interfacestatus()); }
+        if (function_exists('get_cpufreq')) { $stats['cpufreq'] = strip_tags(\get_cpufreq()); }
+        if (function_exists('get_load_average')) { $stats['load_average'] = explode(',',str_replace(' ','',strip_tags(\get_load_average()))); }
+        if (function_exists('get_mbuf')) { $stats['mbuf'] = strip_tags(\get_mbuf()); }
+        if (function_exists('get_mbuf')) { $stats['mbufpercent'] = strip_tags(\get_mbuf(true)); }
+        if (function_exists('get_pfstate')) { $stats['pfstatepercent'] = strip_tags(\get_pfstate(true)); }
         
         return $stats;
     }
