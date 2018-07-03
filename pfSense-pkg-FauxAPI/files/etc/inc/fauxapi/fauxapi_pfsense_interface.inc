@@ -115,13 +115,44 @@ class fauxApiPfsenseInterface {
             'do_reload' => $do_reload
         ));
         
-        $config = array_merge(
+        $config = $this->array_merge_recursive_distinct(
                     $this->config_load($this->config_default_filename),
                     $config_patch
                 );
         
         fauxApiLogger::info('config_patch merged with current config, attempting to save');
         return $this->config_save($config, $do_backup, $do_reload);
+    }
+    
+    /**
+     * array_merge_recursive_distinct()
+     * 
+     * @param array $array1
+     * @param array $array2
+     * @return array
+     * @note adapted from http://php.net/manual/en/function.array-merge-recursive.php#92195
+     */
+    private function array_merge_recursive_distinct(array &$array1, array &$array2) {
+        $merged = $array1;
+        foreach ($array2 as $key => &$value) {
+            if (is_array($value) && !$this->is_numeric_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = $this->array_merge_recursive_distinct($merged[$key], $value);
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+        return $merged;
+    }
+    
+    /**
+     * is_numeric_array()
+     * 
+     * @param array $array
+     * @return bool
+     * @note adapted from https://codereview.stackexchange.com/questions/201/is-numeric-array-is-missing
+     */
+    private function is_numeric_array($array) {
+        return array_keys($array) === range(0,(count($array)-1));
     }
     
     /**

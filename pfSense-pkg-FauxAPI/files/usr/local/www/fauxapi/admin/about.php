@@ -453,8 +453,7 @@ path.</li>
 <h3>
 <a id="user-content-config_patch" class="anchor" href="#config_patch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_patch</h3>
 <ul>
-<li>Allows the API user to patch the system configuration (using PHP <code>array_merge()</code> under the hood)
-with the existing system config</li>
+<li>Allows the API user to patch the system configuration with the existing system config</li>
 <li>A <strong>config_patch</strong> call allows the API user to supply the partial configuration to be updated
 which is quite different to the <strong>config_set</strong> function which MUST provide the full configuration
 to be applied</li>
@@ -738,6 +737,7 @@ returned.</li>
   <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
     <span class="pl-s"><span class="pl-pds">"</span>rules<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
       {
+        <span class="pl-s"><span class="pl-pds">"</span>number<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">5</span>,
         <span class="pl-s"><span class="pl-pds">"</span>rule<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>anchor <span class="pl-cce">\"</span>openvpn/*<span class="pl-cce">\"</span> all<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>evaluations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>14134<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>packets<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
@@ -892,8 +892,8 @@ actions.</li>
 <h4>
 <a id="user-content-v13---2018-07-02" class="anchor" href="#v13---2018-07-02" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.3 - 2018-07-02</h4>
 <ul>
-<li>add the <strong>config_patch</strong> function providing the ability to patch (using PHP <code>array_merge()</code>) the system config, thus
-allowing API users to make granular configuration changes.</li>
+<li>add the <strong>config_patch</strong> function providing the ability to patch the system config, thus allowing API users to
+make granular configuration changes.</li>
 <li>added a "previous_config_file" response attribute to functions that cause write operations to the running <code>config.xml</code>
 </li>
 <li>add the <strong>interface_stats</strong> function to help in determining the usage of an
@@ -903,10 +903,11 @@ interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxap
 </li>
 <li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, caused by an upstream
 change(s) in the pfSense code.</li>
-<li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy configuration files using "owner" are still supported.</li>
+<li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy configuration files using "owner" are
+still supported.</li>
 <li>added a "source" attribute to the logs making it easier to grep fauxapi events, for example <code>clog /var/log/system.log | grep fauxapi</code>
 </li>
-<li>plenty of dcoumentation fixes and updates</li>
+<li>plenty of dcoumentation fixes and updates highlighting old features and capabilities.</li>
 <li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path in the project repo as a
 better place to keep non-package files, client-libs, examples, build tools etc</li>
 <li>testing against pfSense 2.3.5</li>

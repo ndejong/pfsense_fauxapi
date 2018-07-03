@@ -439,8 +439,7 @@ cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.j
 
 ---
 ### config_patch
- - Allows the API user to patch the system configuration (using PHP `array_merge()` under the hood)
-   with the existing system config
+ - Allows the API user to patch the system configuration with the existing system config
  - A **config_patch** call allows the API user to supply the partial configuration to be updated 
    which is quite different to the **config_set** function which MUST provide the full configuration
    to be applied
@@ -881,15 +880,16 @@ pfSense test infrastructure if it already exists.*
  - testing against pfSense 2.3.4
 
 #### v1.3 - 2018-07-02
- - add the **config_patch** function providing the ability to patch (using PHP `array_merge()`) the system config, thus
-   allowing API users to make granular configuration changes.  
+ - add the **config_patch** function providing the ability to patch the system config, thus allowing API users to 
+   make granular configuration changes.  
  - added a "previous_config_file" response attribute to functions that cause write operations to the running `config.xml`
  - add the **interface_stats** function to help in determining the usage of an 
    interface to (partly) address [Issue #20](https://github.com/ndejong/pfsense_fauxapi/issues/20)
  - added a `number` attibute to the `rules` output making the actual rule number more explict as described in [Issue #13](https://github.com/ndejong/pfsense_fauxapi/issues/13)
  - addressed a bug with the `system_stats` function that was preventing it from returning, caused by an upstream 
    change(s) in the pfSense code.
- - rename the confusing "owner" field in `credentials.ini` to "comment", legacy configuration files using "owner" are still supported. 
+ - rename the confusing "owner" field in `credentials.ini` to "comment", legacy configuration files using "owner" are 
+   still supported. 
  - added a "source" attribute to the logs making it easier to grep fauxapi events, for example `clog /var/log/system.log | grep fauxapi`
  - plenty of dcoumentation fixes and updates highlighting old features and capabilities.
  - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 
