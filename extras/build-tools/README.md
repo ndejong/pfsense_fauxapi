@@ -9,7 +9,7 @@ Build Notes
 #### FreeBSD (build) server
  * Download and Install FreeBSD - https://www.freebsd.org/where.html
  * During installation, you can unselect the option to install the ports tree since it will be cloned from the pfSense repo later on.
- * Allow root login via ssh in `/etc/ssh/sshd_config`
+ * Allow root login via ssh in `/etc/ssh/sshd_config` and remember to reload the new sshd config with `service sshd reload`
  ```
 PermitRootLogin yes
 ```
