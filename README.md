@@ -816,7 +816,7 @@ pfSense test infrastructure if it already exists.*
  - add the **interface_stats** function call to help in determining the usage of an 
    interface to (partly) address [Issue #20](https://github.com/ndejong/pfsense_fauxapi/issues/20)
  - added a `number` attibute to the `rules` output making the actual rule number more explict 
- - addressed a bug with the `system_stats` function that was preventing it from returning, cause by an upstream 
+ - addressed a bug with the `system_stats` function that was preventing it from returning, caused by an upstream 
    change(s) in the pfSense code.
  - rename the confusing "owner" field in `credentials.ini` to "comment", legacy files are still supported. 
  - added a "source" attribute to the logs making it easier to grep fauxapi events, for example `clog /var/log/system.log | grep fauxapi`
