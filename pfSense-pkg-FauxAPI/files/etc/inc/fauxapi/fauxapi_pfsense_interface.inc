@@ -156,6 +156,22 @@ class fauxApiPfsenseInterface {
     }
     
     /**
+     * config_item_get()
+     * 
+     * @param string $item
+     * @return string
+     */
+    public function config_item_get($item) {
+        fauxApiLogger::debug(__METHOD__, array(
+            'item' => $item
+        ));
+        
+        // not yet implemented !!
+        fauxApiLogger::error('not yet implemented');
+        return FALSE;
+    }
+    
+    /**
      * config_item_set()
      * 
      * @param string $item

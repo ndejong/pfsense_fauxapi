@@ -126,6 +126,35 @@ class fauxApiActions {
     }
     
     /**
+     * config_item_get()
+     * 
+     * @param array $__args
+     * @return boolean
+     */
+    public function config_item_get($__args) {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $item = NULL;
+        extract($__args, EXTR_IF_EXISTS);
+        
+        $value = $this->PfsenseInterface->config_item_get($item);
+        
+        if (FALSE === $value) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get config item value';
+            $this->response->data = array(
+                'item' => $item);
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'item' => $item, 
+            'value' => $value);
+        return TRUE;
+    }
+    
+    /**
      * config_item_set()
      * 
      * @param array $__args
@@ -135,14 +164,12 @@ class fauxApiActions {
         fauxApiLogger::debug(__METHOD__);
         
         $item = NULL;
-        $value = NULL;
-        
         $do_backup = TRUE;
         $do_reload = TRUE;
         $do_insert = FALSE;
         extract($__args, EXTR_IF_EXISTS);
         
-        if (!$this->PfsenseInterface->config_item_set($item, $value, $do_insert, $do_backup, $do_reload)) {
+        if (!$this->PfsenseInterface->config_item_set($item, $this->action_input_data, $do_insert, $do_backup, $do_reload)) {
             $this->response->http_code = 500;
             $this->response->message = 'failed to set config item value';
             $this->response->data = array(
