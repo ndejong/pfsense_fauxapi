@@ -100,17 +100,65 @@ class fauxApiActions {
      * 
      * @param array $__args
      * @return boolean
+     */
     public function config_patch($__args) {
         fauxApiLogger::debug(__METHOD__);
         
         $do_backup = TRUE;
         $do_reload = TRUE;
-        $path = NULL;
-        $value = NULL;
         extract($__args, EXTR_IF_EXISTS);
         
+        // patch the config data
+        if (!$this->PfsenseInterface->config_patch($this->action_input_data, $do_backup, $do_reload)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'failed to patch config data';
+            return FALSE;
+        }
+        
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'do_backup' => $do_backup, 
+            'do_reload' => $do_reload);
+        return TRUE;
     }
+    
+    /**
+     * config_item_set()
+     * 
+     * @param array $__args
+     * @return boolean
      */
+    public function config_item_set($__args) {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $item = NULL;
+        $value = NULL;
+        
+        $do_backup = TRUE;
+        $do_reload = TRUE;
+        $do_insert = FALSE;
+        extract($__args, EXTR_IF_EXISTS);
+        
+        if (!$this->PfsenseInterface->config_item_set($item, $value, $do_insert, $do_backup, $do_reload)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'failed to set config item value';
+            $this->response->data = array(
+                'item' => $item,
+                'value' => $value);
+            return FALSE;
+        }
+        
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'item' => $item,
+            'value' => $value,
+            'do_insert' => $do_insert, 
+            'do_backup' => $do_backup, 
+            'do_reload' => $do_reload);
+        return TRUE;
+    }
     
     /**
      * config_reload()

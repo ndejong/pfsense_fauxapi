@@ -98,6 +98,53 @@ class fauxApiPfsenseInterface {
         
         return \parse_xml_config($config_file, $this->config_xml_root);
     }
+    
+    /**
+     * config_patch()
+     * 
+     * @param array $config_patch
+     * @param boolean $do_backup
+     * @param boolean $do_reload
+     * @return boolean
+     */
+    public function config_patch($config_patch, $do_backup=TRUE, $do_reload=TRUE) {
+        fauxApiLogger::debug(__METHOD__, array(
+            'do_backup' => $do_backup,
+            'do_reload' => $do_reload
+        ));
+        
+        $config = array_merge(
+                    $this->config_load($this->config_default_filename),
+                    $config_patch
+                );
+        
+        fauxApiLogger::info('config_patch merged with current config, attempting to save');
+        return $this->config_save($config, $do_backup, $do_reload);
+    }
+    
+    /**
+     * config_item_set()
+     * 
+     * @param string $item
+     * @param string $value
+     * @param boolean $do_insert
+     * @param boolean $do_backup
+     * @param boolean $do_reload
+     * @return boolean
+     */
+    public function config_item_set($item, $value, $do_insert=FALSE, $do_backup=TRUE, $do_reload=TRUE) {
+        fauxApiLogger::debug(__METHOD__, array(
+            'item' => $item,
+            'value' => $value,
+            'do_insert' => $do_insert,
+            'do_backup' => $do_backup,
+            'do_reload' => $do_reload
+        ));
+        
+        // not yet implemented !!
+        fauxApiLogger::error('not yet implemented');
+        return FALSE;
+    }
 
     /**
      * config_save()
@@ -607,6 +654,12 @@ class fauxApiPfsenseInterface {
      */
     public function interface_stats($interface){
         fauxApiLogger::debug(__METHOD__);
+        
+        if(is_null($interface)) {
+            $error_message = 'no interface parameter provided';
+            fauxApiLogger::error($error_message);
+            throw new \Exception($error_message);
+        }
         
         return \pfSense_get_interface_stats($interface);
     }
