@@ -91,7 +91,8 @@ class fauxApiActions {
         $this->response->message = 'ok';
         $this->response->data = array(
             'do_backup' => $do_backup, 
-            'do_reload' => $do_reload);
+            'do_reload' => $do_reload,
+            'previous_config_file' => $this->PfsenseInterface->backup_config_filename[FAUXAPI_CALLID]);
         return TRUE;
     }
     
@@ -119,7 +120,8 @@ class fauxApiActions {
         $this->response->message = 'ok';
         $this->response->data = array(
             'do_backup' => $do_backup, 
-            'do_reload' => $do_reload);
+            'do_reload' => $do_reload,
+            'previous_config_file' => $this->PfsenseInterface->backup_config_filename[FAUXAPI_CALLID]);
         return TRUE;
     }
     
@@ -156,7 +158,8 @@ class fauxApiActions {
             'value' => $value,
             'do_insert' => $do_insert, 
             'do_backup' => $do_backup, 
-            'do_reload' => $do_reload);
+            'do_reload' => $do_reload,
+            'previous_config_file' => $this->PfsenseInterface->backup_config_filename[FAUXAPI_CALLID]);
         return TRUE;
     }
     
