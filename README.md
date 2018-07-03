@@ -72,7 +72,7 @@ install manually from **root** as shown:-
 set fauxapi_baseurl='https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package'
 set fauxapi_latest=`curl --silent $fauxapi_baseurl/LATEST`
 fetch $fauxapi_baseurl/$fauxapi_latest
-pkg install $fauxapi_latest
+pkg-static install $fauxapi_latest
 ```
 
 Installation and de-installation is quite straight forward, further examples can 
