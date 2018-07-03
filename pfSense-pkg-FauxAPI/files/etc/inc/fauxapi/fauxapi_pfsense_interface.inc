@@ -41,6 +41,8 @@ class fauxApiPfsenseInterface {
     public $config_default_filename = '/cf/conf/config.xml';
     public $config_reload_max_wait_secs = 60;
     
+    public $backup_config_filename = array();
+    
     /**
      * get_next_backup_config_filename()
      * 
@@ -167,6 +169,10 @@ class fauxApiPfsenseInterface {
             if (!is_file($config_backup_file)) {
                 return FALSE;
             }
+            $this->backup_config_filename[FAUXAPI_CALLID] = $config_backup_file;
+        }
+        else {
+            $this->backup_config_filename[FAUXAPI_CALLID] = FALSE;
         }
         
         $username = 'fauxapi-'.FAUXAPI_APIKEY.'@'.fauxApiUtils::get_client_ipaddr();
