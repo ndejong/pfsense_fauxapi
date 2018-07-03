@@ -128,15 +128,6 @@ pkg install <span class="pl-smi">$fauxapi_latest</span></pre></div>
 be found <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/package">here</a>.</p>
 <p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS"><code>SHA256SUMS</code></a></p>
 <h2>
-<a id="user-content-debugging" class="anchor" href="#debugging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Debugging</h2>
-<p>FauxAPI comes with awesome debug logging capability, simply insert <code>__debug=true</code>
-as a URL request parameter and the response data will contain rich debugging log
-data about the flow of the request.</p>
-<p>If you are looking for more debugging at various points feel free to submit a
-pull request or lodge an issue describing your requirement and I'll see what
-can be done to accommodate.</p>
-<p><a name="user-content-client_libraries"></a></p>
-<h2>
 <a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h2>
 <h4>
 <a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
@@ -249,6 +240,26 @@ secret = abcdefghijklmnopqrstuvwxyz0123456789abcd
 permit = alias_*, config_*, gateway_*, rule_*, send_*, system_*, function_*
 comment = example key PFFAexample01 - hardcoded to be inoperative
 </code></pre>
+<h2>
+<a id="user-content-debugging" class="anchor" href="#debugging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Debugging</h2>
+<p>FauxAPI comes with awesome debug logging capability, simply insert <code>__debug=true</code>
+as a URL request parameter and the response data will contain rich debugging log
+data about the flow of the request.</p>
+<p>If you are looking for more debugging at various points feel free to submit a
+pull request or lodge an issue describing your requirement and I'll see what
+can be done to accommodate.</p>
+<h2>
+<a id="user-content-logging" class="anchor" href="#logging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Logging</h2>
+<p>FauxAPI actions are sent to the system syslog via a call to the PHP <code>syslog()</code>
+function thus causing all FauxAPI actions to be logged and auditable on a per
+action (callid) basis which provide the full basis for the call, for example:-</p>
+<pre lang="text"><code>Jul  3 04:37:59 pfSense php-fpm[55897]: {"INFO":"20180703Z043759 :: fauxapi\\v1\\fauxApi::__call","DATA":{"user_action":"alias_update_urltables","callid":"5b3afda73e7c9","client_ip":"192.168.1.5"},"source":"fauxapi"}
+Jul  3 04:37:59 pfSense php-fpm[55897]: {"INFO":"20180703Z043759 :: valid auth for call","DATA":{"apikey":"PFFAdevtrash","callid":"5b3afda73e7c9","client_ip":"192.168.1.5"},"source":"fauxapi"}
+</code></pre>
+<p>Enabling debugging yields considerably more logging data to assist with tracking
+down issues if you encounter them - you may review the logs via the pfSense GUI
+as usual unser Status-&gt;System Logs-&gt;General or via the console using the <code>clog</code> tool</p>
+<div class="highlight highlight-source-shell"><pre>$ clog /var/log/system.log <span class="pl-k">|</span> grep fauxapi</pre></div>
 <h2>
 <a id="user-content-api-rest-actions" class="anchor" href="#api-rest-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API REST Actions</h2>
 <p>The following REST based API actions are provided, example cURL call request
@@ -815,6 +826,8 @@ interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxap
 <li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, cause by an upstream
 change(s) in the pfSense code.</li>
 <li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy files are still supported.</li>
+<li>added a "source" attribute to the logs making it easier to grep fauxapi events, for example <code>clog /var/log/system.log | grep fauxapi</code>
+</li>
 <li>small dcoumentation fixes</li>
 <li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path in the project repo as a
 better place to keep non-package files, client-libs, examples, build tools etc</li>
