@@ -85,6 +85,19 @@ fauxapi_config_backup_list() {
         "https://${fauxapi_host}/fauxapi/v1/?action=config_backup_list&__debug=${fauxapi_debug}"`
 }
 
+fauxapi_config_patch() {
+    fauxapi_host=${1}
+    fauxapi_configpatchfile=${2}
+    echo `curl \
+        -X POST \
+        --silent \
+        ${fauxapi_use_verified_https} \
+        --header "fauxapi-auth: ${fauxapi_auth}" \
+        --header "Content-Type: application/json" \
+        --data @${fauxapi_configpatchfile} \
+        "https://${fauxapi_host}/fauxapi/v1/?action=config_patch&__debug=${fauxapi_debug}"`
+}
+
 fauxapi_config_set() {
     fauxapi_host=${1}
     fauxapi_configfile=${2}
