@@ -890,7 +890,8 @@ pfSense test infrastructure if it already exists.*
  - rename the confusing "owner" field in `credentials.ini` to "comment", legacy configuration files using "owner" are 
    still supported. 
  - added a "source" attribute to the logs making it easier to grep fauxapi events, for example `clog /var/log/system.log | grep fauxapi`
- - plenty of dcoumentation fixes and updates highlighting old features and capabilities.
+ - plenty of dcoumentation fixes and updates
+ - added documentation highlighting features and capabilities that existed without them being obvious
  - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 
    better place to keep non-package files, client-libs, examples, build tools etc
  - testing against pfSense 2.3.5
