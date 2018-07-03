@@ -78,17 +78,6 @@ be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package).
 Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS)
 
 
-## Debugging
-FauxAPI comes with awesome debug logging capability, simply insert `__debug=true` 
-as a URL request parameter and the response data will contain rich debugging log 
-data about the flow of the request.
-
-If you are looking for more debugging at various points feel free to submit a 
-pull request or lodge an issue describing your requirement and I'll see what
-can be done to accommodate.
-
-
-<a name="client_libraries"></a>
 ## Client libraries
 
 #### Python
@@ -228,6 +217,31 @@ secret = abcdefghijklmnopqrstuvwxyz0123456789abcd
 permit = alias_*, config_*, gateway_*, rule_*, send_*, system_*, function_*
 comment = example key PFFAexample01 - hardcoded to be inoperative
 ```
+
+## Debugging
+FauxAPI comes with awesome debug logging capability, simply insert `__debug=true` 
+as a URL request parameter and the response data will contain rich debugging log 
+data about the flow of the request.
+
+If you are looking for more debugging at various points feel free to submit a 
+pull request or lodge an issue describing your requirement and I'll see what
+can be done to accommodate.
+
+
+## Logging
+FauxAPI actions are sent to the system syslog via a call to the PHP `syslog()` 
+function thus causing all FauxAPI actions to be logged and auditable on a per 
+action (callid) basis which provide the full basis for the call, for example:-
+```text
+Jul  3 04:37:59 pfSense php-fpm[55897]: {"INFO":"20180703Z043759 :: fauxapi\\v1\\fauxApi::__call","DATA":{"user_action":"alias_update_urltables","callid":"5b3afda73e7c9","client_ip":"192.168.1.5"},"source":"fauxapi"}
+Jul  3 04:37:59 pfSense php-fpm[55897]: {"INFO":"20180703Z043759 :: valid auth for call","DATA":{"apikey":"PFFAdevtrash","callid":"5b3afda73e7c9","client_ip":"192.168.1.5"},"source":"fauxapi"}
+```
+Enabling debugging yields considerably more logging data to assist with tracking 
+down issues if you encounter them - you may review the logs via the pfSense GUI
+as usual unser Status->System Logs->General or via the console using the `clog` tool
+```bash
+$ clog /var/log/system.log | grep fauxapi
+``` 
 
 
 ## API REST Actions
@@ -805,6 +819,7 @@ pfSense test infrastructure if it already exists.*
  - addressed a bug with the `system_stats` function that was preventing it from returning, cause by an upstream 
    change(s) in the pfSense code.
  - rename the confusing "owner" field in `credentials.ini` to "comment", legacy files are still supported. 
+ - added a "source" attribute to the logs making it easier to grep fauxapi events, for example `clog /var/log/system.log | grep fauxapi`
  - small dcoumentation fixes
  - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 
    better place to keep non-package files, client-libs, examples, build tools etc
