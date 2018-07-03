@@ -19,7 +19,7 @@ rsync -rv --delete ${local_base_path}/${PORTNAME}/ ${STAGEDIR}/usr/ports/sysutil
 ssh $remote_user@$remote_host "cd /usr/ports/sysutils/${PORTNAME}; make clean; make package"
 
 # pull the .txz packages back
-scp $remote_user@$remote_host:/usr/ports/sysutils/${PORTNAME}/work/pkg/*.txz ${local_base_path}/package
+rsync --ignore-existing $remote_user@$remote_host:/usr/ports/sysutils/${PORTNAME}/work/pkg/*.txz ${local_base_path}/package
 
 # re-roll the SHA256SUMS
 cd ${local_base_path}/package
