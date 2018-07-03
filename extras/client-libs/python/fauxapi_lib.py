@@ -53,7 +53,7 @@ class FauxapiLib:
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete config_get() request', json.loads(res.text))
         else:
-            config = json.loads(res.text)
+            config = self._json_parse(res.text)
         if section is None:
             return config['data']['config']
         elif section in config['data']['config']:
@@ -69,73 +69,73 @@ class FauxapiLib:
         res = self._api_request('POST', 'config_set', data=json.dumps(config_new))
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete config_set() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def config_patch(self, config):
         res = self._api_request('POST', 'config_patch', data=json.dumps(config))
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete config_patch() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def config_reload(self):
         res = self._api_request('GET', 'config_reload')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete config_reload() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def config_backup(self):
         res = self._api_request('GET', 'config_backup')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete system_reboot() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def config_backup_list(self):
         res = self._api_request('GET', 'config_backup_list')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete config_backup_list() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def config_restore(self, config_file):
         res = self._api_request('GET', 'config_restore', params={'config_file': config_file})
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete config_restore() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def send_event(self, command):
         res = self._api_request('POST', 'send_event', data=json.dumps([command]))
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete send_event() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def system_reboot(self):
         res = self._api_request('GET', 'system_reboot')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete system_reboot() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def system_stats(self):
         res = self._api_request('GET', 'system_stats')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete system_stats() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def interface_stats(self, interface):
         res = self._api_request('GET', 'interface_stats', params={'interface': interface})
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete interface_stats() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def gateway_status(self):
         res = self._api_request('GET', 'gateway_status')
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete gateway_status() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def rule_get(self, rule_number=None):
         res = self._api_request('GET', 'rule_get', params={'rule_number': rule_number})
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete rule_get() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def alias_update_urltables(self, table=None):
         if table is None:
@@ -144,13 +144,13 @@ class FauxapiLib:
             res = self._api_request('GET', 'alias_update_urltables', params={'table': table})
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete alias_update_urltables() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def function_call(self, data):
         res = self._api_request('POST', 'function_call', data=json.dumps(data))
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete send_event() request', json.loads(res.text))
-        return json.loads(res.text)
+        return self._json_parse(res.text)
 
     def _api_request(self, method, action, params={}, data=None):
         if self.debug:
@@ -177,3 +177,9 @@ class FauxapiLib:
         hash = hashlib.sha256('{}{}{}'.format(self.apisecret, timestamp, nonce).encode('utf-8')).hexdigest()
         return '{}:{}:{}:{}'.format(self.apikey, timestamp, nonce, hash)
 
+    def _json_parse(self, data):
+        try:
+            return json.loads(data)
+        except(json.JSONDecodeError):
+            pass
+        raise FauxapiLibException('unable to parse response data!', data)

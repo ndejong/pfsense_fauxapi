@@ -282,9 +282,9 @@ client side to hence remove scope for man-in-middle concerns.
 
 ---
 ### alias_update_urltables
- - Causes the pfSense host to immediately update any urltable alias entries
-   from their (remote) source URLs.  Optionally update just one table by 
-   specifying the table name, else all tables are updated.
+ - Causes the pfSense host to immediately update any urltable alias entries from their (remote) 
+   source URLs.  Optionally update just one table by specifying the table name, else all 
+   tables are updated.
  - HTTP: **GET**
  - Params:
     - **table** (optional, default = null)
@@ -463,14 +463,14 @@ curl \
 *Example Response*
 ```javascript
 {
-  "callid": "583065cae8993",
+  "callid": "5b3b506f72670",
   "action": "config_patch",
   "message": "ok",
   "data": {
     "do_backup": true,
-    "do_reload": true
+    "do_reload": true,
+    "previous_config_file": "/cf/conf/backup/config-1530613871.xml"
   }
-}
 ```
 
 ---
@@ -559,12 +559,13 @@ curl \
 *Example Response*
 ```javascript
 {
-  "callid": "583065cae8993",
+  "callid": "5b3b50e8b1bc6",
   "action": "config_set",
   "message": "ok",
   "data": {
     "do_backup": true,
-    "do_reload": true
+    "do_reload": true,
+    "previous_config_file": "/cf/conf/backup/config-1530613992.xml"
   }
 }
 ```
@@ -814,28 +815,26 @@ curl \
 *Example Response*
 ```javascript
 {
-  "callid": "583d5ce3301f4",
+  "callid": "5b3b511655589",
   "action": "system_stats",
   "message": "ok",
   "data": {
     "stats": {
-      "cpu": "2",
-      "mem": "16",
-      "uptime": "9 Days 20 Hours 02 Minutes 08 Seconds",
-      "states": "364/48000",
+      "cpu": "20770421|20494981",
+      "mem": "20",
+      "uptime": "1 Day 21 Hours 25 Minutes 48 Seconds",
+      "pfstate": "62/98000",
+      "pfstatepercent": "0",
       "temp": "",
-      "datetime": "20161129Z104804",
-      "interfacestatistics": "",
-      "interfacestatus": "",
+      "datetime": "20180703Z103358",
       "cpufreq": "",
       "load_average": [
-        "0.29",
-        "0.29",
-        "0.28"
+        "0.01",
+        "0.04",
+        "0.01"
       ],
-      "mbuf": "1016/30414",
-      "mbufpercent": "3",
-      "statepercent": "1"
+      "mbuf": "1016/61600",
+      "mbufpercent": "2"
     }
   }
 }

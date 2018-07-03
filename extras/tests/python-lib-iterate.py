@@ -39,91 +39,142 @@ fauxapi_apisecret=sys.argv[3]
 FauxapiLib = FauxapiLib(fauxapi_host, fauxapi_apikey, fauxapi_apisecret, debug=False)
 
 
-# config get the full configuration
+# config get the full configuration and simply print to console
+# =============================================================================
 config = FauxapiLib.config_get()
 print(json.dumps(
     config
 ))
 
 # config set the full configuration
+# =============================================================================
+# NB: nothing amazing is happening here, we are simply writing back the same (full) configuration again, the developer
+# most likely wants to make changes to `config` before calling the config_set function again here
 print(json.dumps(
     FauxapiLib.config_set(config)
 ))
 
-# config get and set within the 'aliases' section only - in this example we are simply setting the same aliases
-# back again, of course this could be far more elaborate by injecting aliases values etc - take a look at the example
-# code in update-aws-aliases.py that implements a useful example
+# config_get, config_set by section
+# =============================================================================
+# perform a second config_get > config_set this time within the 'aliases' section only
+# NB: again, nothing amazing happening in this example, we are are again only writing back the same (section)
+# configuration, the developer more likely wants to perform some kind of operation on `config_aliases` before calling
+# the config_set function again.
 config_aliases = FauxapiLib.config_get('aliases')
 print(json.dumps(
     FauxapiLib.config_set(config_aliases, 'aliases'))
 )
 
+# config_patch
+# =============================================================================
+# in this example we patch a specific set of configuration parameters and then revert them back to what they were
+config_patch = {
+    'system': {
+        'dnsserver': ['8.8.8.8', '8.8.4.4'],
+        'hostname': 'testing'
+    }
+}
+print(json.dumps(
+    FauxapiLib.config_patch(config_patch)
+))
+
+# config_patch - set dnsserver to what it was originally
+config_patch = {
+    'system': {
+        'dnsserver': config['system']['dnsserver'],
+        'hostname': config['system']['hostname'],
+    }
+}
+print(json.dumps(
+    FauxapiLib.config_patch(config_patch)
+))
+
+# config get the full configuration again so we can manually confirm it has been restored
+config = FauxapiLib.config_get()
+print(json.dumps(
+    config
+))
+
 # config reload
+# =============================================================================
 print(json.dumps(
     FauxapiLib.config_reload())
 )
 
 # config backuo
+# =============================================================================
 print(json.dumps(
     FauxapiLib.config_backup())
 )
 
 # config_backup_list
+# =============================================================================
 print(json.dumps(
     FauxapiLib.config_backup_list())
 )
 
 # # config_restore
+# =============================================================================
 # print(json.dumps(
-#     FauxapiLib.config_restore('/cf/conf/backup/config-1503921775.xml'))
+#     FauxapiLib.config_restore('/cf/conf/backup/config-1530604754.xml'))
 # )
 
 # system_stats
+# =============================================================================
 print(json.dumps(
     FauxapiLib.system_stats())
 )
 
-# interface_stats - NB: the real interface name, not an alias such as "wan"
+# interface_stats - NB: the real interface name, not an interface alias such as "WAN" or "LAN"
+# =============================================================================
 print(json.dumps(
     FauxapiLib.interface_stats('em0'))
 )
 
 # gateway_status
+# =============================================================================
 print(json.dumps(
     FauxapiLib.gateway_status())
 )
 
 # send_event - filter reload
+# =============================================================================
 print(json.dumps(
     FauxapiLib.send_event('filter reload'))
 )
 
 # send_event - interface all reload
+# =============================================================================
 print(json.dumps(
     FauxapiLib.send_event('interface all reload'))
 )
 
 # rule_get - get all rules
+# =============================================================================
 print(json.dumps(
     FauxapiLib.rule_get())
 )
 
 # rule_get - get rule number 5
+# =============================================================================
 print(json.dumps(
     FauxapiLib.rule_get(5))
 )
 
 # alias_update_urltables
+# =============================================================================
 print(json.dumps(
     FauxapiLib.alias_update_urltables())
 )
 
 # # system reboot
+# =============================================================================
 # print(json.dumps(
 #     FauxapiLib.system_reboot())
 # )
 
 # function_call - examples
+# =============================================================================
 print(json.dumps(
     FauxapiLib.function_call({
         'function': 'return_gateways_status',
