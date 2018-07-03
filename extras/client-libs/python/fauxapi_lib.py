@@ -60,13 +60,13 @@ class FauxapiLib:
             return config['data']['config'][section]
         raise FauxapiLibException('unable to complete config_get request, section is unknown', section)
 
-    def config_set(self, config_user, section=None):
+    def config_set(self, config, section=None):
         if section is None:
-            config = config_user
+            config_new = config
         else:
-            config = self.config_get(section=None)
-            config[section] = config_user
-        res = self._api_request('POST', 'config_set', data=json.dumps(config))
+            config_new = self.config_get(section=None)
+            config_new[section] = config
+        res = self._api_request('POST', 'config_set', data=json.dumps(config_new))
         if res.status_code != 200:
             raise FauxapiLibException('unable to complete config_set() request', json.loads(res.text))
         return json.loads(res.text)
