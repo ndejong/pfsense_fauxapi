@@ -409,8 +409,45 @@ cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.j
 ```
 
 ---
+### config_patch
+ - Allows the API user to patch the system configuration (using PHP `array_merge()` under the hood)
+   with the existing system config
+ - A **config_patch** call allows the API user to supply the partial configuration to be updated 
+   which is quite different to the **config_set** function which MUST provide the full configuration
+   to be applied
+ - HTTP: **POST**
+ - Params:
+    - **do_backup** (optional, default = true)
+    - **do_reload** (optional, default = true)
+
+*Example Request*
+```bash
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --header "Content-Type: application/json" \
+    --data @/tmp/config_patch.json \
+    "https://<host-address>/fauxapi/v1/?action=config_patch"
+```
+
+*Example Response*
+```javascript
+{
+  "callid": "583065cae8993",
+  "action": "config_patch",
+  "message": "ok",
+  "data": {
+    "do_backup": true,
+    "do_reload": true
+  }
+}
+```
+
+---
 ### config_reload
- - Causes the pfSense system to perform a reload of the `config.xml` file, by 
+ - Causes the pfSense system to perform a reload action of the `config.xml` file, by 
    default this happens when the **config_set** action occurs hence there is 
    normally no need to explicitly call this after a **config_set** action.
  - HTTP: **GET**
@@ -469,10 +506,11 @@ curl \
  - Sets a full system configuration and (by default) takes a system config
    backup and (by default) causes the system config to be reloaded once 
    successfully written and tested.
- - NB1: be sure to pass the *FULL* system configuration in here, not just the 
-   piece you wish to adjust!
- - NB2: if you are pulling the result of a `config_get` call, be sure to parse the response
-   data to obtain the config data only under the key `data.config`
+ - NB1: be sure to pass the *FULL* system configuration here, not just the piece you 
+   wish to adjust!  Consider the **config_patch** or **config_item_set** functions if 
+   you wish to adjust the configuration in more granular ways.
+ - NB2: if you are pulling down the result of a `config_get` call, be sure to parse that
+   response data to obtain the config data only under the key `.data.config`
  - HTTP: **POST**
  - Params:
     - **do_backup** (optional, default = true)
@@ -818,7 +856,7 @@ pfSense test infrastructure if it already exists.*
  - added a `number` attibute to the `rules` output making the actual rule number more explict 
  - addressed a bug with the `system_stats` function that was preventing it from returning, caused by an upstream 
    change(s) in the pfSense code.
- - rename the confusing "owner" field in `credentials.ini` to "comment", legacy files are still supported. 
+ - rename the confusing "owner" field in `credentials.ini` to "comment", legacy configuration files using "owner" are still supported. 
  - added a "source" attribute to the logs making it easier to grep fauxapi events, for example `clog /var/log/system.log | grep fauxapi`
  - small dcoumentation fixes
  - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 

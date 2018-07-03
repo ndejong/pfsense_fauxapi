@@ -418,9 +418,48 @@ path.</li>
 <div class="highlight highlight-source-shell"><pre>cat /tmp/faux-config-get-output-from-curl.json <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
 <hr>
 <h3>
+<a id="user-content-config_patch" class="anchor" href="#config_patch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_patch</h3>
+<ul>
+<li>Allows the API user to patch the system configuration (using PHP <code>array_merge()</code> under the hood)
+with the existing system config</li>
+<li>A <strong>config_patch</strong> call allows the API user to supply the partial configuration to be updated
+which is quite different to the <strong>config_set</strong> function which MUST provide the full configuration
+to be applied</li>
+<li>HTTP: <strong>POST</strong>
+</li>
+<li>Params:
+<ul>
+<li>
+<strong>do_backup</strong> (optional, default = true)</li>
+<li>
+<strong>do_reload</strong> (optional, default = true)</li>
+</ul>
+</li>
+</ul>
+<p><em>Example Request</em></p>
+<div class="highlight highlight-source-shell"><pre>curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
+    --header <span class="pl-s"><span class="pl-pds">"</span>Content-Type: application/json<span class="pl-pds">"</span></span> \
+    --data @/tmp/config_patch.json \
+    <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_patch<span class="pl-pds">"</span></span></pre></div>
+<p><em>Example Response</em></p>
+<div class="highlight highlight-source-js"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583065cae8993<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_patch<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+    <span class="pl-s"><span class="pl-pds">"</span>do_backup<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>,
+    <span class="pl-s"><span class="pl-pds">"</span>do_reload<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>
+  }
+}</pre></div>
+<hr>
+<h3>
 <a id="user-content-config_reload" class="anchor" href="#config_reload" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_reload</h3>
 <ul>
-<li>Causes the pfSense system to perform a reload of the <code>config.xml</code> file, by
+<li>Causes the pfSense system to perform a reload action of the <code>config.xml</code> file, by
 default this happens when the <strong>config_set</strong> action occurs hence there is
 normally no need to explicitly call this after a <strong>config_set</strong> action.</li>
 <li>HTTP: <strong>GET</strong>
@@ -477,10 +516,11 @@ normally no need to explicitly call this after a <strong>config_set</strong> act
 <li>Sets a full system configuration and (by default) takes a system config
 backup and (by default) causes the system config to be reloaded once
 successfully written and tested.</li>
-<li>NB1: be sure to pass the <em>FULL</em> system configuration in here, not just the
-piece you wish to adjust!</li>
-<li>NB2: if you are pulling the result of a <code>config_get</code> call, be sure to parse the response
-data to obtain the config data only under the key <code>data.config</code>
+<li>NB1: be sure to pass the <em>FULL</em> system configuration here, not just the piece you
+wish to adjust!  Consider the <strong>config_patch</strong> or <strong>config_item_set</strong> functions if
+you wish to adjust the configuration in more granular ways.</li>
+<li>NB2: if you are pulling down the result of a <code>config_get</code> call, be sure to parse that
+response data to obtain the config data only under the key <code>.data.config</code>
 </li>
 <li>HTTP: <strong>POST</strong>
 </li>
@@ -823,9 +863,9 @@ actions.</li>
 interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxapi/issues/20">Issue #20</a>
 </li>
 <li>added a <code>number</code> attibute to the <code>rules</code> output making the actual rule number more explict</li>
-<li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, cause by an upstream
+<li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, caused by an upstream
 change(s) in the pfSense code.</li>
-<li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy files are still supported.</li>
+<li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy configuration files using "owner" are still supported.</li>
 <li>added a "source" attribute to the logs making it easier to grep fauxapi events, for example <code>clog /var/log/system.log | grep fauxapi</code>
 </li>
 <li>small dcoumentation fixes</li>
