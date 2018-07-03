@@ -725,6 +725,7 @@ curl \
   "data": {
     "rules": [
       {
+        "number": 5,
         "rule": "anchor \"openvpn/*\" all",
         "evaluations": "14134",
         "packets": "0",
@@ -890,7 +891,7 @@ pfSense test infrastructure if it already exists.*
    change(s) in the pfSense code.
  - rename the confusing "owner" field in `credentials.ini` to "comment", legacy configuration files using "owner" are still supported. 
  - added a "source" attribute to the logs making it easier to grep fauxapi events, for example `clog /var/log/system.log | grep fauxapi`
- - plenty of dcoumentation fixes and updates
+ - plenty of dcoumentation fixes and updates highlighting old features and capabilities.
  - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 
    better place to keep non-package files, client-libs, examples, build tools etc
  - testing against pfSense 2.3.5
