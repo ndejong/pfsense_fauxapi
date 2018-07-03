@@ -81,7 +81,7 @@ print(json.dumps(
 # config_patch - set dnsserver to what it was originally
 config_patch = {
     'system': {
-        'dnsserver': config['system']['dnsserver'],
+        'dnsserver': config['system']['dnsserver'] if 'dnsserver' in config['system'] else [''],
         'hostname': config['system']['hostname'],
     }
 }
