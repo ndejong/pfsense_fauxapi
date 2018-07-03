@@ -71,6 +71,12 @@ class FauxapiLib:
             raise FauxapiLibException('unable to complete config_set() request', json.loads(res.text))
         return json.loads(res.text)
 
+    def config_patch(self, config):
+        res = self._api_request('POST', 'config_patch', data=json.dumps(config))
+        if res.status_code != 200:
+            raise FauxapiLibException('unable to complete config_patch() request', json.loads(res.text))
+        return json.loads(res.text)
+
     def config_reload(self):
         res = self._api_request('GET', 'config_reload')
         if res.status_code != 200:
