@@ -62,9 +62,15 @@ tasks feasible.</p>
 <li>
 <a href="#user-content-config_backup_list">config_backup_list</a> - Returns a list of the currently available system configuration backups.</li>
 <li>
-<a href="#user-content-config_get">config_get</a> - Returns the system configuration as a JSON formatted string.</li>
+<a href="#user-content-config_get">config_get</a> - Returns the full system configuration as a JSON formatted string.</li>
 <li>
-<a href="#user-content-config_reload">config_reload</a> - Causes the pfSense system to perform a reload of the <code>config.xml</code> file.</li>
+<a href="#user-content-config_item_get">config_item_get</a> - Gets the value of a specific configuration item.</li>
+<li>
+<a href="#user-content-config_item_set">config_item_set</a> - Sets the value of a specific configuration item and optionally inserts it if not already existing.</li>
+<li>
+<a href="#user-content-config_patch">config_patch</a> - Patch the system config with a granular piece of new configuration.</li>
+<li>
+<a href="#user-content-config_reload">config_reload</a> - Causes the pfSense system to perform an internal reload of the <code>config.xml</code> file.</li>
 <li>
 <a href="#user-content-config_restore">config_restore</a> - Restores the pfSense system to the named backup configuration.</li>
 <li>
@@ -127,6 +133,8 @@ pkg install <span class="pl-smi">$fauxapi_latest</span></pre></div>
 <p>Installation and de-installation is quite straight forward, further examples can
 be found <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/package">here</a>.</p>
 <p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS"><code>SHA256SUMS</code></a></p>
+<p><strong>Hint:</strong> if not already, consider installing the <code>jq</code> tool on your local machine (not pfSense host) to
+pipe and manage outputs from FauxAPI - <a href="https://stedolan.github.io/jq/" rel="nofollow">https://stedolan.github.io/jq/</a></p>
 <h2>
 <a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h2>
 <h4>
@@ -260,6 +268,19 @@ Jul  3 04:37:59 pfSense php-fpm[55897]: {"INFO":"20180703Z043759 :: valid auth f
 down issues if you encounter them - you may review the logs via the pfSense GUI
 as usual unser Status-&gt;System Logs-&gt;General or via the console using the <code>clog</code> tool</p>
 <div class="highlight highlight-source-shell"><pre>$ clog /var/log/system.log <span class="pl-k">|</span> grep fauxapi</pre></div>
+<h2>
+<a id="user-content-configuration-backups" class="anchor" href="#configuration-backups" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration Backups</h2>
+<p>All configuration edits through FauxAPI create configuration backups in the
+same way as pfSense does with the webapp GUI.</p>
+<p>These backups are available in the same way as edits through the pfSense
+GUI and are thus able to be reviewed and diff'd in the same way under
+Diagnostics-&gt;Backup &amp; Restore-&gt;Config History.</p>
+<p>Changes made through the FauxAPI carry configuration change descriptions that
+name the unique <code>callid</code> which can then be tied to logs if required for full
+usage audit and change tracking.</p>
+<p>FauxAPI functions that cause write operations to the system config <code>config.xml</code>
+return reference to a backup file of the configuration immediately previous
+to the change.</p>
 <h2>
 <a id="user-content-api-rest-actions" class="anchor" href="#api-rest-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API REST Actions</h2>
 <p>The following REST based API actions are provided, example cURL call request
@@ -416,6 +437,18 @@ path.</li>
              <span class="pl-k">...</span>.</pre></div>
 <p>Hint: use <code>jq</code> to parse the response JSON and obtain the config only, as such:-</p>
 <div class="highlight highlight-source-shell"><pre>cat /tmp/faux-config-get-output-from-curl.json <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
+<hr>
+<h3>
+<a id="user-content-config_item_get" class="anchor" href="#config_item_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_item_get</h3>
+<ul>
+<li>TODO: placeholder</li>
+</ul>
+<hr>
+<h3>
+<a id="user-content-config_item_set" class="anchor" href="#config_item_set" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_item_set</h3>
+<ul>
+<li>TODO: placeholder</li>
+</ul>
 <hr>
 <h3>
 <a id="user-content-config_patch" class="anchor" href="#config_patch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_patch</h3>
@@ -859,16 +892,21 @@ actions.</li>
 <h4>
 <a id="user-content-v13---2018-07-02" class="anchor" href="#v13---2018-07-02" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.3 - 2018-07-02</h4>
 <ul>
-<li>add the <strong>interface_stats</strong> function call to help in determining the usage of an
+<li>add the <strong>config_patch</strong> function providing the ability to patch (using PHP <code>array_merge()</code>) the system config, thus
+allowing API users to make granular configuration changes.</li>
+<li>added a "previous_config_file" response attribute to functions that cause write operations to the running <code>config.xml</code>
+</li>
+<li>add the <strong>interface_stats</strong> function to help in determining the usage of an
 interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxapi/issues/20">Issue #20</a>
 </li>
-<li>added a <code>number</code> attibute to the <code>rules</code> output making the actual rule number more explict</li>
+<li>added a <code>number</code> attibute to the <code>rules</code> output making the actual rule number more explict as described in <a href="https://github.com/ndejong/pfsense_fauxapi/issues/13">Issue #13</a>
+</li>
 <li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, caused by an upstream
 change(s) in the pfSense code.</li>
 <li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy configuration files using "owner" are still supported.</li>
 <li>added a "source" attribute to the logs making it easier to grep fauxapi events, for example <code>clog /var/log/system.log | grep fauxapi</code>
 </li>
-<li>small dcoumentation fixes</li>
+<li>plenty of dcoumentation fixes and updates</li>
 <li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path in the project repo as a
 better place to keep non-package files, client-libs, examples, build tools etc</li>
 <li>testing against pfSense 2.3.5</li>
