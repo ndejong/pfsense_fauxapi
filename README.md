@@ -12,8 +12,6 @@ tasks feasible.
  - [config_backup](#user-content-config_backup) - Causes the system to take a configuration backup and add it to the regular set of system change backups.
  - [config_backup_list](#user-content-config_backup_list) - Returns a list of the currently available system configuration backups.
  - [config_get](#user-content-config_get) - Returns the full system configuration as a JSON formatted string.
- - [config_item_get](#user-content-config_item_get) - Gets the value of a specific configuration item.
- - [config_item_set](#user-content-config_item_set) - Sets the value of a specific configuration item and optionally inserts it if not already existing.
  - [config_patch](#user-content-config_patch) - Patch the system config with a granular piece of new configuration.
  - [config_reload](#user-content-config_reload) - Causes the pfSense system to perform an internal reload of the `config.xml` file.
  - [config_restore](#user-content-config_restore) - Restores the pfSense system to the named backup configuration.

@@ -64,10 +64,6 @@ tasks feasible.</p>
 <li>
 <a href="#user-content-config_get">config_get</a> - Returns the full system configuration as a JSON formatted string.</li>
 <li>
-<a href="#user-content-config_item_get">config_item_get</a> - Gets the value of a specific configuration item.</li>
-<li>
-<a href="#user-content-config_item_set">config_item_set</a> - Sets the value of a specific configuration item and optionally inserts it if not already existing.</li>
-<li>
 <a href="#user-content-config_patch">config_patch</a> - Patch the system config with a granular piece of new configuration.</li>
 <li>
 <a href="#user-content-config_reload">config_reload</a> - Causes the pfSense system to perform an internal reload of the <code>config.xml</code> file.</li>
