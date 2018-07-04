@@ -109,10 +109,6 @@ per-action application-layer interface it is still possible for the API caller
 to create configuration changes that make no sense and can potentially disrupt
 your pfSense system - as the package name states, it is a "Faux" API to pfSense
 filling a gap in functionality with the current pfSense product.</p>
-<p>A common source of confusion is the requirement to pass the <em>FULL</em> configuration
-into the <strong>config_set</strong> action and not just the portion of the configuration you
-wish to adjust.  A <strong>config_patch</strong> action is in development and is expected in
-a future release.</p>
 <p>Because FauxAPI is a utility that interfaces with the pfSense <code>config.xml</code> there
 are some cases where reloading the configuration file is not enough and you
 may need to "tickle" pfSense a little more to do what you want.  This is not
@@ -133,8 +129,8 @@ pkg-static install <span class="pl-smi">$fauxapi_latest</span></pre></div>
 <p>Installation and de-installation is quite straight forward, further examples can
 be found <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/package">here</a>.</p>
 <p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS"><code>SHA256SUMS</code></a></p>
-<p><strong>Hint:</strong> if not already, consider installing the <code>jq</code> tool on your local machine (not pfSense host) to
-pipe and manage outputs from FauxAPI - <a href="https://stedolan.github.io/jq/" rel="nofollow">https://stedolan.github.io/jq/</a></p>
+<p><strong>Hint:</strong> if not already, consider installing the <code>jq</code> tool on your local machine (not
+pfSense host) to pipe and manage JSON outputs from FauxAPI - <a href="https://stedolan.github.io/jq/" rel="nofollow">https://stedolan.github.io/jq/</a></p>
 <h2>
 <a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h2>
 <h4>
@@ -155,10 +151,10 @@ pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-
 to observe worked examples with the library.  Of small note is that the Python
 library supports the ability to get and set single sections of the pfSense
 system, not just the entire system configuration as with the Bash library.</p>
-<p><strong>update-aws-aliases.py</strong> - example</p>
-<p>An reasonable Python based worked example using the API can be found with <code>update-aws-aliases.py</code>
-under the <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples"><code>extras/examples</code></a> path - the tool
-pulls in the latest AWS <code>ip-ranges.json</code> parses them and injects them into the aliases section if required.</p>
+<p><strong>update-aws-aliases.py</strong> - a reasonable Python based worked example using the API can
+be found with <code>update-aws-aliases.py</code> under the <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples"><code>extras/examples</code></a>
+path - the tool pulls in the latest AWS <code>ip-ranges.json</code> parses them and injects them
+into the aliases section if required.</p>
 <h4>
 <a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
 <p>The <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs">Bash client library</a>
@@ -891,25 +887,30 @@ actions.</li>
 <h4>
 <a id="user-content-v13---2018-07-02" class="anchor" href="#v13---2018-07-02" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.3 - 2018-07-02</h4>
 <ul>
-<li>add the <strong>config_patch</strong> function providing the ability to patch the system config, thus allowing API users to
-make granular configuration changes.</li>
-<li>added a "previous_config_file" response attribute to functions that cause write operations to the running <code>config.xml</code>
+<li>add the <strong>config_patch</strong> function providing the ability to patch the system config,
+thus allowing API users to make granular configuration changes.</li>
+<li>added a "previous_config_file" response attribute to functions that cause write
+operations to the running <code>config.xml</code>
 </li>
 <li>add the <strong>interface_stats</strong> function to help in determining the usage of an
 interface to (partly) address <a href="https://github.com/ndejong/pfsense_fauxapi/issues/20">Issue #20</a>
 </li>
-<li>added a <code>number</code> attibute to the <code>rules</code> output making the actual rule number more explict as described in <a href="https://github.com/ndejong/pfsense_fauxapi/issues/13">Issue #13</a>
+<li>added a "number" attibute to the "rules" output making the actual rule number more
+explict as described in <a href="https://github.com/ndejong/pfsense_fauxapi/issues/13">Issue #13</a>
 </li>
-<li>addressed a bug with the <code>system_stats</code> function that was preventing it from returning, caused by an upstream
-change(s) in the pfSense code.</li>
-<li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy configuration files using "owner" are
-still supported.</li>
-<li>added a "source" attribute to the logs making it easier to grep fauxapi events, for example <code>clog /var/log/system.log | grep fauxapi</code>
+<li>addressed a bug with the <strong>system_stats</strong> function that was preventing it from
+returning, caused by an upstream change(s) in the pfSense code.</li>
+<li>rename the confusing "owner" field in <code>credentials.ini</code> to "comment", legacy
+configuration files using "owner" are still supported.</li>
+<li>added a "source" attribute to the logs making it easier to grep fauxapi events,
+for example <code>clog /var/log/system.log | grep fauxapi</code>
 </li>
 <li>plenty of dcoumentation fixes and updates</li>
-<li>added documentation highlighting features and capabilities that existed without them being obvious</li>
-<li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path in the project repo as a
-better place to keep non-package files, client-libs, examples, build tools etc</li>
+<li>added documentation highlighting features and capabilities that existed without
+them being obvious</li>
+<li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path
+in the project repo as a better place to keep non-package files, <code>client-libs</code>, <code>examples</code>,
+<code>build-tools</code> etc</li>
 <li>testing against pfSense 2.3.5</li>
 <li>testing against pfSense 2.4.3</li>
 </ul>

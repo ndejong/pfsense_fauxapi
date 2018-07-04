@@ -48,11 +48,6 @@ to create configuration changes that make no sense and can potentially disrupt
 your pfSense system - as the package name states, it is a "Faux" API to pfSense
 filling a gap in functionality with the current pfSense product.
 
-A common source of confusion is the requirement to pass the _FULL_ configuration 
-into the **config_set** action and not just the portion of the configuration you 
-wish to adjust.  A **config_patch** action is in development and is expected in 
-a future release.
-
 Because FauxAPI is a utility that interfaces with the pfSense `config.xml` there
 are some cases where reloading the configuration file is not enough and you 
 may need to "tickle" pfSense a little more to do what you want.  This is not 
@@ -80,8 +75,8 @@ be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package).
 
 Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS)
 
-**Hint:** if not already, consider installing the `jq` tool on your local machine (not pfSense host) to 
-pipe and manage outputs from FauxAPI - https://stedolan.github.io/jq/
+**Hint:** if not already, consider installing the `jq` tool on your local machine (not 
+pfSense host) to pipe and manage JSON outputs from FauxAPI - https://stedolan.github.io/jq/
 
 ## Client libraries
 
@@ -107,11 +102,10 @@ to observe worked examples with the library.  Of small note is that the Python
 library supports the ability to get and set single sections of the pfSense 
 system, not just the entire system configuration as with the Bash library.
 
-**update-aws-aliases.py** - example
-
-An reasonable Python based worked example using the API can be found with `update-aws-aliases.py` 
-under the [`extras/examples`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples) path - the tool 
-pulls in the latest AWS `ip-ranges.json` parses them and injects them into the aliases section if required. 
+**update-aws-aliases.py** - a reasonable Python based worked example using the API can 
+be found with `update-aws-aliases.py` under the [`extras/examples`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples) 
+path - the tool pulls in the latest AWS `ip-ranges.json` parses them and injects them 
+into the aliases section if required. 
 
 #### Bash
 The [Bash client library](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs) 
@@ -879,21 +873,26 @@ pfSense test infrastructure if it already exists.*
  - testing against pfSense 2.3.4
 
 #### v1.3 - 2018-07-02
- - add the **config_patch** function providing the ability to patch the system config, thus allowing API users to 
-   make granular configuration changes.  
- - added a "previous_config_file" response attribute to functions that cause write operations to the running `config.xml`
+ - add the **config_patch** function providing the ability to patch the system config, 
+   thus allowing API users to make granular configuration changes.  
+ - added a "previous_config_file" response attribute to functions that cause write 
+   operations to the running `config.xml`
  - add the **interface_stats** function to help in determining the usage of an 
    interface to (partly) address [Issue #20](https://github.com/ndejong/pfsense_fauxapi/issues/20)
- - added a `number` attibute to the `rules` output making the actual rule number more explict as described in [Issue #13](https://github.com/ndejong/pfsense_fauxapi/issues/13)
- - addressed a bug with the `system_stats` function that was preventing it from returning, caused by an upstream 
-   change(s) in the pfSense code.
- - rename the confusing "owner" field in `credentials.ini` to "comment", legacy configuration files using "owner" are 
-   still supported. 
- - added a "source" attribute to the logs making it easier to grep fauxapi events, for example `clog /var/log/system.log | grep fauxapi`
+ - added a "number" attibute to the "rules" output making the actual rule number more 
+   explict as described in [Issue #13](https://github.com/ndejong/pfsense_fauxapi/issues/13)
+ - addressed a bug with the **system_stats** function that was preventing it from 
+   returning, caused by an upstream change(s) in the pfSense code.
+ - rename the confusing "owner" field in `credentials.ini` to "comment", legacy 
+   configuration files using "owner" are still supported. 
+ - added a "source" attribute to the logs making it easier to grep fauxapi events, 
+   for example `clog /var/log/system.log | grep fauxapi`
  - plenty of dcoumentation fixes and updates
- - added documentation highlighting features and capabilities that existed without them being obvious
- - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path in the project repo as a 
-   better place to keep non-package files, client-libs, examples, build tools etc
+ - added documentation highlighting features and capabilities that existed without 
+   them being obvious
+ - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path 
+   in the project repo as a better place to keep non-package files, `client-libs`, `examples`,
+   `build-tools` etc
  - testing against pfSense 2.3.5
  - testing against pfSense 2.4.3
 
