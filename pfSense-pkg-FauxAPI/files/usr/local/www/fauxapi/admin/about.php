@@ -435,24 +435,12 @@ path.</li>
 <div class="highlight highlight-source-shell"><pre>cat /tmp/faux-config-get-output-from-curl.json <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
 <hr>
 <h3>
-<a id="user-content-config_item_get" class="anchor" href="#config_item_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_item_get</h3>
-<ul>
-<li>TODO: placeholder</li>
-</ul>
-<hr>
-<h3>
-<a id="user-content-config_item_set" class="anchor" href="#config_item_set" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_item_set</h3>
-<ul>
-<li>TODO: placeholder</li>
-</ul>
-<hr>
-<h3>
 <a id="user-content-config_patch" class="anchor" href="#config_patch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_patch</h3>
 <ul>
 <li>Allows the API user to patch the system configuration with the existing system config</li>
 <li>A <strong>config_patch</strong> call allows the API user to supply the partial configuration to be updated
-which is quite different to the <strong>config_set</strong> function which MUST provide the full configuration
-to be applied</li>
+which is quite different to the <strong>config_set</strong> function that requires the full configuration
+to be posted.</li>
 <li>HTTP: <strong>POST</strong>
 </li>
 <li>Params:
@@ -465,7 +453,19 @@ to be applied</li>
 </li>
 </ul>
 <p><em>Example Request</em></p>
-<div class="highlight highlight-source-shell"><pre>curl \
+<div class="highlight highlight-source-shell"><pre>cat <span class="pl-k">&gt;</span> /tmp/config_patch.json <span class="pl-s"><span class="pl-k">&lt;&lt;</span><span class="pl-k">EOF</span></span>
+<span class="pl-s">{</span>
+<span class="pl-s">  "system": {</span>
+<span class="pl-s">    "dnsserver": [</span>
+<span class="pl-s">      "8.8.8.8",</span>
+<span class="pl-s">      "8.8.4.4"</span>
+<span class="pl-s">    ],</span>
+<span class="pl-s">    "hostname": "newhostname"</span>
+<span class="pl-s">  }</span>
+<span class="pl-s">}</span>
+<span class="pl-s"><span class="pl-k">EOF</span></span>
+
+curl \
     -X POST \
     --silent \
     --insecure \

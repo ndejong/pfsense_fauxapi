@@ -424,19 +424,11 @@ cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.j
 ```
 
 ---
-### config_item_get
- - TODO: placeholder
-
----
-### config_item_set
- - TODO: placeholder
-
----
 ### config_patch
  - Allows the API user to patch the system configuration with the existing system config
  - A **config_patch** call allows the API user to supply the partial configuration to be updated 
-   which is quite different to the **config_set** function which MUST provide the full configuration
-   to be applied
+   which is quite different to the **config_set** function that requires the full configuration
+   to be posted.
  - HTTP: **POST**
  - Params:
     - **do_backup** (optional, default = true)
@@ -444,6 +436,18 @@ cat /tmp/faux-config-get-output-from-curl.json | jq .data.config > /tmp/config.j
 
 *Example Request*
 ```bash
+cat > /tmp/config_patch.json <<EOF
+{
+  "system": {
+    "dnsserver": [
+      "8.8.8.8",
+      "8.8.4.4"
+    ],
+    "hostname": "newhostname"
+  }
+}
+EOF
+
 curl \
     -X POST \
     --silent \
