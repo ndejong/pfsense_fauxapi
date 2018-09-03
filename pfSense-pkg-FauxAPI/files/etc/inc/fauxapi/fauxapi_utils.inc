@@ -110,6 +110,14 @@ class fauxApiUtils {
         }
         return $scheme;
     }
+
+    /**
+     * get_request_port()
+     * @return int
+     */
+    public static function get_request_port() {
+        return (int) getenv('SERVER_PORT');
+    }
     
     /**
      * get_request_ipaddr()
