@@ -105,7 +105,7 @@ system, not just the entire system configuration as with the Bash library.
    `add_user`, `manage_user`, `remove_user` and perform the same functions on groups.
  - `update-aws-aliases.py` - example code that pulls in the latest AWS `ip-ranges.json` 
    data, parses it and injects them into the pfSense aliases section if required.
- - [`extras/examples`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples)
+ - [github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples)
 
 #### Bash
 The [Bash client library](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs) 
@@ -125,8 +125,8 @@ to get a better idea how to use it.
 
 #### PHP
 A PHP client has been developed by a third party and is available here
- - [Github](https://github.com/travisghansen/pfsense_fauxapi_php_client)
- - [Packagist](https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client)
+ - [github.com/travisghansen/pfsense_fauxapi_php_client](https://github.com/travisghansen/pfsense_fauxapi_php_client)
+ - [packagist.org/packages/travisghansen/pfsense_fauxapi_php_client](https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client)
 
 
 ## API Authentication
