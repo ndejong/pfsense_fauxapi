@@ -147,10 +147,16 @@ pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-
 to observe worked examples with the library.  Of small note is that the Python
 library supports the ability to get and set single sections of the pfSense
 system, not just the entire system configuration as with the Bash library.</p>
-<p><strong>update-aws-aliases.py</strong> - a reasonable Python based worked example using the API can
-be found with <code>update-aws-aliases.py</code> under the <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples"><code>extras/examples</code></a>
-path - the tool pulls in the latest AWS <code>ip-ranges.json</code> parses them and injects them
-into the aliases section if required.</p>
+<p><strong>Python examples</strong></p>
+<ul>
+<li>
+<code>usergroup-management.py</code> - example code that provides the ability to <code>get_users</code>,
+<code>add_user</code>, <code>manage_user</code>, <code>remove_user</code> and perform the same functions on groups.</li>
+<li>
+<code>update-aws-aliases.py</code> - example code that pulls in the latest AWS <code>ip-ranges.json</code>
+data, parses it and injects them into the pfSense aliases section if required.</li>
+<li><a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples">github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples</a></li>
+</ul>
 <h4>
 <a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
 <p>The <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs">Bash client library</a>
@@ -166,9 +172,11 @@ fauxapi_config_set <span class="pl-k">&lt;</span>host-address<span class="pl-k">
 to get a better idea how to use it.</p>
 <h4>
 <a id="user-content-php" class="anchor" href="#php" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PHP</h4>
-<p>A PHP interface does not yet exist, it should be fairly easy to develop by
-observing the Bash and Python examples - if you do please submit it as a github
-pull request, there are no doubt others that will appreciate a PHP interface.</p>
+<p>A PHP client has been developed by a third party and is available here</p>
+<ul>
+<li><a href="https://github.com/travisghansen/pfsense_fauxapi_php_client">github.com/travisghansen/pfsense_fauxapi_php_client</a></li>
+<li><a href="https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client" rel="nofollow">packagist.org/packages/travisghansen/pfsense_fauxapi_php_client</a></li>
+</ul>
 <h2>
 <a id="user-content-api-authentication" class="anchor" href="#api-authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authentication</h2>
 <p>A deliberate design decision to decouple FauxAPI authentication from both the
