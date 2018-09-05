@@ -391,7 +391,9 @@ class fauxApiPfsenseInterface {
         while($wait_count_seconds < $this->config_reload_max_wait_secs) {
             
             // induce the pfsense config.cache to regenerate by requesting index.php
-            $cache_respawn_url = fauxApiUtils::get_request_scheme() . '://127.0.0.1/index.php?__fauxapi_callid='.FAUXAPI_CALLID;
+            $scheme = fauxApiUtils::get_request_scheme();
+            $port = fauxApiUtils::get_request_port();
+            $cache_respawn_url = $scheme . '://127.0.0.1:' . $port . '/index.php?__fauxapi_callid='.FAUXAPI_CALLID;
             $exec_command = 'curl --silent --insecure "'.addslashes($cache_respawn_url).'" > /dev/null';
             // unable to call file_get_contents() to a URL thus we resort to an exec!!
             fauxApiLogger::debug('exec curl', array(
