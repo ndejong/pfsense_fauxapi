@@ -100,10 +100,12 @@ to observe worked examples with the library.  Of small note is that the Python
 library supports the ability to get and set single sections of the pfSense 
 system, not just the entire system configuration as with the Bash library.
 
-**update-aws-aliases.py** - a reasonable Python based worked example using the API can 
-be found with `update-aws-aliases.py` under the [`extras/examples`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples) 
-path - the tool pulls in the latest AWS `ip-ranges.json` parses them and injects them 
-into the aliases section if required. 
+**Python examples**
+ - `usergroup-management.py` - example code that provides the ability to `get_users`, 
+   `add_user`, `manage_user`, `remove_user` and perform the same functions on groups.
+ - `update-aws-aliases.py` - example code that pulls in the latest AWS `ip-ranges.json` 
+   data, parses it and injects them into the pfSense aliases section if required.
+ - [`extras/examples`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples)
 
 #### Bash
 The [Bash client library](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs) 
@@ -122,9 +124,9 @@ It is recommended to review [`bash-lib-iterate.sh`](https://github.com/ndejong/p
 to get a better idea how to use it.
 
 #### PHP
-A PHP interface does not yet exist, it should be fairly easy to develop by 
-observing the Bash and Python examples - if you do please submit it as a github 
-pull request, there are no doubt others that will appreciate a PHP interface.
+A PHP client has been developed by a third party and is available here
+ - [Github](https://github.com/travisghansen/pfsense_fauxapi_php_client)
+ - [Packagist](https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client)
 
 
 ## API Authentication
