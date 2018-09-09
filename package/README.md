@@ -9,12 +9,12 @@ installation example below.  It takes just 2x commands to install and just 1x
 command to de-install if you need to.
 
 ## Current Version
- - pfSense-pkg-FauxAPI-1.3_1.txz
- - SHA256: cc3d1cac94b9088b13330f72dfbad8a080ca853cd292ad3bbecb5fc6a8497e62
+ - pfSense-pkg-FauxAPI-1.3_3.txz
+ - SHA256: 9ed0e5a61a1cb954b203d732c3d0d141dacd4f7b26ed5d892819683f15659f47
 
 ## Installation Example
 ```
-[2.4.3-RELEASE][root@pfSense.localdomain]/root: pkg-static install pfSense-pkg-FauxAPI-1.3_1.txz
+[2.4.3-RELEASE][root@pfSense.localdomain]/root: pkg-static install pfSense-pkg-FauxAPI-1.3_3.txz
 Updating pfSense-core repository catalogue...
 pfSense-core repository is up to date.
 Updating pfSense repository catalogue...
@@ -25,13 +25,13 @@ Checking integrity... done (0 conflicting)
 The following 1 package(s) will be affected (of 0 checked):
 
 New packages to be INSTALLED:
-	pfSense-pkg-FauxAPI: 1.3_1 [unknown-repository]
+	pfSense-pkg-FauxAPI: 1.3_3 [unknown-repository]
 
 Number of packages to be installed: 1
 
 Proceed with this action? [y/N]: y
-[1/1] Installing pfSense-pkg-FauxAPI-1.3_1...
-Extracting pfSense-pkg-FauxAPI-1.3_1: 100%
+[1/1] Installing pfSense-pkg-FauxAPI-1.3_3...
+Extracting pfSense-pkg-FauxAPI-1.3_3: 100%
 Saving updated package information...
 done.
 Loading package configuration... done.
@@ -49,15 +49,15 @@ Checking integrity... done (0 conflicting)
 Deinstallation has been requested for the following 1 packages (of 0 packages in the universe):
 
 Installed packages to be REMOVED:
-	pfSense-pkg-FauxAPI-1.3_1
+	pfSense-pkg-FauxAPI-1.3_3
 
 Number of packages to be removed: 1
 
 Proceed with deinstalling packages? [y/N]: y
-[1/1] Deinstalling pfSense-pkg-FauxAPI-1.3_1...
+[1/1] Deinstalling pfSense-pkg-FauxAPI-1.3_3...
 Removing FauxAPI components...
 Menu items... done.
-[1/1] Deleting files for pfSense-pkg-FauxAPI-1.3_1: 100%
+[1/1] Deleting files for pfSense-pkg-FauxAPI-1.3_3: 100%
 Removing FauxAPI components...
 Configuration... done.
 [2.4.3-RELEASE][root@pfSense.localdomain]/root: 

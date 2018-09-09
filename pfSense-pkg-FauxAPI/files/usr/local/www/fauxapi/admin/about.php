@@ -127,6 +127,8 @@ be found <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/package
 <p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS"><code>SHA256SUMS</code></a></p>
 <p><strong>Hint:</strong> if not already, consider installing the <code>jq</code> tool on your local machine (not
 pfSense host) to pipe and manage JSON outputs from FauxAPI - <a href="https://stedolan.github.io/jq/" rel="nofollow">https://stedolan.github.io/jq/</a></p>
+<p><strong>NB:</strong> you MUST at least setup your <code>/etc/fauxapi/credentials.ini</code> file on the
+pfSense host before you continue, see the API Authentication section below.</p>
 <h2>
 <a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h2>
 <h4>
@@ -186,9 +188,11 @@ host.  It also seems more prudent to only establish API user(s) manually via the
 FauxAPI <code>/etc/fauxapi/credentials.ini</code> file - happy to receive feedback about
 this approach.</p>
 <p>The two sample FauxAPI keys (PFFAexample01 and PFFAexample02) and their
-associated secrets in the sample <code>credentials.ini</code> file are hard-coded to be
-inoperative, you must create entirely new values before your client scripts
+associated secrets in the sample <code>credentials.sample.ini</code> file are hard-coded to
+be inoperative, you must create entirely new values before your client scripts
 will be able to issue commands to FauxAPI.</p>
+<p>You can start your own <code>/etc/fauxapi/credentials.ini</code> file by copying the sample
+file provided in <code>credentials.sample.ini</code></p>
 <p>API authentication itself is performed on a per-call basis with the auth value
 inserted as an additional <strong>fauxapi-auth</strong> HTTP request header, it can be
 calculated as such:-</p>
@@ -599,6 +603,9 @@ harm your pfSense system if you do not 100% understand what is going on.</li>
 <li>Functions to be called via this interface <em>MUST</em> be defined in the file
 <code>/etc/pfsense_function_calls.txt</code> only a handful very basic and
 read-only pfSense functions are enabled by default.</li>
+<li>You can start your own <code>/etc/fauxapi/pfsense_function_calls.txt</code> file by
+copying the sample file provided in <code>pfsense_function_calls.sample.txt</code>
+</li>
 <li>HTTP: <strong>POST</strong>
 </li>
 <li>Params: none</li>
