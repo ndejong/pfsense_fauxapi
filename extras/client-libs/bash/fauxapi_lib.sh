@@ -22,7 +22,7 @@ fauxapi_auth() {
     fauxapi_apikey=${1}
     fauxapi_apisecret=${2}
 
-    fauxapi_timestamp=`date --utc +%Y%m%dZ%H%M%S`
+    fauxapi_timestamp=`date -u +%Y%m%dZ%H%M%S`
     fauxapi_nonce=`head -c 40 /dev/urandom | md5sum | head -c 8`
 
     # NB:-
