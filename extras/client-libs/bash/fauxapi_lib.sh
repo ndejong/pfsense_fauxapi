@@ -28,7 +28,7 @@ fauxapi_auth() {
     # NB:-
     #  auth = apikey:timestamp:nonce:HASH(apisecret:timestamp:nonce)
 
-    fauxapi_hash=`echo -n ${fauxapi_apisecret}${fauxapi_timestamp}${fauxapi_nonce} | sha256sum | cut -d' ' -f1`
+    fauxapi_hash=`echo -n ${fauxapi_apisecret}${fauxapi_timestamp}${fauxapi_nonce} | (sha256sum 2>/dev/null  || shasum -a 256 2>/dev/null) | cut -d' ' -f1`
     fauxapi_auth=${fauxapi_apikey}:${fauxapi_timestamp}:${fauxapi_nonce}:${fauxapi_hash}
 
     echo ${fauxapi_auth}
