@@ -76,6 +76,9 @@ Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense
 **Hint:** if not already, consider installing the `jq` tool on your local machine (not 
 pfSense host) to pipe and manage JSON outputs from FauxAPI - https://stedolan.github.io/jq/
 
+**NB:** you MUST at least setup your `/etc/fauxapi/credentials.ini` file on the 
+pfSense host before you continue, see the API Authentication section below.
+
 ## Client libraries
 
 #### Python
@@ -138,9 +141,12 @@ FauxAPI `/etc/fauxapi/credentials.ini` file - happy to receive feedback about
 this approach.
 
 The two sample FauxAPI keys (PFFAexample01 and PFFAexample02) and their 
-associated secrets in the sample `credentials.ini` file are hard-coded to be
-inoperative, you must create entirely new values before your client scripts
+associated secrets in the sample `credentials.sample.ini` file are hard-coded to 
+be inoperative, you must create entirely new values before your client scripts
 will be able to issue commands to FauxAPI.
+
+You can start your own `/etc/fauxapi/credentials.ini` file by copying the sample
+file provided in `credentials.sample.ini`
 
 API authentication itself is performed on a per-call basis with the auth value 
 inserted as an additional **fauxapi-auth** HTTP request header, it can be 
@@ -580,6 +586,8 @@ curl \
  - Functions to be called via this interface *MUST* be defined in the file 
    `/etc/pfsense_function_calls.txt` only a handful very basic and 
    read-only pfSense functions are enabled by default.
+ - You can start your own `/etc/fauxapi/pfsense_function_calls.txt` file by 
+   copying the sample file provided in `pfsense_function_calls.sample.txt`
  - HTTP: **POST**
  - Params: none
 

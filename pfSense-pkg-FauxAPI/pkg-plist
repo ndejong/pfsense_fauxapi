@@ -5,8 +5,8 @@
 /etc/inc/priv/fauxapi.priv.inc
 
 @dir /etc/fauxapi
-/etc/fauxapi/credentials.ini
-/etc/fauxapi/pfsense_function_calls.txt
+/etc/fauxapi/credentials.sample.ini
+/etc/fauxapi/pfsense_function_calls.sample.txt
 
 @dir /usr/local/www/fauxapi
 @dir /usr/local/www/fauxapi/v1

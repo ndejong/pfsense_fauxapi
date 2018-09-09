@@ -735,6 +735,15 @@ class fauxApiPfsenseInterface {
             'includes' => $includes,
         ));
         
+        if(!is_file($this->config_pfsense_function_calls)) {
+            $error_message = 'required pfsense function calls file not found';
+            $error_data = array(
+                'filename' => $this->config_pfsense_function_calls
+            );
+            fauxApiLogger::error($error_message, $error_data);
+            throw new \Exception($error_message);
+        }
+        
         // load and parse pfsense_function_calls.txt
         $pf_function_calls_raw = file_get_contents($this->config_pfsense_function_calls);
         $pf_function_calls = array();

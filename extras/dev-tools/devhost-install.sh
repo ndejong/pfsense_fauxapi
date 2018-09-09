@@ -31,12 +31,14 @@ scp ${FILESDIR}${PREFIX}/pkg/fauxapi.xml \
 scp ${FILESDIR}/etc/inc/priv/fauxapi.priv.inc \
                 ${STAGEDIR}/etc/inc/priv
 
-# scp ${FILESDIR}/etc/fauxapi/credentials.ini \
-#                 ${STAGEDIR}/etc/fauxapi
+ scp ${FILESDIR}/etc/fauxapi/credentials.sample.ini \
+                 ${STAGEDIR}/etc/fauxapi
 scp ${local_base_path}/extras/dev-tools/credentials.ini \
                 ${STAGEDIR}/etc/fauxapi
 
-scp ${FILESDIR}/etc/fauxapi/pfsense_function_calls.txt \
+scp ${FILESDIR}/etc/fauxapi/pfsense_function_calls.sample.txt \
+                ${STAGEDIR}/etc/fauxapi
+scp ${local_base_path}/extras/dev-tools/pfsense_function_calls.txt \
                 ${STAGEDIR}/etc/fauxapi
 
 scp ${FILESDIR}${PREFIX}/www/fauxapi/v1/index.php \
