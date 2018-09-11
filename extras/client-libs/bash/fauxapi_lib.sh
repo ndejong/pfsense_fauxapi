@@ -22,13 +22,13 @@ fauxapi_auth() {
     fauxapi_apikey=${1}
     fauxapi_apisecret=${2}
 
-    fauxapi_timestamp=`date --utc +%Y%m%dZ%H%M%S`
+    fauxapi_timestamp=`date -u +%Y%m%dZ%H%M%S`
     fauxapi_nonce=`head -c 40 /dev/urandom | md5sum | head -c 8`
 
     # NB:-
     #  auth = apikey:timestamp:nonce:HASH(apisecret:timestamp:nonce)
 
-    fauxapi_hash=`echo -n ${fauxapi_apisecret}${fauxapi_timestamp}${fauxapi_nonce} | sha256sum | cut -d' ' -f1`
+    fauxapi_hash=`echo -n ${fauxapi_apisecret}${fauxapi_timestamp}${fauxapi_nonce} | (sha256sum 2>/dev/null  || shasum -a 256 2>/dev/null) | cut -d' ' -f1`
     fauxapi_auth=${fauxapi_apikey}:${fauxapi_timestamp}:${fauxapi_nonce}:${fauxapi_hash}
 
     echo ${fauxapi_auth}
