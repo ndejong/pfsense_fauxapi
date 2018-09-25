@@ -23,7 +23,7 @@ fauxapi_auth() {
     fauxapi_apisecret=${2}
 
     fauxapi_timestamp=`date -u +%Y%m%dZ%H%M%S`
-    fauxapi_nonce=`head -c 40 /dev/urandom | md5sum | head -c 8`
+    fauxapi_nonce=`head -c 40 /dev/urandom | (md5sum 2>/dev/null  || md5 2>/dev/null) | head -c 8`
 
     # NB:-
     #  auth = apikey:timestamp:nonce:HASH(apisecret:timestamp:nonce)
