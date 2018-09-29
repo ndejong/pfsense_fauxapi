@@ -118,7 +118,7 @@ class fauxApiAuth {
         }
         
         define('FAUXAPI_APIKEY', $auth['apikey']);
-        fauxApiLogger::info('valid auth for call', array(
+        fauxApiLogger::debug('valid auth for call', array(
             'apikey' => FAUXAPI_APIKEY,
             'callid' => FAUXAPI_CALLID,
             'client_ip' => fauxApiUtils::get_client_ipaddr()

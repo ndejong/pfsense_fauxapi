@@ -51,7 +51,14 @@ class fauxApi {
      */
     public function __call($user_action, $call_args) {
         
-        fauxApiLogger::info(__METHOD__, array(
+        // info-level log only if a non GET request
+        if('GET' !== getenv('REQUEST_METHOD')) {
+            $logger_function = 'info';
+        } else {
+            $logger_function = 'debug';
+        }
+        
+        fauxApiLogger::$logger_function(__METHOD__, array(
             'user_action' => $user_action,
             'callid' => FAUXAPI_CALLID,
             'client_ip' => fauxApiUtils::get_client_ipaddr()
