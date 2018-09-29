@@ -39,13 +39,13 @@ class fauxApiAuth {
     public function is_authenticated() {
         fauxApiLogger::debug(__METHOD__);
 
-        if (!isset(getenv('HTTP_FAUXAPI_AUTH'))) {
+        if (!isset($_SERVER['HTTP_FAUXAPI_AUTH'])) {
             fauxApiLogger::error('request missing FAUXAPI_AUTH header value');
             return FALSE;
         }
 
         // make sure the AUTH is well formed and has expected input
-        $elements = explode(':', fauxApiUtils::sanitize(getenv('HTTP_FAUXAPI_AUTH'), array(':')));
+        $elements = explode(':', fauxApiUtils::sanitize($_SERVER['HTTP_FAUXAPI_AUTH'], array(':')));
         if (4 !== count($elements)) {
             fauxApiLogger::error('unexpected number of FAUXAPI_AUTH elements supplied', array(
                 $elements
