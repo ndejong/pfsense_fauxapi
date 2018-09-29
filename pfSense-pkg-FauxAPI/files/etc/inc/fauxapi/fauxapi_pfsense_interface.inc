@@ -770,8 +770,8 @@ class fauxApiPfsenseInterface {
                 if(count($fn_matches) < 2) {
                     continue 1; 
                 }
-                if (isset($fn_matches[2]) && strlen($fn_matches[2]) > 0) {
-                    $fn_args = split(',',str_replace(' ','', $fn_matches[2]));
+                if(isset($fn_matches[2]) && strlen($fn_matches[2]) > 0) {
+                    $fn_args = explode(',',str_replace(' ','', $fn_matches[2]));
                 } else {
                     $fn_args = array();
                 }
