@@ -24,4 +24,4 @@ rsync --ignore-existing $remote_user@$remote_host:/usr/ports/sysutils/${PORTNAME
 
 # re-roll the SHA256SUMS
 cd ${local_packages_path}
-echo sha256sum pfSense-pkg-FauxAPI-*.txz > SHA256SUMS
+sha256sum pfSense-pkg-FauxAPI-*.txz > SHA256SUMS
