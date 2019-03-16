@@ -82,25 +82,31 @@ pfSense host before you continue, see the API Authentication section below.
 ## Client libraries
 
 #### Python
-A [Python interface](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs) 
+A [Python interface](https://github.com/ndejong/pfsense_fauxapi_client_python) 
 to pfSense was perhaps the most desired end-goal at the onset of the FauxAPI 
 package project.  Anyone that has tried to parse the pfSense `config.xml` files 
 using a Python based library will understand that things don't quite work out as 
 expected or desired.
 
+The Python client-library can be easily installed from PyPi as such
+```bash
+pip3 install pfsense-fauxapi
+```
+
+Use of the package should be easy enough as shown
 ```python
 import pprint, sys
-from fauxapi_lib import FauxapiLib
-FauxapiLib = FauxapiLib('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
+from PfsenseFauxapi.PfsenseFauxapi import PfsenseFauxapi
+PfsenseFauxapi = FauxapiLib('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
 
 aliases = FauxapiLib.config_get('aliases')
 ## perform some kind of manipulation to `aliases` here ##
 pprint.pprint(FauxapiLib.config_set(aliases, 'aliases'))
 ```
 
-It is recommended to review [`python-lib-iterate.py`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/python-lib-iterate.py)
-to observe worked examples with the library.  Of small note is that the Python 
-library supports the ability to get and set single sections of the pfSense 
+It is recommended to review the [Python code examples](https://github.com/ndejong/pfsense_fauxapi_client_python/tree/master/examples)
+to observe worked examples with the client library.  Of small note is that the 
+Python library supports the ability to get and set single sections of the pfSense 
 system, not just the entire system configuration as with the Bash library.
 
 **Python examples**
@@ -108,7 +114,16 @@ system, not just the entire system configuration as with the Bash library.
    `add_user`, `manage_user`, `remove_user` and perform the same functions on groups.
  - `update-aws-aliases.py` - example code that pulls in the latest AWS `ip-ranges.json` 
    data, parses it and injects them into the pfSense aliases section if required.
- - [github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples)
+ - `function-iterate.py` - iterates (almost) all the FauxAPI functions to 
+   confirm operation.  
+
+#### Command Line
+As distinct from the Bash library as described below the Python pip also introduces
+a command-line tool to interact with the API, which makes a wide range of actions
+possible directly from the command line, for example
+```bash
+fauxapi --host 192.168.1.200 gateway_status | jq .
+```
 
 #### Bash
 The [Bash client library](https://github.com/ndejong/pfsense_fauxapi_client_bash) 
@@ -127,10 +142,15 @@ It is recommended to review the commented out samples in the provided
 `fauxapi-sample.sh` file that cover all possible FauxAPI calls to gain a better
 idea on usage.
 
+#### NodeJS/TypeScript
+A NodeJS client has been developed by a third party and is available here
+ - NPMJS: [https://www.npmjs.com/package/faux-api-client](https://www.npmjs.com/package/faux-api-client)
+ - Github: [github.com/Elucidia/faux-api-client](https://github.com/Elucidia/faux-api-client)
+
 #### PHP
 A PHP client has been developed by a third party and is available here
- - [github.com/travisghansen/pfsense_fauxapi_php_client](https://github.com/travisghansen/pfsense_fauxapi_php_client)
- - [packagist.org/packages/travisghansen/pfsense_fauxapi_php_client](https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client)
+ - Packagist: [packagist.org/packages/travisghansen/pfsense_fauxapi_php_client](https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client)
+ - Github: [github.com/travisghansen/pfsense_fauxapi_php_client](https://github.com/travisghansen/pfsense_fauxapi_php_client)
 
 
 ## API Authentication
