@@ -118,13 +118,13 @@ now provides the ability to issue function calls directly into pfSense.</em></p>
 <a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 <p>Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to
 install manually from <strong>root</strong> as shown:-</p>
-<div class="highlight highlight-source-shell"><pre><span class="pl-c1">set</span> fauxapi_baseurl=<span class="pl-s"><span class="pl-pds">'</span>https://raw.githubusercontent.com/ndejong/pfsense_fauxapi/master/package<span class="pl-pds">'</span></span>
-<span class="pl-c1">set</span> fauxapi_latest=<span class="pl-s"><span class="pl-pds">`</span>curl --silent <span class="pl-smi">$fauxapi_baseurl</span>/LATEST<span class="pl-pds">`</span></span>
-fetch <span class="pl-smi">$fauxapi_baseurl</span>/<span class="pl-smi">$fauxapi_latest</span>
-pkg-static install <span class="pl-smi">$fauxapi_latest</span></pre></div>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">set</span> fauxapi_base_package_url=<span class="pl-s"><span class="pl-pds">'</span>https://raw.githubusercontent.com/ndejong/pfsense_fauxapi_packages/master<span class="pl-pds">'</span></span>
+<span class="pl-c1">set</span> <span class="pl-c1">set</span> fauxapi_latest=<span class="pl-s"><span class="pl-pds">`</span>fetch -qo - <span class="pl-smi">${fauxapi_base_package_url}</span>/LATEST<span class="pl-pds">`</span></span>
+fetch <span class="pl-smi">${fauxapi_base_package_url}</span>/<span class="pl-smi">${fauxapi_latest}</span>
+pkg-static install <span class="pl-smi">${fauxapi_latest}</span></pre></div>
 <p>Installation and de-installation is quite straight forward, further examples can
-be found <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/package">here</a>.</p>
-<p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS"><code>SHA256SUMS</code></a></p>
+be found in the <code>README.md</code> located <a href="https://github.com/ndejong/pfsense_fauxapi_packages">here</a>.</p>
+<p>Refer to the published package <a href="https://github.com/ndejong/pfsense_fauxapi_packages/blob/master/SHA256SUMS"><code>SHA256SUMS</code></a></p>
 <p><strong>Hint:</strong> if not already, consider installing the <code>jq</code> tool on your local machine (not
 pfSense host) to pipe and manage JSON outputs from FauxAPI - <a href="https://stedolan.github.io/jq/" rel="nofollow">https://stedolan.github.io/jq/</a></p>
 <p><strong>NB:</strong> you MUST at least setup your <code>/etc/fauxapi/credentials.ini</code> file on the
