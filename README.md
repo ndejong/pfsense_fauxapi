@@ -2,7 +2,7 @@
 A REST API interface for pfSense 2.3.x and 2.4.x to facilitate devops:-
  - https://github.com/ndejong/pfsense_fauxapi
 
-Additionally available are a set of [client libraries](#user-content-client_libraries) 
+Additionally available are a set of [client libraries](#client-libraries) 
 that hence make programmatic access and management of pfSense hosts for devops 
 tasks feasible.
 
@@ -169,7 +169,7 @@ A nice tidy timestamp format that the `strtotime` PHP function is able to proces
 can be obtained using bash command `date --utc +%Y%m%dZ%H%M%S` where the `Z` 
 date-time seperator hence also specifies the UTC timezone.  
 
-This is all handled in the [client libraries](#user-content-client_libraries) 
+This is all handled in the [client libraries](#client-libraries) 
 provided, but as can be seen it is relatively easy to implement even in a Bash 
 shell script.
 
@@ -268,7 +268,7 @@ to the change.
 ## API REST Actions
 The following REST based API actions are provided, example cURL call request 
 examples are provided for each.  The API user is perhaps more likely to interface 
-with the [client libraries](#user-content-client_libraries) as documented above 
+with the [client libraries](#client-libraries) as documented above 
 rather than directly with these REST end-points.
 
 The framework around the FauxAPI has been put together with the idea of being
