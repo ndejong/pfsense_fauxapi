@@ -19,7 +19,7 @@
 
 ## Create a fresh pfSense builder host
  * Install git and pull down the latest pfSense FreeBSD-ports fork
- ```bash
+```bash
 pkg install git
 cd /usr/
 git clone https://github.com/pfsense/FreeBSD-ports ports
@@ -27,13 +27,13 @@ git clone https://github.com/pfsense/FreeBSD-ports ports
 
 ## Build a package
  * Clean the build path if required before a build
- ```bash
+```bash
 cd /path/to/package
 make clean
 ```
 
  * Change to the package directory and make
- ```bash
+```bash
 cd /path/to/package
 make package
 ```
@@ -42,7 +42,7 @@ make package
 
 ## Checking for errors
  * Before submitting a package you should check with `portlint`
- ```bash
+```bash
 pkg install portlint
 echo DEVELOPER=yes >> /etc/make.conf
 cd /path/to/package
