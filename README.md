@@ -69,9 +69,9 @@ pkg-static install ${fauxapi_latest}
 ```
 
 Installation and de-installation is quite straight forward, further examples can 
-be found [here](https://github.com/ndejong/pfsense_fauxapi/tree/master/package).
+be found in the `README.md` located [here](https://github.com/ndejong/pfsense_fauxapi_packages).
 
-Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense_fauxapi/blob/master/package/SHA256SUMS)
+Refer to the published package [`SHA256SUMS`](https://github.com/ndejong/pfsense_fauxapi_packages/blob/master/SHA256SUMS)
 
 **Hint:** if not already, consider installing the `jq` tool on your local machine (not 
 pfSense host) to pipe and manage JSON outputs from FauxAPI - https://stedolan.github.io/jq/
