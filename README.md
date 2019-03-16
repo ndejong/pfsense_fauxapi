@@ -111,20 +111,21 @@ system, not just the entire system configuration as with the Bash library.
  - [github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples)
 
 #### Bash
-The [Bash client library](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs) 
-makes it possible to add a line with `source fauxapi_lib.sh` to your bash script 
+The [Bash client library](https://github.com/ndejong/pfsense_fauxapi_client_bash) 
+makes it possible to add a line with `source pfsense-fauxapi.sh` to your bash script 
 and then access a pfSense host configuration directly as a JSON string
 ```bash
-source fauxapi_lib.sh
-export fauxapi_auth=`fauxapi_auth <fauxapi-key> <fauxapi-secret>`
+source pfsense-fauxapi.sh
+export fauxapi_auth=$(fauxapi_auth <fauxapi-key> <fauxapi-secret>)
 
 fauxapi_config_get <host-address> | jq .data.config > /tmp/config.json
 ## perform some kind of manipulation to `/tmp/config.json` here ##
 fauxapi_config_set <host-address> /tmp/config.json
 ```
 
-It is recommended to review [`bash-lib-iterate.sh`](https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/bash-lib-iterate.sh)
-to get a better idea how to use it.
+It is recommended to review the commented out samples in the provided 
+`fauxapi-sample.sh` file that cover all possible FauxAPI calls to gain a better
+idea on usage.
 
 #### PHP
 A PHP client has been developed by a third party and is available here
