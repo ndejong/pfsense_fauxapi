@@ -17,13 +17,14 @@
  * Consider changing the MAC addresses in the (in the lower section) of the `instances-reclone.sh` script
  * Run the `instances-reclone.sh` to get a "nice" fresh clone - this tool will **CLOBBER** the target image if target is in powered-off state!
 
-## Create a fresh pfSense builder host
+## Pull down the pfSense FreeBSD-ports locally to build against
  * Install git and pull down the latest pfSense FreeBSD-ports fork
 ```bash
 pkg install git
 cd /usr/
 git clone https://github.com/pfsense/FreeBSD-ports ports
 ```
+ * Consider creating a VirtualBox image based on the fresh FreeBSD + FreeBSD-ports to make a reclone easier/quicker later on.
 
 ## Build a package
  * Clean the build path if required before a build
