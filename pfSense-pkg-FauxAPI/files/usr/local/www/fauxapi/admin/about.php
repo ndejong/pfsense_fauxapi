@@ -49,7 +49,7 @@ events.push(function() {
 <ul>
 <li><a href="https://github.com/ndejong/pfsense_fauxapi">https://github.com/ndejong/pfsense_fauxapi</a></li>
 </ul>
-<p>Additionally available are a set of <a href="#user-content-client_libraries">client libraries</a>
+<p>Additionally available are a set of <a href="#client-libraries">client libraries</a>
 that hence make programmatic access and management of pfSense hosts for devops
 tasks feasible.</p>
 <h2>
@@ -133,21 +133,25 @@ pfSense host before you continue, see the API Authentication section below.</p>
 <a id="user-content-client-libraries" class="anchor" href="#client-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Client libraries</h2>
 <h4>
 <a id="user-content-python" class="anchor" href="#python" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Python</h4>
-<p>A <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs">Python interface</a>
+<p>A <a href="https://github.com/ndejong/pfsense_fauxapi_client_python">Python interface</a>
 to pfSense was perhaps the most desired end-goal at the onset of the FauxAPI
 package project.  Anyone that has tried to parse the pfSense <code>config.xml</code> files
 using a Python based library will understand that things don't quite work out as
 expected or desired.</p>
+<p>The Python client-library can be easily installed from PyPi as such</p>
+<div class="highlight highlight-source-shell"><pre>pip3 install pfsense-fauxapi</pre></div>
+<p>Package Status: <a href="https://pypi.org/project/pfsense-fauxapi/" rel="nofollow"><img src="https://camo.githubusercontent.com/93156147a029f0a7f529402e128e26ef49cdfacd/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f706673656e73652d666175786170692e737667" alt="PyPi" data-canonical-src="https://img.shields.io/pypi/v/pfsense-fauxapi.svg" style="max-width:100%;"></a> <a href="https://travis-ci.org/ndejong/pfsense_fauxapi_client_python" rel="nofollow"><img src="https://camo.githubusercontent.com/0ea636b454052bc8cd9abed19b35b11d13e739a4/68747470733a2f2f7472617669732d63692e6f72672f6e64656a6f6e672f706673656e73655f666175786170695f636c69656e745f707974686f6e2e7376673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/ndejong/pfsense_fauxapi_client_python.svg?branch=master" style="max-width:100%;"></a></p>
+<p>Use of the package should be easy enough as shown</p>
 <div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> pprint, sys
-<span class="pl-k">from</span> fauxapi_lib <span class="pl-k">import</span> FauxapiLib
-FauxapiLib <span class="pl-k">=</span> FauxapiLib(<span class="pl-s"><span class="pl-pds">'</span>&lt;host-address&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-key&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-secret&gt;<span class="pl-pds">'</span></span>)
+<span class="pl-k">from</span> PfsenseFauxapi.PfsenseFauxapi <span class="pl-k">import</span> PfsenseFauxapi
+PfsenseFauxapi <span class="pl-k">=</span> FauxapiLib(<span class="pl-s"><span class="pl-pds">'</span>&lt;host-address&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-key&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-secret&gt;<span class="pl-pds">'</span></span>)
 
 aliases <span class="pl-k">=</span> FauxapiLib.config_get(<span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>)
 <span class="pl-c"><span class="pl-c">#</span># perform some kind of manipulation to `aliases` here ##</span>
 pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>))</pre></div>
-<p>It is recommended to review <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/python-lib-iterate.py"><code>python-lib-iterate.py</code></a>
-to observe worked examples with the library.  Of small note is that the Python
-library supports the ability to get and set single sections of the pfSense
+<p>It is recommended to review the <a href="https://github.com/ndejong/pfsense_fauxapi_client_python/tree/master/examples">Python code examples</a>
+to observe worked examples with the client library.  Of small note is that the
+Python library supports the ability to get and set single sections of the pfSense
 system, not just the entire system configuration as with the Bash library.</p>
 <p><strong>Python examples</strong></p>
 <ul>
@@ -157,27 +161,47 @@ system, not just the entire system configuration as with the Bash library.</p>
 <li>
 <code>update-aws-aliases.py</code> - example code that pulls in the latest AWS <code>ip-ranges.json</code>
 data, parses it and injects them into the pfSense aliases section if required.</li>
-<li><a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples">github.com/ndejong/pfsense_fauxapi/blob/master/extras/examples</a></li>
+<li>
+<code>function-iterate.py</code> - iterates (almost) all the FauxAPI functions to
+confirm operation.</li>
 </ul>
 <h4>
+<a id="user-content-command-line" class="anchor" href="#command-line" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Command Line</h4>
+<p>As distinct from the Bash library as described below the Python pip also introduces
+a command-line tool to interact with the API, which makes a wide range of actions
+possible directly from the command line, for example</p>
+<div class="highlight highlight-source-shell"><pre>fauxapi --host 192.168.1.200 gateway_status <span class="pl-k">|</span> jq <span class="pl-c1">.</span></pre></div>
+<h4>
 <a id="user-content-bash" class="anchor" href="#bash" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bash</h4>
-<p>The <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras/client-libs">Bash client library</a>
-makes it possible to add a line with <code>source fauxapi_lib.sh</code> to your bash script
+<p>The <a href="https://github.com/ndejong/pfsense_fauxapi_client_bash">Bash client library</a>
+makes it possible to add a line with <code>source pfsense-fauxapi.sh</code> to your bash script
 and then access a pfSense host configuration directly as a JSON string</p>
-<div class="highlight highlight-source-shell"><pre><span class="pl-c1">source</span> fauxapi_lib.sh
-<span class="pl-k">export</span> fauxapi_auth=<span class="pl-s"><span class="pl-pds">`</span>fauxapi_auth <span class="pl-k">&lt;</span>fauxapi-key<span class="pl-k">&gt;</span> <span class="pl-k">&lt;</span>fauxapi-secret<span class="pl-k">&gt;</span><span class="pl-pds">`</span></span>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">source</span> pfsense-fauxapi.sh
+<span class="pl-k">export</span> fauxapi_auth=<span class="pl-s"><span class="pl-pds">$(</span>fauxapi_auth <span class="pl-k">&lt;</span>fauxapi-key<span class="pl-k">&gt;</span> <span class="pl-k">&lt;</span>fauxapi-secret<span class="pl-k">&gt;</span><span class="pl-pds">)</span></span>
 
 fauxapi_config_get <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json
 <span class="pl-c"><span class="pl-c">#</span># perform some kind of manipulation to `/tmp/config.json` here ##</span>
 fauxapi_config_set <span class="pl-k">&lt;</span>host-address<span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
-<p>It is recommended to review <a href="https://github.com/ndejong/pfsense_fauxapi/blob/master/extras/tests/bash-lib-iterate.sh"><code>bash-lib-iterate.sh</code></a>
-to get a better idea how to use it.</p>
+<p>It is recommended to review the commented out samples in the provided
+<code>fauxapi-sample.sh</code> file that cover all possible FauxAPI calls to gain a better
+idea on usage.</p>
+<h4>
+<a id="user-content-nodejstypescript" class="anchor" href="#nodejstypescript" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NodeJS/TypeScript</h4>
+<p>A NodeJS client has been developed by a third party and is available here</p>
+<ul>
+<li>NPMJS: <a href="https://www.npmjs.com/package/faux-api-client" rel="nofollow">npmjs.com/package/faux-api-client</a>
+</li>
+<li>Github: <a href="https://github.com/Elucidia/faux-api-client">github.com/Elucidia/faux-api-client</a>
+</li>
+</ul>
 <h4>
 <a id="user-content-php" class="anchor" href="#php" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PHP</h4>
 <p>A PHP client has been developed by a third party and is available here</p>
 <ul>
-<li><a href="https://github.com/travisghansen/pfsense_fauxapi_php_client">github.com/travisghansen/pfsense_fauxapi_php_client</a></li>
-<li><a href="https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client" rel="nofollow">packagist.org/packages/travisghansen/pfsense_fauxapi_php_client</a></li>
+<li>Packagist: <a href="https://packagist.org/packages/travisghansen/pfsense_fauxapi_php_client" rel="nofollow">packagist.org/packages/travisghansen/pfsense_fauxapi_php_client</a>
+</li>
+<li>Github: <a href="https://github.com/travisghansen/pfsense_fauxapi_php_client">github.com/travisghansen/pfsense_fauxapi_php_client</a>
+</li>
 </ul>
 <h2>
 <a id="user-content-api-authentication" class="anchor" href="#api-authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Authentication</h2>
@@ -209,7 +233,7 @@ which can interpret a wide variety of timestamp formats together with a timezone
 A nice tidy timestamp format that the <code>strtotime</code> PHP function is able to process
 can be obtained using bash command <code>date --utc +%Y%m%dZ%H%M%S</code> where the <code>Z</code>
 date-time seperator hence also specifies the UTC timezone.</p>
-<p>This is all handled in the <a href="#user-content-client_libraries">client libraries</a>
+<p>This is all handled in the <a href="#client-libraries">client libraries</a>
 provided, but as can be seen it is relatively easy to implement even in a Bash
 shell script.</p>
 <p>Getting the API credentials right seems to be a common source of confusion in
@@ -289,7 +313,7 @@ to the change.</p>
 <a id="user-content-api-rest-actions" class="anchor" href="#api-rest-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API REST Actions</h2>
 <p>The following REST based API actions are provided, example cURL call request
 examples are provided for each.  The API user is perhaps more likely to interface
-with the <a href="#user-content-client_libraries">client libraries</a> as documented above
+with the <a href="#client-libraries">client libraries</a> as documented above
 rather than directly with these REST end-points.</p>
 <p>The framework around the FauxAPI has been put together with the idea of being
 able to easily add more actions at a later time, if you have ideas for actions
