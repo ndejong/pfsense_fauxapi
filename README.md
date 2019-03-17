@@ -93,6 +93,8 @@ The Python client-library can be easily installed from PyPi as such
 pip3 install pfsense-fauxapi
 ```
 
+Package Status: [![PyPi](https://img.shields.io/pypi/v/pfsense-fauxapi.svg)](https://pypi.org/project/pfsense-fauxapi/) [![Build Status](https://travis-ci.org/ndejong/pfsense_fauxapi_client_python.svg?branch=master)](https://travis-ci.org/ndejong/pfsense_fauxapi_client_python)
+
 Use of the package should be easy enough as shown
 ```python
 import pprint, sys
