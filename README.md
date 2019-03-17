@@ -146,7 +146,7 @@ idea on usage.
 
 #### NodeJS/TypeScript
 A NodeJS client has been developed by a third party and is available here
- - NPMJS: [https://www.npmjs.com/package/faux-api-client](https://www.npmjs.com/package/faux-api-client)
+ - NPMJS: [npmjs.com/package/faux-api-client](https://www.npmjs.com/package/faux-api-client)
  - Github: [github.com/Elucidia/faux-api-client](https://github.com/Elucidia/faux-api-client)
 
 #### PHP
