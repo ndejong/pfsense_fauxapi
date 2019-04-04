@@ -871,7 +871,7 @@ curl \
 ---
 
 ## Versions and Testing
-The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5 and 2.4.3 it has 
+The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5, 2.4.3, 2.4.4 it has 
 not (yet) been tested against 2.3.0 or 2.3.1.  Further, it is apparent that the pfSense 
 packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be 
 backported to anything prior to 2.3.0.
@@ -934,7 +934,7 @@ pfSense test infrastructure if it already exists.*
 
 ## FauxAPI License
 ```
-Copyright 2016-2018 Nicholas de Jong  
+Copyright 2016-2019 Nicholas de Jong
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
