@@ -99,11 +99,11 @@ Use of the package should be easy enough as shown
 ```python
 import pprint, sys
 from PfsenseFauxapi.PfsenseFauxapi import PfsenseFauxapi
-PfsenseFauxapi = FauxapiLib('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
+PfsenseFauxapi = PfsenseFauxapi('<host-address>', '<fauxapi-key>', '<fauxapi-secret>')
 
-aliases = FauxapiLib.config_get('aliases')
+aliases = PfsenseFauxapi.config_get('aliases')
 ## perform some kind of manipulation to `aliases` here ##
-pprint.pprint(FauxapiLib.config_set(aliases, 'aliases'))
+pprint.pprint(PfsenseFauxapi.config_set(aliases, 'aliases'))
 ```
 
 It is recommended to review the [Python code examples](https://github.com/ndejong/pfsense_fauxapi_client_python/tree/master/examples)
