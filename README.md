@@ -23,6 +23,7 @@ tasks feasible.
  - [send_event](#user-content-send_event) - Performs a pfSense "send_event" command to cause various pfSense system actions.
  - [system_reboot](#user-content-system_reboot) - Reboots the pfSense system.
  - [system_stats](#user-content-system_stats) - Returns various useful system stats.
+ - [system_info](#user-content-system_info) - Returns various useful system info.
 
 
 ## Approach
@@ -866,6 +867,66 @@ curl \
       "mbufpercent": "2"
     }
   }
+}
+```
+---
+### system_info
+ - Returns various useful system info.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=system_info"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e1d8ceb8ff47",
+    "action": "system_info",
+    "message": "ok",
+    "data": {
+        "info": {
+            "sys": {
+                "platform": {
+                    "name": "VMware",
+                    "descr": "VMware Virtual Machine"
+                },
+                "serial_no": "",
+                "device_id": "719e8c91c2c43b820400"
+            },
+            "pfsense_version": {
+                "product_version_string": "2.4.5-DEVELOPMENT",
+                "product_version": "2.4.5-DEVELOPMENT",
+                "product_version_patch": "0"
+            },
+            "pfsense_remote_version": {
+                "version": "2.4.5.a.20200112.1821",
+                "installed_version": "2.4.5.a.20191218.2354",
+                "pkg_version_compare": "<"
+            },
+            "os_verison": "FreeBSD 11.3-STABLE",
+            "cpu_type": {
+                "cpu_model": "Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz",
+                "cpu_count": "4",
+                "logic_cpu_count": "4 package(s)",
+                "cpu_freq": ""
+            },
+            "kernel_pti_status": "enabled",
+            "mds_mitigation": "inactive",
+            "bios": {
+                "vendor": "Phoenix Technologies LTD",
+                "version": "6.00",
+                "date": "07/29/2019"
+            }
+        }
+    }
 }
 ```
 ---
