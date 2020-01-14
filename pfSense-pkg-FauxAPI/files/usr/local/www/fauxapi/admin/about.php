@@ -27,6 +27,7 @@ include_once('head.inc');
 
 $tab_array   = array();
 $tab_array[] = array(gettext("Credentials"), false, "/fauxapi/admin/credentials.php");
+$tab_array[] = array(gettext("Logs"), false, "/fauxapi/admin/logs.php");
 $tab_array[] = array(gettext("About"), true, "/fauxapi/admin/about.php");
 display_top_tabs($tab_array, true);
 

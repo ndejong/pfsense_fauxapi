@@ -41,6 +41,11 @@
                 <active/>
             </tab>
             <tab>
+                <text>Logs</text>
+                <url>/fauxapi/admin/logs.php</url>
+                <active/>
+            </tab>
+            <tab>
                 <text>About</text>
                 <url>/fauxapi/admin/about.php</url>
             </tab>

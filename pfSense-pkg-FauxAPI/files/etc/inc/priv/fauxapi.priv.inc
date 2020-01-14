@@ -25,6 +25,7 @@ $priv_list['page-system-fauxapi']['name'] = "WebCfg - System: FauxAPI";
 $priv_list['page-system-fauxapi']['descr'] = "Allow access to FauxAPI configuration";
 $priv_list['page-system-fauxapi']['match'] = array();
 $priv_list['page-system-fauxapi']['match'][] = "/fauxapi/admin/credentials.php";
+$priv_list['page-system-fauxapi']['match'][] = "/fauxapi/admin/logs.php";
 $priv_list['page-system-fauxapi']['match'][] = "/fauxapi/admin/about.php";
 
 ?>
