@@ -424,6 +424,54 @@ class fauxApiActions {
         );
         return TRUE;
     }
+
+    /**
+     * filter_rules_get()
+     * 
+     * @return boolean
+     */
+    public function filter_rules_get() {
+        fauxApiLogger::debug(__METHOD__);
+                
+        $rules = $this->PfsenseInterface->filter_rules_get();
+        
+        if (empty($rules)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get filter rule(s)';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'filter' => array(
+                'rules' => $rules
+            ),           
+        );
+        return TRUE;
+    }
+
+    /**
+     * address_aliases_get()
+     * 
+     * @return boolean
+     */
+    public function network_address_aliases_get() {
+        fauxApiLogger::debug(__METHOD__);
+                
+        $alias = $this->PfsenseInterface->network_address_aliases_get();
+        
+        if (empty($alias)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get address aliases';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'aliases' => $alias,      
+        );
+        return TRUE;
+    }
     
     /**
      * alias_update_urltables()

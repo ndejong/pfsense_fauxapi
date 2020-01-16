@@ -24,6 +24,8 @@ tasks feasible.
  - [system_reboot](#user-content-system_reboot) - Reboots the pfSense system.
  - [system_stats](#user-content-system_stats) - Returns various useful system stats.
  - [system_info](#user-content-system_info) - Returns various useful system info.
+ - [network_address_aliases_get](#user-content-network_address_aliases_get) - Returns address aliaes used by rules.
+ - [filter_rules_get](#user-content-filter_rules_get) - Returns firewall filters.
 
 
 ## Approach
@@ -925,6 +927,135 @@ curl \
                 "version": "6.00",
                 "date": "07/29/2019"
             }
+        }
+    }
+}
+```
+---
+### network_address_aliases_get
+ - Returns address aliaes used by rules.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_get"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e205fc052956",
+    "action": "network_address_aliases_get",
+    "message": "ok",
+    "data": {
+        "aliases": {
+            "alias": [
+                {
+                    "name": "EasyRuleBlockHostsWAN",
+                    "type": "network",
+                    "address": "1.2.3.4/32 5.6.7.8/32",
+                    "descr": "Hosts blocked from Firewall Log view",
+                    "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
+                }
+            ]
+        }
+    }
+}
+```
+---
+### filter_rules_get
+ - Returns firewall filters.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=filter_rules_get"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e2060797a602",
+    "action": "filter_rules_get",
+    "message": "ok",
+    "data": {
+        "filter": {
+            "rules": [
+                {
+                    "id": "",
+                    "tracker": "1579178400",
+                    "type": "pass",
+                    "interface": "wan",
+                    "ipprotocol": "inet",
+                    "tag": "",
+                    "tagged": "",
+                    "max": "",
+                    "max-src-nodes": "",
+                    "max-src-conn": "",
+                    "max-src-states": "",
+                    "statetimeout": "",
+                    "statetype": "keep state",
+                    "os": "",
+                    "protocol": "tcp",
+                    "source": {
+                        "address": "1.2.1.1"
+                    },
+                    "destination": {
+                        "any": "",
+                        "port": "1-65535"
+                    },
+                    "descr": "",
+                    "updated": {
+                        "time": "1579178400",
+                        "username": "admin@192.168.88.1 (Local Database)"
+                    },
+                    "created": {
+                        "time": "1579178400",
+                        "username": "admin@192.168.88.1 (Local Database)"
+                    }
+                },
+                {
+                    "type": "block",
+                    "interface": "wan",
+                    "ipprotocol": "inet",
+                    "source": {
+                        "address": "EasyRuleBlockHostsWAN"
+                    },
+                    "destination": {
+                        "any": ""
+                    },
+                    "descr": "Easy Rule: Blocked from Firewall Log View",
+                    "created": {
+                        "time": "1577436781",
+                        "username": "Easy Rule"
+                    },
+                    "tracker": "1577436781"
+                },
+                {
+                    "type": "drop",
+                    "ipprotocol": "inet",
+                    "descr": "Default allow LAN to any rule",
+                    "interface": "lan",
+                    "source": {
+                        "network": "lan"
+                    },
+                    "destination": {
+                        "ip": "192.10.1.1"
+                    }
+                }
+            ]
         }
     }
 }

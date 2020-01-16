@@ -766,6 +766,28 @@ class fauxApiPfsenseInterface {
     }
     
     /**
+     * filter_rules_get()
+     * 
+     * @return array
+     */
+    public function filter_rules_get(){
+        global $config;
+        fauxApiLogger::debug(__METHOD__);
+        return $config["filter"]["rule"];
+    }
+
+    /**
+     * network_address_aliases_get()
+     * 
+     * @return array
+     */
+    public function network_address_aliases_get(){
+        global $config;
+        fauxApiLogger::debug(__METHOD__);
+        return $config["aliases"];
+    }
+
+    /**
      * function_call()
      * 
      * @param string $function
