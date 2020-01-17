@@ -31,6 +31,7 @@ include_once '/etc/inc/pkg-utils.inc';
 
 include_once '/usr/local/www/includes/functions.inc.php';
 
+include_once 'fauxapi_pfsense_interface_alias.inc';
 class fauxApiPfsenseInterface {
 
     public $config_xml_root = 'pfsense';
@@ -775,17 +776,8 @@ class fauxApiPfsenseInterface {
         fauxApiLogger::debug(__METHOD__);
         return $config["filter"]["rule"];
     }
-
-    /**
-     * network_address_aliases_get()
-     * 
-     * @return array
-     */
-    public function network_address_aliases_get(){
-        global $config;
-        fauxApiLogger::debug(__METHOD__);
-        return $config["aliases"];
-    }
+    
+    use network_address_aliases;
 
     /**
      * function_call()

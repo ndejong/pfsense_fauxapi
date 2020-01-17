@@ -25,6 +25,7 @@ tasks feasible.
  - [system_stats](#user-content-system_stats) - Returns various useful system stats.
  - [system_info](#user-content-system_info) - Returns various useful system info.
  - [network_address_aliases_get](#user-content-network_address_aliases_get) - Returns address aliaes used by rules.
+ - [network_address_aliases_create](#user-content-network_address_aliases_create) - Creates An network aliaes for rules
  - [filter_rules_get](#user-content-filter_rules_get) - Returns firewall filters.
 
 
@@ -962,6 +963,59 @@ curl \
                     "address": "1.2.3.4/32 5.6.7.8/32",
                     "descr": "Hosts blocked from Firewall Log view",
                     "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
+                }
+            ]
+        }
+    }
+}
+```
+---
+### network_address_aliases_create
+ - Create a address aliaes used by rules. Returns newest result
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+     - **name** :<string> name of aliases
+     - **type** :<string> type of aliases. **MUST** be `network` for now.
+     - **cidr_addresses** : < list of <object> > name alias what
+        - **address** an ip address or a network prefix.
+        - **details** a description of this address. for human readable documentation.
+     - **descr** : <string> the description of current aliases.
+  - Response: json <object>: the items after created
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"name": "wsdfan", "type": "network", "cidr_addresses": [{"address":"12.23.45.3/32", "details":"a"}], "descr":"Test"}'
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_create"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e22393a9aa5a",
+    "action": "network_address_aliases_create",
+    "message": "ok",
+    "data": {
+        "aliases": {
+            "alias": [
+                {
+                    "name": "EasyRuleBlockHostsWAN",
+                    "type": "network",
+                    "address": "1.2.3.4/32 5.6.7.8/32",
+                    "descr": "Hosts blocked from Firewall Log view",
+                    "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
+                },
+                {
+                    "name": "wsdfan",
+                    "descr": "Test",
+                    "type": "network",
+                    "address": "12.23.45.3/32",
+                    "detail": "a"
                 }
             ]
         }
