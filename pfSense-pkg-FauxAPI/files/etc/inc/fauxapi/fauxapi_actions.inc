@@ -473,7 +473,7 @@ class fauxApiActions {
         return TRUE;
     }
     /**
-     * address_aliases_get()
+     * network_address_aliases_create()
      * 
      * @return boolean
      */
@@ -483,9 +483,37 @@ class fauxApiActions {
         $name = $this->action_input_data["name"];
         $type = $this->action_input_data["type"];
         $cidr_addresses =$this->action_input_data['cidr_addresses'];
-        $descr=$this->action_input_data['descr'] or "Added by fauxapi";
+        $descr=$this->action_input_data['descr']; 
 
         $alias = $this->PfsenseInterface->network_address_aliases_create($name, $type, $cidr_addresses, $descr);
+        
+        if (empty($alias)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get address aliases';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'aliases' => $alias,      
+        );
+        return TRUE;
+    }
+
+     /**
+     * network_address_aliases_update()
+     * 
+     * @return boolean
+     */
+    public function network_address_aliases_update() {
+        fauxApiLogger::debug(__METHOD__);
+
+        $name = $this->action_input_data["name"];
+        $type = $this->action_input_data["type"];
+        $cidr_addresses =$this->action_input_data['cidr_addresses'];
+        $descr=$this->action_input_data['descr'] ;
+
+        $alias = $this->PfsenseInterface->network_address_aliases_update($name, $type, $cidr_addresses, $descr);
         
         if (empty($alias)) {
             $this->response->http_code = 500;
