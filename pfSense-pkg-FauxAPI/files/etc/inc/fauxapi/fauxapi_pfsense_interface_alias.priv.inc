@@ -142,6 +142,83 @@ class fauxApiInterfaceAliasTools
         }
     }
 
+    public static function find_alias_reference($section, $field, $origname, &$is_alias_referenced, &$referenced_by) {
+        global $config;
+        if (!$origname || $is_alias_referenced) {
+            return;
+        }
+    
+        $sectionref = &$config;
+        foreach ($section as $sectionname) {
+            if (is_array($sectionref) && isset($sectionref[$sectionname])) {
+                $sectionref = &$sectionref[$sectionname];
+            } else {
+                return;
+            }
+        }
+    
+        if (is_array($sectionref)) {
+            foreach ($sectionref as $itemkey => $item) {
+                $fieldfound = true;
+                $fieldref = &$sectionref[$itemkey];
+                foreach ($field as $fieldname) {
+                    if (is_array($fieldref) && isset($fieldref[$fieldname])) {
+                        $fieldref = &$fieldref[$fieldname];
+                    } else {
+                        $fieldfound = false;
+                        break;
+                    }
+                }
+                if ($fieldfound && $fieldref == $origname) {
+                    $is_alias_referenced = true;
+                    if (is_array($item)) {
+                        $referenced_by = $item['descr'];
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    public static function is_alias_used($alias_name){
+        $is_alias_referenced = false;
+        $referenced_by = false;
+        
+		// Firewall rules
+		fauxApiInterfaceAliasTools::find_alias_reference(array('filter', 'rule'), array('source', 'address'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('filter', 'rule'), array('destination', 'address'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('filter', 'rule'), array('source', 'port'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('filter', 'rule'), array('destination', 'port'), $alias_name, $is_alias_referenced, $referenced_by);
+		// NAT Rules
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'rule'), array('source', 'address'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'rule'), array('source', 'port'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'rule'), array('destination', 'address'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'rule'), array('destination', 'port'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'rule'), array('target'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'rule'), array('local-port'), $alias_name, $is_alias_referenced, $referenced_by);
+		// NAT 1:1 Rules
+		//fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'onetoone'), array('external'), $alias_name, $is_alias_referenced, $referenced_by);
+		//fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'onetoone'), array('source', 'address'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'onetoone'), array('destination', 'address'), $alias_name, $is_alias_referenced, $referenced_by);
+		// NAT Outbound Rules
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'outbound', 'rule'), array('source', 'network'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'outbound', 'rule'), array('sourceport'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'outbound', 'rule'), array('destination', 'address'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'outbound', 'rule'), array('dstport'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('nat', 'outbound', 'rule'), array('target'), $alias_name, $is_alias_referenced, $referenced_by);
+		// Alias in an alias
+		fauxApiInterfaceAliasTools::find_alias_reference(array('aliases', 'alias'), array('address'), $alias_name, $is_alias_referenced, $referenced_by);
+		// Load Balancer
+		fauxApiInterfaceAliasTools::find_alias_reference(array('load_balancer', 'lbpool'), array('port'), $alias_name, $is_alias_referenced, $referenced_by);
+		fauxApiInterfaceAliasTools::find_alias_reference(array('load_balancer', 'virtual_server'), array('port'), $alias_name, $is_alias_referenced, $referenced_by);
+		// Static routes
+		fauxApiInterfaceAliasTools::find_alias_reference(array('staticroutes', 'route'), array('network'), $alias_name, $is_alias_referenced, $referenced_by);
+		if ($is_alias_referenced) {
+            return $referenced_by;
+        }
+        return NULL;
+    }
+
 
 }
 

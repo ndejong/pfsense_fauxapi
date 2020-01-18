@@ -127,9 +127,32 @@ trait network_address_aliases
         fauxApiLogger::debug(__METHOD__, array(
             'name' => $name
         ));
-        $pconfig=NULL;
+        $idx = -1;
         for ($id = 0; $id < count($config["aliases"]["alias"]); $id+=1) {
+            if ($config["aliases"]["alias"][$id]['name'] == $name) {
+                $idx=$id;
+                break;
+            }
+        }
+        if ($idx == -1) {
+            //not find
+            $error_message = "not find name";
+            $error_data = array('name' => $name);
+            fauxApiLogger::error($error_message, $error_data);
+            throw new \Exception($error_message);
+        }
+        $usederrmsg = fauxApiInterfaceAliasTools::is_alias_used($name);
+        if ($usederrmsg) {
+            $error_message = $usederrmsg;
+            $error_data = array('name'=>$name);
+            fauxApiLogger::error($error_message, $error_data);
+            throw new \Exception($error_message);
+        }
+        \array_splice($config["aliases"]["alias"], $idx, 1);
+        if (!fauxApiInterfaceAliasTools::write_config_aliases()) {
+            return NULL;
         }
 
+        return $config["aliases"];
     }
 }

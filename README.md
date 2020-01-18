@@ -27,6 +27,7 @@ tasks feasible.
  - [network_address_aliases_get](#user-content-network_address_aliases_get) - Returns address aliaes used by rules.
  - [network_address_aliases_create](#user-content-network_address_aliases_create) - Creates An network aliaes for rules
  - [network_address_aliases_update](#user-content-network_address_aliases_update) - Update a address aliaes. Returns newest result
+ - [network_address_aliases_delete](#user-content-network_address_aliases_delete) - delete a address aliaes. Returns newest result
  - [filter_rules_get](#user-content-filter_rules_get) - Returns firewall filters.
 
 
@@ -992,14 +993,14 @@ curl \
     --insecure \
     --header "fauxapi-auth: <auth-value>" \
     --data '{"name": "wsdfan", "type": "network", "cidr_addresses": [{"address":"12.23.45.3/32", "details":"a"}], "descr":"Test"}'
-    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_create"
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_update"
 ```
 
 *Example Response*
 ```javascript
 {
     "callid": "5e22393a9aa5a",
-    "action": "network_address_aliases_create",
+    "action": "network_address_aliases_update",
     "message": "ok",
     "data": {
         "aliases": {
@@ -1070,6 +1071,47 @@ curl \
                     "type": "network",
                     "address": "12.23.45.3/32",
                     "detail": "a"
+                }
+            ]
+        }
+    }
+}
+```
+---
+### network_address_aliases_delete
+ - deletes a address aliaes. Returns newest result
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+     - **name** :<string> name of aliases. identiy which aliase to delete 
+  - Response: json <object>: the items after created
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"name": "wsdfan"}'
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_delete"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e22393a9aa5a",
+    "action": "network_address_aliases_delete",
+    "message": "ok",
+    "data": {
+        "aliases": {
+            "alias": [
+                {
+                    "name": "EasyRuleBlockHostsWAN",
+                    "type": "network",
+                    "address": "1.2.3.4/32 5.6.7.8/32",
+                    "descr": "Hosts blocked from Firewall Log view",
+                    "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
                 }
             ]
         }

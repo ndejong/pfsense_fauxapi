@@ -527,6 +527,31 @@ class fauxApiActions {
         );
         return TRUE;
     }
+
+     /**
+     * network_address_aliases_update()
+     * 
+     * @return boolean
+     */
+    public function network_address_aliases_delete() {
+        fauxApiLogger::debug(__METHOD__);
+
+        $name = $this->action_input_data["name"];
+
+        $alias = $this->PfsenseInterface->network_address_aliases_delete($name);
+        
+        if (empty($alias)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get address aliases';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'aliases' => $alias,      
+        );
+        return TRUE;
+    }
     
     /**
      * alias_update_urltables()
