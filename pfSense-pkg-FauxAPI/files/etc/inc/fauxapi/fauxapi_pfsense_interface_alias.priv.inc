@@ -2,8 +2,8 @@
 namespace fauxapi\v1;
 
 // write_config requires functions from this
-include '/etc/inc/phpsessionmanager.inc';
-include '/etc/inc/auth.inc';
+include_once '/etc/inc/phpsessionmanager.inc';
+include_once '/etc/inc/auth.inc';
 
 class fauxApiInterfaceAliasTools
 {

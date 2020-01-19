@@ -451,6 +451,66 @@ class fauxApiActions {
     }
 
     /**
+     * filter_rules_create()
+     * 
+     * @return boolean
+     */
+    public function filter_rules_create() {
+        fauxApiLogger::debug(__METHOD__);
+                
+        $position = $this->action_input_data["position"];
+        $ruleobj = $this->action_input_data["rule"];
+        $rules = $this->PfsenseInterface->filter_rules_create($position, $ruleobj);
+        
+        if (empty($rules)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get filter rule(s)';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'filter' => array(
+                'rules' => $rules
+            ),           
+        );
+        return TRUE;
+    }
+
+    /**
+     * filter_rules_create()
+     * 
+     * @return boolean
+     */
+    public function filter_rules_delete() {
+        fauxApiLogger::debug(__METHOD__);
+        
+        if(!isset($this->action_input_data["position"])) {
+            $error_message = "could only delete by position at now";
+            $error_data = array('postdata' => $this->action_input_data);
+            fauxApiLogger::error($error_message, $error_data);
+            throw new \Exception($error_message);
+            return FALSE;
+        }
+        $position = $this->action_input_data["position"];
+        $rules = $this->PfsenseInterface->filter_rules_delete_by_position($position);
+        
+        if (empty($rules)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get filter rule(s)';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'filter' => array(
+                'rules' => $rules
+            ),           
+        );
+        return TRUE;
+    }
+
+    /**
      * network_address_aliases_get()
      * 
      * @return boolean

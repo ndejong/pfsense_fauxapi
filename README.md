@@ -29,6 +29,8 @@ tasks feasible.
  - [network_address_aliases_update](#user-content-network_address_aliases_update) - Update a address aliaes. Returns newest result
  - [network_address_aliases_delete](#user-content-network_address_aliases_delete) - delete a address aliaes. Returns newest result
  - [filter_rules_get](#user-content-filter_rules_get) - Returns firewall filters.
+ - [filter_rules_create](#user-content-filter_rules_create) - Creates firewall filters.
+ - [filter_rules_delete](#user-content-filter_rules_delete) - Deletes firewall filters.
 
 
 ## Approach
@@ -977,13 +979,13 @@ curl \
  - HTTP: **POST**
  - Params: none
  - Request body: json
-     - **name** :<string> name of aliases
-     - **type** :<string> type of aliases. **MUST** be `network` for now.
-     - **cidr_addresses** : < list of <object> > name alias what
+     - **name** :< string > name of aliases
+     - **type** :< string > type of aliases. **MUST** be `network` for now.
+     - **cidr_addresses** : < list of < object > > name alias what
         - **address** an ip address or a network prefix.
         - **details** a description of this address. for human readable documentation.
-     - **descr** : <string> the description of current aliases.
-  - Response: json <object>: the items after created
+     - **descr** : < string > the description of current aliases.
+  - Response: json < object >: the items after created
 
 *Example Request*
 ```bash
@@ -1030,13 +1032,13 @@ curl \
  - HTTP: **POST**
  - Params: none
  - Request body: json
-     - **name** :<string> name of aliases. identiy which aliases frr modify
-     - **type** :<string> type of aliases. **MUST** be `network` for now.
-     - **cidr_addresses** : < list of <object> > name alias what
+     - **name** :< string > name of aliases. identiy which aliases frr modify
+     - **type** :< string > type of aliases. **MUST** be `network` for now.
+     - **cidr_addresses** : < list of < object > > name alias what
         - **address** an ip address or a network prefix.
         - **details** a description of this address. for human readable documentation.
-     - **descr** : <string> the description of current aliases.
-  - Response: json <object>: the items after created
+     - **descr** : < string > the description of current aliases.
+  - Response: json < object >: the items after created
 
 *Example Request*
 ```bash
@@ -1083,8 +1085,8 @@ curl \
  - HTTP: **POST**
  - Params: none
  - Request body: json
-     - **name** :<string> name of aliases. identiy which aliase to delete 
-  - Response: json <object>: the items after created
+     - **name** :< string > name of aliases. identiy which aliase to delete 
+  - Response: json < object >: the items after created
 
 *Example Request*
 ```bash
@@ -1210,6 +1212,68 @@ curl \
     }
 }
 ```
+---
+### filter_rules_create
+ - Creates firewall filters
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+    - **position**: < int >: insert to which position.
+    - **rule**: < object >: what is the rule. 
+      - **type** :< string > : Type of filter. could take value: pass / block / reject
+      - **ipprotocol**: < string >: Which network type? could take value: inet / inet6 / inet46
+      - **protocol**: < string >: if seted. could only take value: tcp. used for port match.
+      - **descr** : < string > : Used for description.
+      - **interface**: < string >: To which interface. e.g. WAN
+      - **source**: < object > : match source item.
+          - `{"any":""}`: matchs any address.
+          - `{"address": "network_address_aliases"}`: matchs any network_address_aliases.
+          - `{"address": "1.2.3.4"}`: matchs address 1.2.3.4
+          - `{"any":"", "port": "443-1000"}`: matchs 443 to 1000 port. uses with protocol
+      - **destination**: < object >: match description. -- same as above.
+  - Response: json < object >: the items after created
+
+*Test it carefully before going to wild please.  USE AT YOUR OWN RISK*
+
+*Example Request*
+```bash
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"position": 1, "rule": {"type": "reject", "ipprotocol": "inet", "descr": "testobject", "interface": "wan", "source": {"any": ""}, "destination": {"address": "1.2.3.4"}}}' \
+    "https://<host-address>/fauxapi/v1/?action=filter_rules_create"
+```
+*Example Response*
+Same As [filter_rules_get](#user-content-filter_rules_get)
+
+---
+### filter_rules_delete
+ - Returns firewall filters.
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+    - **position**: <int>: deletes which position.
+
+*Test it carefully before going to wild please.  USE AT YOUR OWN RISK*
+
+Because there's nothing like Unique ID or name in rule. Currently we could only take the position to identify which rule shell be deleted.
+
+*Example Request*
+```bash
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"position": 1}' \
+    "https://<host-address>/fauxapi/v1/?action=filter_rules_delete"
+```
+
+*Example Response*
+Same As [filter_rules_get](#user-content-filter_rules_get)
+
 ---
 
 ## Versions and Testing
