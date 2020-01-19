@@ -47,6 +47,8 @@ do-install:
 		${STAGEDIR}${PREFIX}/www/fauxapi/admin
 	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/credentials.php \
 		${STAGEDIR}${PREFIX}/www/fauxapi/admin
+	${INSTALL_DATA} ${FILESDIR}${PREFIX}/www/fauxapi/admin/logs.php \
+		${STAGEDIR}${PREFIX}/www/fauxapi/admin
 
 	${MKDIR} ${STAGEDIR}/etc/inc/fauxapi
 	${INSTALL_DATA} ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc \
