@@ -348,6 +348,29 @@ class fauxApiActions {
         );
         return TRUE;
     }
+
+    /**
+     * system_stats()
+     * 
+     * @return boolean
+     */
+    public function system_info() {
+        fauxApiLogger::debug(__METHOD__);
+        
+        $info = $this->PfsenseInterface->system_info();
+        
+        if (empty($info)) {
+            $this->response->http_code = 500;
+            $this->response->message = 'unable to get system info';
+            return FALSE;
+        }
+        $this->response->http_code = 200;
+        $this->response->message = 'ok';
+        $this->response->data = array(
+            'info' => $info
+        );
+        return TRUE;
+    }
     
     /**
      * interface_stats()

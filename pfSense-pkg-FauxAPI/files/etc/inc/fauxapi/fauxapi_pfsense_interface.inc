@@ -27,6 +27,9 @@ include_once '/etc/inc/xmlparse.inc';
 include_once '/etc/inc/notices.inc';
 include_once '/etc/inc/config.lib.inc';
 include_once '/etc/inc/system.inc';
+include_once '/etc/inc/pkg-utils.inc';
+
+include_once '/usr/local/www/includes/functions.inc.php';
 
 class fauxApiPfsenseInterface {
 
@@ -488,6 +491,49 @@ class fauxApiPfsenseInterface {
         
         \send_event($command);
         return TRUE;
+    }
+
+    /**
+     * system_info
+     * 
+     * @return array
+     */
+    public function system_info() {
+        global $g;
+        fauxApiLogger::debug(__METHOD__);
+        $info['sys'] = array (
+            'platform'=>system_identify_specific_platform(),
+            'serial_no' => system_get_serial(),
+            'device_id' => system_get_uniqueid(),
+        );
+        $info['pfsense_version'] = array(
+                'product_version_string'=> $g['product_version_string'],
+                'product_version'=>$g['product_version'],
+                'product_version_patch'=>$g['product_version_patch'],
+            );
+        $info['pfsense_remote_version'] = NULL;
+        $remote_system_version = get_system_pkg_version(false, true);
+        if (is_array($remote_system_version) ) {
+            $info['pfsense_remote_version']= $remote_system_version;
+        }
+        $info['os_verison'] = php_uname("s") . " " . php_uname("r");
+        $info['cpu_type'] = array (
+            'cpu_model' => get_single_sysctl("hw.model"),
+            'cpu_count' => get_cpu_count(),
+            'logic_cpu_count' => get_cpu_count(true),
+            'cpu_freq' => get_cpufreq(),
+            );
+        $info['kernel_pti_status'] = get_single_sysctl('vm.pmap.pti')==0 ?'disabled':'enabled';
+        $info['mds_mitigation'] = get_single_sysctl('hw.mds_disable_state');
+        exec('/bin/kenv -q smbios.bios.vendor 2>/dev/null', $biosvendor);
+        exec('/bin/kenv -q smbios.bios.version 2>/dev/null', $biosversion);
+        exec('/bin/kenv -q smbios.bios.reldate 2>/dev/null', $biosdate);
+        $info['bios'] = array (
+            'vendor' => $biosvendor[0],
+            'version' => $biosversion[0],
+            'date' => $biosdate[0],
+        );
+        return $info;
     }
     
     /**
