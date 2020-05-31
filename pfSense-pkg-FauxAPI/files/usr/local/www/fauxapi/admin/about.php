@@ -86,6 +86,8 @@ tasks feasible.</p>
 <a href="#user-content-system_reboot">system_reboot</a> - Reboots the pfSense system.</li>
 <li>
 <a href="#user-content-system_stats">system_stats</a> - Returns various useful system stats.</li>
+<li>
+<a href="#user-content-system_info">system_info</a> - Returns various useful system info.</li>
 </ul>
 <h2>
 <a id="user-content-approach" class="anchor" href="#approach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Approach</h2>
@@ -120,7 +122,7 @@ now provides the ability to issue function calls directly into pfSense.</em></p>
 <p>Until the FauxAPI is added to the pfSense FreeBSD-ports tree you will need to
 install manually from <strong>root</strong> as shown:-</p>
 <div class="highlight highlight-source-shell"><pre><span class="pl-c1">set</span> fauxapi_base_package_url=<span class="pl-s"><span class="pl-pds">'</span>https://raw.githubusercontent.com/ndejong/pfsense_fauxapi_packages/master<span class="pl-pds">'</span></span>
-<span class="pl-c1">set</span> <span class="pl-c1">set</span> fauxapi_latest=<span class="pl-s"><span class="pl-pds">`</span>fetch -qo - <span class="pl-smi">${fauxapi_base_package_url}</span>/LATEST<span class="pl-pds">`</span></span>
+<span class="pl-c1">set</span> fauxapi_latest=<span class="pl-s"><span class="pl-pds">`</span>fetch -qo - <span class="pl-smi">${fauxapi_base_package_url}</span>/LATEST<span class="pl-pds">`</span></span>
 fetch <span class="pl-smi">${fauxapi_base_package_url}</span>/<span class="pl-smi">${fauxapi_latest}</span>
 pkg-static install <span class="pl-smi">${fauxapi_latest}</span></pre></div>
 <p>Installation and de-installation is quite straight forward, further examples can
@@ -143,13 +145,13 @@ expected or desired.</p>
 <div class="highlight highlight-source-shell"><pre>pip3 install pfsense-fauxapi</pre></div>
 <p>Package Status: <a href="https://pypi.org/project/pfsense-fauxapi/" rel="nofollow"><img src="https://camo.githubusercontent.com/93156147a029f0a7f529402e128e26ef49cdfacd/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f706673656e73652d666175786170692e737667" alt="PyPi" data-canonical-src="https://img.shields.io/pypi/v/pfsense-fauxapi.svg" style="max-width:100%;"></a> <a href="https://travis-ci.org/ndejong/pfsense_fauxapi_client_python" rel="nofollow"><img src="https://camo.githubusercontent.com/0ea636b454052bc8cd9abed19b35b11d13e739a4/68747470733a2f2f7472617669732d63692e6f72672f6e64656a6f6e672f706673656e73655f666175786170695f636c69656e745f707974686f6e2e7376673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/ndejong/pfsense_fauxapi_client_python.svg?branch=master" style="max-width:100%;"></a></p>
 <p>Use of the package should be easy enough as shown</p>
-<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> pprint, sys
-<span class="pl-k">from</span> PfsenseFauxapi.PfsenseFauxapi <span class="pl-k">import</span> PfsenseFauxapi
-PfsenseFauxapi <span class="pl-k">=</span> FauxapiLib(<span class="pl-s"><span class="pl-pds">'</span>&lt;host-address&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-key&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&lt;fauxapi-secret&gt;<span class="pl-pds">'</span></span>)
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> <span class="pl-s1">pprint</span>, <span class="pl-s1">sys</span>
+<span class="pl-k">from</span> <span class="pl-v">PfsenseFauxapi</span>.<span class="pl-v">PfsenseFauxapi</span> <span class="pl-k">import</span> <span class="pl-v">PfsenseFauxapi</span>
+<span class="pl-v">PfsenseFauxapi</span> <span class="pl-c1">=</span> <span class="pl-v">PfsenseFauxapi</span>(<span class="pl-s">'&lt;host-address&gt;'</span>, <span class="pl-s">'&lt;fauxapi-key&gt;'</span>, <span class="pl-s">'&lt;fauxapi-secret&gt;'</span>)
 
-aliases <span class="pl-k">=</span> FauxapiLib.config_get(<span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>)
-<span class="pl-c"><span class="pl-c">#</span># perform some kind of manipulation to `aliases` here ##</span>
-pprint.pprint(FauxapiLib.config_set(aliases, <span class="pl-s"><span class="pl-pds">'</span>aliases<span class="pl-pds">'</span></span>))</pre></div>
+<span class="pl-s1">aliases</span> <span class="pl-c1">=</span> <span class="pl-v">PfsenseFauxapi</span>.<span class="pl-en">config_get</span>(<span class="pl-s">'aliases'</span>)
+<span class="pl-c">## perform some kind of manipulation to `aliases` here ##</span>
+<span class="pl-s1">pprint</span>.<span class="pl-en">pprint</span>(<span class="pl-v">PfsenseFauxapi</span>.<span class="pl-en">config_set</span>(<span class="pl-s1">aliases</span>, <span class="pl-s">'aliases'</span>))</pre></div>
 <p>It is recommended to review the <a href="https://github.com/ndejong/pfsense_fauxapi_client_python/tree/master/examples">Python code examples</a>
 to observe worked examples with the client library.  Of small note is that the
 Python library supports the ability to get and set single sections of the pfSense
@@ -347,21 +349,21 @@ tables are updated.</li>
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=alias_update_urltables<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>598ec756b4d09<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>alias_update_urltables<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>updates<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-      <span class="pl-s"><span class="pl-pds">"</span>bruteforceblocker<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-        <span class="pl-s"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>status<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
-          <span class="pl-s"><span class="pl-pds">"</span>no changes.<span class="pl-pds">"</span></span>
-        ]
-      }
-    }
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"598ec756b4d09"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"alias_update_urltables"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"updates"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"bruteforceblocker"</span>: <span class="pl-kos">{</span>
+        <span class="pl-s">"url"</span>: <span class="pl-s">"https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/bruteforceblocker.ipset"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"status"</span>: <span class="pl-kos">[</span>
+          <span class="pl-s">"no changes."</span>
+        <span class="pl-kos">]</span>
+      <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-config_backup" class="anchor" href="#config_backup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_backup</h3>
@@ -381,14 +383,14 @@ set of pfSense system backups at <code>/cf/conf/backup/</code>
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_backup<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583012fea254f<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_backup<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>backup_config_file<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/backup/config-1479545598.xml<span class="pl-pds">"</span></span>
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"583012fea254f"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"config_backup"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"backup_config_file"</span>: <span class="pl-s">"/cf/conf/backup/config-1479545598.xml"</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-config_backup_list" class="anchor" href="#config_backup_list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_backup_list</h3>
@@ -406,20 +408,20 @@ set of pfSense system backups at <code>/cf/conf/backup/</code>
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_backup_list<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583065cb670db<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_backup_list<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>backup_files<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
-      {
-        <span class="pl-s"><span class="pl-pds">"</span>filename<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/backup/config-1479545598.xml<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>timestamp<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>20161119Z144635<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>description<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>fauxapi-PFFA4797d073@192.168.10.10: update via fauxapi for callid: 583012fea254f<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>version<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>15.5<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>filesize<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">18535</span>
-      },
-      <span class="pl-k">...</span>.</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"583065cb670db"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"config_backup_list"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"backup_files"</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-s">"filename"</span>: <span class="pl-s">"/cf/conf/backup/config-1479545598.xml"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"timestamp"</span>: <span class="pl-s">"20161119Z144635"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"description"</span>: <span class="pl-s">"fauxapi-PFFA4797d073@192.168.10.10: update via fauxapi for callid: 583012fea254f"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"version"</span>: <span class="pl-s">"15.5"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"filesize"</span>: <span class="pl-c1">18535</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      ...<span class="pl-kos">.</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-config_get" class="anchor" href="#config_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_get</h3>
@@ -445,25 +447,25 @@ path.</li>
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_get<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-    <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583012fe39f79<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_get<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-      <span class="pl-s"><span class="pl-pds">"</span>config_file<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/config.xml<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>config<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-        <span class="pl-s"><span class="pl-pds">"</span>version<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>15.5<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>staticroutes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>snmpd<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-          <span class="pl-s"><span class="pl-pds">"</span>syscontact<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-          <span class="pl-s"><span class="pl-pds">"</span>rocommunity<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>public<span class="pl-pds">"</span></span>,
-          <span class="pl-s"><span class="pl-pds">"</span>syslocation<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>
-        },
-        <span class="pl-s"><span class="pl-pds">"</span>shaper<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>installedpackages<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-          <span class="pl-s"><span class="pl-pds">"</span>pfblockerngsouthamerica<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-            <span class="pl-s"><span class="pl-pds">"</span>config<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
-             <span class="pl-k">...</span>.</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+    <span class="pl-s">"callid"</span>: <span class="pl-s">"583012fe39f79"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"action"</span>: <span class="pl-s">"config_get"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"config_file"</span>: <span class="pl-s">"/cf/conf/config.xml"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"config"</span>: <span class="pl-kos">{</span>
+        <span class="pl-s">"version"</span>: <span class="pl-s">"15.5"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"staticroutes"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+        <span class="pl-s">"snmpd"</span>: <span class="pl-kos">{</span>
+          <span class="pl-s">"syscontact"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+          <span class="pl-s">"rocommunity"</span>: <span class="pl-s">"public"</span><span class="pl-kos">,</span>
+          <span class="pl-s">"syslocation"</span>: <span class="pl-s">""</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+        <span class="pl-s">"shaper"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+        <span class="pl-s">"installedpackages"</span>: <span class="pl-kos">{</span>
+          <span class="pl-s">"pfblockerngsouthamerica"</span>: <span class="pl-kos">{</span>
+            <span class="pl-s">"config"</span>: <span class="pl-kos">[</span>
+             ...<span class="pl-kos">.</span></pre></div>
 <p>Hint: use <code>jq</code> to parse the response JSON and obtain the config only, as such:-</p>
 <div class="highlight highlight-source-shell"><pre>cat /tmp/faux-config-get-output-from-curl.json <span class="pl-k">|</span> jq .data.config <span class="pl-k">&gt;</span> /tmp/config.json</pre></div>
 <hr>
@@ -507,15 +509,15 @@ curl \
     --data @/tmp/config_patch.json \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_patch<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5b3b506f72670<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_patch<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>do_backup<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>,
-    <span class="pl-s"><span class="pl-pds">"</span>do_reload<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>,
-    <span class="pl-s"><span class="pl-pds">"</span>previous_config_file<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/backup/config-1530613871.xml<span class="pl-pds">"</span></span>
-  }</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"5b3b506f72670"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"config_patch"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"do_backup"</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+    <span class="pl-s">"do_reload"</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+    <span class="pl-s">"previous_config_file"</span>: <span class="pl-s">"/cf/conf/backup/config-1530613871.xml"</span>
+  <span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-config_reload" class="anchor" href="#config_reload" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_reload</h3>
@@ -535,11 +537,11 @@ normally no need to explicitly call this after a <strong>config_set</strong> act
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_reload<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5831226e18326<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_reload<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"5831226e18326"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"config_reload"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-config_restore" class="anchor" href="#config_restore" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_restore</h3>
@@ -562,14 +564,14 @@ normally no need to explicitly call this after a <strong>config_set</strong> act
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_restore&amp;config_file=/cf/conf/backup/config-1479545598.xml<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583126192a789<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_restore<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>config_file<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/backup/config-1479545598.xml<span class="pl-pds">"</span></span>
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"583126192a789"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"config_restore"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"config_file"</span>: <span class="pl-s">"/cf/conf/backup/config-1479545598.xml"</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-config_set" class="anchor" href="#config_set" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>config_set</h3>
@@ -604,16 +606,16 @@ response data to obtain the config data only under the key <code>.data.config</c
     --data @/tmp/config.json \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=config_set<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5b3b50e8b1bc6<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>config_set<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>do_backup<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>,
-    <span class="pl-s"><span class="pl-pds">"</span>do_reload<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">true</span>,
-    <span class="pl-s"><span class="pl-pds">"</span>previous_config_file<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>/cf/conf/backup/config-1530613992.xml<span class="pl-pds">"</span></span>
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"5b3b50e8b1bc6"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"config_set"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"do_backup"</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+    <span class="pl-s">"do_reload"</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span>
+    <span class="pl-s">"previous_config_file"</span>: <span class="pl-s">"/cf/conf/backup/config-1530613992.xml"</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-function_call" class="anchor" href="#function_call" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>function_call</h3>
@@ -645,22 +647,21 @@ copying the sample file provided in <code>pfsense_function_calls.sample.txt</cod
     --data <span class="pl-s"><span class="pl-pds">"</span>{<span class="pl-cce">\"</span>function<span class="pl-cce">\"</span>: <span class="pl-cce">\"</span>get_services<span class="pl-cce">\"</span>}<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=function_call<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>59a29e5017905<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>function_call<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>return<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
-      {
-        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>unbound<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>description<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>DNS Resolver<span class="pl-pds">"</span></span>
-      },
-      {
-        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ntpd<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>description<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>NTP clock sync<span class="pl-pds">"</span></span>
-      },
-      <span class="pl-k">...</span>.
-</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"59a29e5017905"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"function_call"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"return"</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-s">"name"</span>: <span class="pl-s">"unbound"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"description"</span>: <span class="pl-s">"DNS Resolver"</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-s">"name"</span>: <span class="pl-s">"ntpd"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"description"</span>: <span class="pl-s">"NTP clock sync"</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      ...<span class="pl-kos">.</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-gateway_status" class="anchor" href="#gateway_status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>gateway_status</h3>
@@ -678,24 +679,24 @@ copying the sample file provided in <code>pfsense_function_calls.sample.txt</cod
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=gateway_status<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>598ecf3e7011e<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>gateway_status<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>gateway_status<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-      <span class="pl-s"><span class="pl-pds">"</span>10.22.33.1<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-        <span class="pl-s"><span class="pl-pds">"</span>monitorip<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>8.8.8.8<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>srcip<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>10.22.33.100<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>GW_WAN<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>delay<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>4.415ms<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>stddev<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>3.239ms<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>loss<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0.0%<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>status<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>none<span class="pl-pds">"</span></span>
-      }
-    }
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"598ecf3e7011e"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"gateway_status"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"gateway_status"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"10.22.33.1"</span>: <span class="pl-kos">{</span>
+        <span class="pl-s">"monitorip"</span>: <span class="pl-s">"8.8.8.8"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"srcip"</span>: <span class="pl-s">"10.22.33.100"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"name"</span>: <span class="pl-s">"GW_WAN"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"delay"</span>: <span class="pl-s">"4.415ms"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"stddev"</span>: <span class="pl-s">"3.239ms"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"loss"</span>: <span class="pl-s">"0.0%"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"status"</span>: <span class="pl-s">"none"</span>
+      <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-interface_stats" class="anchor" href="#interface_stats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>interface_stats</h3>
@@ -719,26 +720,26 @@ not an alias of the interface such as "WAN" or "LAN"</li>
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=interface_stats&amp;interface=em0<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5b3a5bce65d01<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>interface_stats<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>stats<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-      <span class="pl-s"><span class="pl-pds">"</span>inpkts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">267017</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>inbytes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">21133408</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>outpkts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">205860</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>outbytes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">8923046</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>inerrs<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>outerrs<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>collisions<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>inmcasts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">61618</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>outmcasts<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">73</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>unsuppproto<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">0</span>,
-      <span class="pl-s"><span class="pl-pds">"</span>mtu<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">1500</span>
-    }
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"5b3a5bce65d01"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"interface_stats"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"stats"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"inpkts"</span>: <span class="pl-c1">267017</span><span class="pl-kos">,</span>
+      <span class="pl-s">"inbytes"</span>: <span class="pl-c1">21133408</span><span class="pl-kos">,</span>
+      <span class="pl-s">"outpkts"</span>: <span class="pl-c1">205860</span><span class="pl-kos">,</span>
+      <span class="pl-s">"outbytes"</span>: <span class="pl-c1">8923046</span><span class="pl-kos">,</span>
+      <span class="pl-s">"inerrs"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+      <span class="pl-s">"outerrs"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+      <span class="pl-s">"collisions"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+      <span class="pl-s">"inmcasts"</span>: <span class="pl-c1">61618</span><span class="pl-kos">,</span>
+      <span class="pl-s">"outmcasts"</span>: <span class="pl-c1">73</span><span class="pl-kos">,</span>
+      <span class="pl-s">"unsuppproto"</span>: <span class="pl-c1">0</span><span class="pl-kos">,</span>
+      <span class="pl-s">"mtu"</span>: <span class="pl-c1">1500</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-rule_get" class="anchor" href="#rule_get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>rule_get</h3>
@@ -763,25 +764,25 @@ returned.</li>
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=rule_get&amp;rule_number=5<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>583c279b56958<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>rule_get<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>rules<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
-      {
-        <span class="pl-s"><span class="pl-pds">"</span>number<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-c1">5</span>,
-        <span class="pl-s"><span class="pl-pds">"</span>rule<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>anchor <span class="pl-cce">\"</span>openvpn/*<span class="pl-cce">\"</span> all<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>evaluations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>14134<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>packets<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>bytes<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>states<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>inserted<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>21188<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>statecreations<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>
-      }
-    ]
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"583c279b56958"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"rule_get"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"rules"</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-s">"number"</span>: <span class="pl-c1">5</span><span class="pl-kos">,</span>
+        <span class="pl-s">"rule"</span>: <span class="pl-s">"anchor \"openvpn/*\" all"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"evaluations"</span>: <span class="pl-s">"14134"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"packets"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"bytes"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"states"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"inserted"</span>: <span class="pl-s">"21188"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"statecreations"</span>: <span class="pl-s">"0"</span>
+      <span class="pl-kos">}</span>
+    <span class="pl-kos">]</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-send_event" class="anchor" href="#send_event" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>send_event</h3>
@@ -809,11 +810,11 @@ following standard pfSense send_event combinations are permitted:-
     --data <span class="pl-s"><span class="pl-pds">"</span>[<span class="pl-cce">\"</span>interface reload all<span class="pl-cce">\"</span>]<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=send_event<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>58312bb3398bc<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>send_event<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"58312bb3398bc"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"send_event"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-system_reboot" class="anchor" href="#system_reboot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_reboot</h3>
@@ -831,11 +832,11 @@ following standard pfSense send_event combinations are permitted:-
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=system_reboot<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>58312bb3487ac<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>system_reboot<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"58312bb3487ac"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"system_reboot"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h3>
 <a id="user-content-system_stats" class="anchor" href="#system_stats" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_stats</h3>
@@ -853,34 +854,92 @@ following standard pfSense send_event combinations are permitted:-
     --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
     <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=system_stats<span class="pl-pds">"</span></span></pre></div>
 <p><em>Example Response</em></p>
-<div class="highlight highlight-source-js"><pre>{
-  <span class="pl-s"><span class="pl-pds">"</span>callid<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>5b3b511655589<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>system_stats<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>,
-  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-    <span class="pl-s"><span class="pl-pds">"</span>stats<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-      <span class="pl-s"><span class="pl-pds">"</span>cpu<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>20770421|20494981<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>mem<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>20<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>uptime<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>1 Day 21 Hours 25 Minutes 48 Seconds<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>pfstate<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>62/98000<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>pfstatepercent<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>temp<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>datetime<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>20180703Z103358<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>cpufreq<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>load_average<span class="pl-pds">"</span></span><span class="pl-k">:</span> [
-        <span class="pl-s"><span class="pl-pds">"</span>0.01<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>0.04<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>0.01<span class="pl-pds">"</span></span>
-      ],
-      <span class="pl-s"><span class="pl-pds">"</span>mbuf<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>1016/61600<span class="pl-pds">"</span></span>,
-      <span class="pl-s"><span class="pl-pds">"</span>mbufpercent<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>
-    }
-  }
-}</pre></div>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+  <span class="pl-s">"callid"</span>: <span class="pl-s">"5b3b511655589"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"action"</span>: <span class="pl-s">"system_stats"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+  <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+    <span class="pl-s">"stats"</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"cpu"</span>: <span class="pl-s">"20770421|20494981"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"mem"</span>: <span class="pl-s">"20"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"uptime"</span>: <span class="pl-s">"1 Day 21 Hours 25 Minutes 48 Seconds"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"pfstate"</span>: <span class="pl-s">"62/98000"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"pfstatepercent"</span>: <span class="pl-s">"0"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"temp"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+      <span class="pl-s">"datetime"</span>: <span class="pl-s">"20180703Z103358"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"cpufreq"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+      <span class="pl-s">"load_average"</span>: <span class="pl-kos">[</span>
+        <span class="pl-s">"0.01"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"0.04"</span><span class="pl-kos">,</span>
+        <span class="pl-s">"0.01"</span>
+      <span class="pl-kos">]</span><span class="pl-kos">,</span>
+      <span class="pl-s">"mbuf"</span>: <span class="pl-s">"1016/61600"</span><span class="pl-kos">,</span>
+      <span class="pl-s">"mbufpercent"</span>: <span class="pl-s">"2"</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
+<hr>
+<h3>
+<a id="user-content-system_info" class="anchor" href="#system_info" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>system_info</h3>
+<ul>
+<li>Returns various useful system info.</li>
+<li>HTTP: <strong>GET</strong>
+</li>
+<li>Params: none</li>
+</ul>
+<p><em>Example Request</em></p>
+<div class="highlight highlight-source-shell"><pre>curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header <span class="pl-s"><span class="pl-pds">"</span>fauxapi-auth: &lt;auth-value&gt;<span class="pl-pds">"</span></span> \
+    <span class="pl-s"><span class="pl-pds">"</span>https://&lt;host-address&gt;/fauxapi/v1/?action=system_info<span class="pl-pds">"</span></span></pre></div>
+<p><em>Example Response</em></p>
+<div class="highlight highlight-source-js"><pre><span class="pl-kos">{</span>
+    <span class="pl-s">"callid"</span>: <span class="pl-s">"5e1d8ceb8ff47"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"action"</span>: <span class="pl-s">"system_info"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"message"</span>: <span class="pl-s">"ok"</span><span class="pl-kos">,</span>
+    <span class="pl-s">"data"</span>: <span class="pl-kos">{</span>
+        <span class="pl-s">"info"</span>: <span class="pl-kos">{</span>
+            <span class="pl-s">"sys"</span>: <span class="pl-kos">{</span>
+                <span class="pl-s">"platform"</span>: <span class="pl-kos">{</span>
+                    <span class="pl-s">"name"</span>: <span class="pl-s">"VMware"</span><span class="pl-kos">,</span>
+                    <span class="pl-s">"descr"</span>: <span class="pl-s">"VMware Virtual Machine"</span>
+                <span class="pl-kos">}</span><span class="pl-kos">,</span>
+                <span class="pl-s">"serial_no"</span>: <span class="pl-s">""</span><span class="pl-kos">,</span>
+                <span class="pl-s">"device_id"</span>: <span class="pl-s">"719e8c91c2c43b820400"</span>
+            <span class="pl-kos">}</span><span class="pl-kos">,</span>
+            <span class="pl-s">"pfsense_version"</span>: <span class="pl-kos">{</span>
+                <span class="pl-s">"product_version_string"</span>: <span class="pl-s">"2.4.5-DEVELOPMENT"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"product_version"</span>: <span class="pl-s">"2.4.5-DEVELOPMENT"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"product_version_patch"</span>: <span class="pl-s">"0"</span>
+            <span class="pl-kos">}</span><span class="pl-kos">,</span>
+            <span class="pl-s">"pfsense_remote_version"</span>: <span class="pl-kos">{</span>
+                <span class="pl-s">"version"</span>: <span class="pl-s">"2.4.5.a.20200112.1821"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"installed_version"</span>: <span class="pl-s">"2.4.5.a.20191218.2354"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"pkg_version_compare"</span>: <span class="pl-s">"&lt;"</span>
+            <span class="pl-kos">}</span><span class="pl-kos">,</span>
+            <span class="pl-s">"os_verison"</span>: <span class="pl-s">"FreeBSD 11.3-STABLE"</span><span class="pl-kos">,</span>
+            <span class="pl-s">"cpu_type"</span>: <span class="pl-kos">{</span>
+                <span class="pl-s">"cpu_model"</span>: <span class="pl-s">"Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"cpu_count"</span>: <span class="pl-s">"4"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"logic_cpu_count"</span>: <span class="pl-s">"4 package(s)"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"cpu_freq"</span>: <span class="pl-s">""</span>
+            <span class="pl-kos">}</span><span class="pl-kos">,</span>
+            <span class="pl-s">"kernel_pti_status"</span>: <span class="pl-s">"enabled"</span><span class="pl-kos">,</span>
+            <span class="pl-s">"mds_mitigation"</span>: <span class="pl-s">"inactive"</span><span class="pl-kos">,</span>
+            <span class="pl-s">"bios"</span>: <span class="pl-kos">{</span>
+                <span class="pl-s">"vendor"</span>: <span class="pl-s">"Phoenix Technologies LTD"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"version"</span>: <span class="pl-s">"6.00"</span><span class="pl-kos">,</span>
+                <span class="pl-s">"date"</span>: <span class="pl-s">"07/29/2019"</span>
+            <span class="pl-kos">}</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span></pre></div>
 <hr>
 <h2>
 <a id="user-content-versions-and-testing" class="anchor" href="#versions-and-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Versions and Testing</h2>
-<p>The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5 and 2.4.3 it has
+<p>The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5, 2.4.3, 2.4.4 it has
 not (yet) been tested against 2.3.0 or 2.3.1.  Further, it is apparent that the pfSense
 packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be
 backported to anything prior to 2.3.0.</p>
@@ -952,7 +1011,7 @@ in the project repo as a better place to keep non-package files, <code>client-li
 </ul>
 <h2>
 <a id="user-content-fauxapi-license" class="anchor" href="#fauxapi-license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI License</h2>
-<pre><code>Copyright 2016-2018 Nicholas de Jong  
+<pre><code>Copyright 2016-2020 Nicholas de Jong
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

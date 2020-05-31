@@ -932,8 +932,11 @@ curl \
 ---
 
 ## Versions and Testing
-The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5, 2.4.3, 2.4.4 it has 
-not (yet) been tested against 2.3.0 or 2.3.1.  Further, it is apparent that the pfSense 
+The FauxAPI has been developed against the following pfSense versions 
+ - **2.3.x** - 2.3.2, 2.3.3, 2.3.4, 2.3.5
+ - **2.4.x** - 2.4.3, 2.4.4, 2.4.5
+ 
+FauxAPI has not been tested against 2.3.0 or 2.3.1.  Additionally, it is apparent that the pfSense 
 packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be 
 backported to anything prior to 2.3.0.
 
@@ -983,9 +986,9 @@ pfSense test infrastructure if it already exists.*
    configuration files using "owner" are still supported. 
  - added a "source" attribute to the logs making it easier to grep fauxapi events, 
    for example `clog /var/log/system.log | grep fauxapi`
- - plenty of dcoumentation fixes and updates
- - added documentation highlighting features and capabilities that existed without 
-   them being obvious
+ - plenty of documentation fixes and updates
+ - added documentation highlighting features and capabilities that existed but were not 
+   previously obvious
  - added the [`extras`](https://github.com/ndejong/pfsense_fauxapi/tree/master/extras) path 
    in the project repo as a better place to keep non-package files, `client-libs`, `examples`,
    `build-tools` etc
@@ -995,7 +998,7 @@ pfSense test infrastructure if it already exists.*
 
 ## FauxAPI License
 ```
-Copyright 2016-2019 Nicholas de Jong
+Copyright 2016-2020 Nicholas de Jong
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

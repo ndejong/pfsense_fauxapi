@@ -1,8 +1,8 @@
 #!/bin/bash
 
 group_name="pfsense"
-source_vm="pfsense-builder1-freebsd-11.2-golden"
-target_folder="/opt/virtual-hosts-local"
+source_vm="pfSense-builder-FreeBSD-11.3"
+target_folder="/opt/virtual-machines"
 
 function clone_instance() {
 

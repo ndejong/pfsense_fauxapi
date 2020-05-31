@@ -50,6 +50,9 @@ scp ${FILESDIR}${PREFIX}/www/fauxapi/admin/about.php \
 scp ${FILESDIR}${PREFIX}/www/fauxapi/admin/credentials.php \
                 ${STAGEDIR}${PREFIX}/www/fauxapi/admin
 
+scp ${FILESDIR}${PREFIX}/www/fauxapi/admin/logs.php \
+                ${STAGEDIR}${PREFIX}/www/fauxapi/admin
+
 scp ${FILESDIR}/etc/inc/fauxapi/fauxapi.inc \
                 ${STAGEDIR}/etc/inc/fauxapi
 
