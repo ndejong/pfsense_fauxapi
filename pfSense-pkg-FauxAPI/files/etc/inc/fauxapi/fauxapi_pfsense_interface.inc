@@ -703,16 +703,22 @@ class fauxApiPfsenseInterface {
         $config = $this->config_load($this->config_default_filename);
 
         $urltables = array();
-        foreach ($config['aliases']['alias'] as $alias) {
-            if (preg_match('/urltable/i', $alias['type'])) {
-                $urltables[$alias['name']] = array(
-                    'url'  => $alias['url'],
-                    'type' => $alias['type'],
-                    'updatefreq' => $alias['updatefreq']
-                );
-            }
+
+        if (
+            array_key_exists('aliases', $config) and
+            is_array($config['aliases']) and
+            array_key_exists('aliases', $config['aliases'])) {
+                foreach ($config['alias']['alias'] as $alias) {
+                    if (preg_match('/urltable/i', $alias['type'])) {
+                        $urltables[$alias['name']] = array(
+                            'url'  => $alias['url'],
+                            'type' => $alias['type'],
+                            'updatefreq' => $alias['updatefreq']
+                        );
+                    }
+                }
         }
-        
+
         $updates = array();
         foreach ($urltables as $urltablename => $urltable) {
             $updates[$urltablename] = array('url' => $urltable['url']);
