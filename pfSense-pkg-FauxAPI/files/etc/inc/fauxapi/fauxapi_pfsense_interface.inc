@@ -28,6 +28,7 @@ include_once '/etc/inc/notices.inc';
 include_once '/etc/inc/config.lib.inc';
 include_once '/etc/inc/system.inc';
 include_once '/etc/inc/pkg-utils.inc';
+include_once '/etc/inc/phpsessionmanager.inc';
 
 include_once '/usr/local/www/includes/functions.inc.php';
 
