@@ -1,5 +1,5 @@
-# FauxAPI - v1.3
-A REST API interface for pfSense 2.3.x and 2.4.x to facilitate devops:-
+# FauxAPI - v1.4
+A REST API interface for pfSense 2.3.x, 2.4.x, 2.5.x to facilitate devops:-
  - https://github.com/ndejong/pfsense_fauxapi
 
 Additionally available are a set of [client libraries](#client-libraries) 
@@ -935,10 +935,11 @@ curl \
 The FauxAPI has been developed against the following pfSense versions 
  - **2.3.x** - 2.3.2, 2.3.3, 2.3.4, 2.3.5
  - **2.4.x** - 2.4.3, 2.4.4, 2.4.5
+ - **2.5.x** - 2.5.0-DEVELOPMENT-amd64-20200527-1410
  
-FauxAPI has not been tested against 2.3.0 or 2.3.1.  Additionally, it is apparent that the pfSense 
-packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be 
-backported to anything prior to 2.3.0.
+FauxAPI has not been tested against 2.3.0 or 2.3.1.  Additionally, it is apparent the pfSense 
+packaging technique changed significantly prior to 2.3.x so it is unlikely it will be backported 
+to anything prior to 2.3.0.
 
 Testing is reasonable but does not achieve 100% code coverage within the FauxAPI 
 codebase.  Two client side test scripts (1x Bash, 1x Python) that both 
@@ -995,6 +996,11 @@ pfSense test infrastructure if it already exists.*
  - testing against pfSense 2.3.5
  - testing against pfSense 2.4.3
 
+#### v1.4 - 2020-05-31
+ - Added **system_info** function to return various useful system information.
+ - include include `phpsessionmanager.inc` since it is commonly required in other function calls
+ - testing against pfSense 2.4.5
+ - testing against pfSense 2.5.0 (pfSense-CE-2.5.0-DEVELOPMENT-amd64-20200527-1410.iso)
 
 ## FauxAPI License
 ```

@@ -45,8 +45,8 @@ events.push(function() {
 <div>
 <!--READMESTART-->
 <h1>
-<a id="user-content-fauxapi---v13" class="anchor" href="#fauxapi---v13" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI - v1.3</h1>
-<p>A REST API interface for pfSense 2.3.x and 2.4.x to facilitate devops:-</p>
+<a id="user-content-fauxapi---v14" class="anchor" href="#fauxapi---v14" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI - v1.4</h1>
+<p>A REST API interface for pfSense 2.3.x, 2.4.x, 2.5.x to facilitate devops:-</p>
 <ul>
 <li><a href="https://github.com/ndejong/pfsense_fauxapi">https://github.com/ndejong/pfsense_fauxapi</a></li>
 </ul>
@@ -939,10 +939,18 @@ following standard pfSense send_event combinations are permitted:-
 <hr>
 <h2>
 <a id="user-content-versions-and-testing" class="anchor" href="#versions-and-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Versions and Testing</h2>
-<p>The FauxAPI has been developed against pfSense 2.3.2, 2.3.3, 2.3.4, 2.3.5, 2.4.3, 2.4.4 it has
-not (yet) been tested against 2.3.0 or 2.3.1.  Further, it is apparent that the pfSense
-packaging technique changed significantly prior to 2.3.x so it is unlikely that it will be
-backported to anything prior to 2.3.0.</p>
+<p>The FauxAPI has been developed against the following pfSense versions</p>
+<ul>
+<li>
+<strong>2.3.x</strong> - 2.3.2, 2.3.3, 2.3.4, 2.3.5</li>
+<li>
+<strong>2.4.x</strong> - 2.4.3, 2.4.4, 2.4.5</li>
+<li>
+<strong>2.5.x</strong> - 2.5.0-DEVELOPMENT-amd64-20200527-1410</li>
+</ul>
+<p>FauxAPI has not been tested against 2.3.0 or 2.3.1.  Additionally, it is apparent the pfSense
+packaging technique changed significantly prior to 2.3.x so it is unlikely it will be backported
+to anything prior to 2.3.0.</p>
 <p>Testing is reasonable but does not achieve 100% code coverage within the FauxAPI
 codebase.  Two client side test scripts (1x Bash, 1x Python) that both
 demonstrate and test all possible server side actions are provided.  Under the
@@ -1000,14 +1008,22 @@ configuration files using "owner" are still supported.</li>
 <li>added a "source" attribute to the logs making it easier to grep fauxapi events,
 for example <code>clog /var/log/system.log | grep fauxapi</code>
 </li>
-<li>plenty of dcoumentation fixes and updates</li>
-<li>added documentation highlighting features and capabilities that existed without
-them being obvious</li>
+<li>plenty of documentation fixes and updates</li>
+<li>added documentation highlighting features and capabilities that existed but were not
+previously obvious</li>
 <li>added the <a href="https://github.com/ndejong/pfsense_fauxapi/tree/master/extras"><code>extras</code></a> path
 in the project repo as a better place to keep non-package files, <code>client-libs</code>, <code>examples</code>,
 <code>build-tools</code> etc</li>
 <li>testing against pfSense 2.3.5</li>
 <li>testing against pfSense 2.4.3</li>
+</ul>
+<h4>
+<a id="user-content-v14---2020-05-31" class="anchor" href="#v14---2020-05-31" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>v1.4 - 2020-05-31</h4>
+<ul>
+<li>Added <strong>system_info</strong> function to return various useful system information.</li>
+<li>include include <code>phpsessionmanager.inc</code> since it is commonly required in other function calls</li>
+<li>testing against pfSense 2.4.5</li>
+<li>testing against pfSense 2.5.0 (pfSense-CE-2.5.0-DEVELOPMENT-amd64-20200527-1410.iso)</li>
 </ul>
 <h2>
 <a id="user-content-fauxapi-license" class="anchor" href="#fauxapi-license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FauxAPI License</h2>
