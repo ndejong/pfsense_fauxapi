@@ -750,7 +750,7 @@ class fauxApiPfsenseInterface {
         
         include_once '/etc/inc/gwlb.inc';
         
-        $byname = false;
+        $byname = true;
         return \return_gateways_status($byname);
     }
     
