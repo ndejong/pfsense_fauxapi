@@ -477,13 +477,19 @@ class fauxApiActions {
      */
     public function function_call() {
         fauxApiLogger::debug(__METHOD__);
-        
-        if(!is_array($this->action_input_data) || !isset($this->action_input_data['function'])) {
+
+        if(!is_array($this->action_input_data)) {
             $this->response->http_code = 400;
             $this->response->message = 'incorrectly formatted request data';
             return FALSE;
         }
-        
+
+        if(!isset($this->action_input_data['function'])) {
+            $this->response->http_code = 400;
+            $this->response->message = 'missing function name parameter';
+            return FALSE;
+        }
+
         $function = $this->action_input_data['function'];
         if(!is_string($function)) {
             $this->response->http_code = 400;
