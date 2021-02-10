@@ -52,7 +52,7 @@ are some cases where reloading the configuration file is not enough and you
 may need to "tickle" pfSense a little more to do what you want.  This is not 
 common however a good example is getting newly defined network interfaces or 
 VLANs to be recognized.  These situations are easily handled by calling the
-**send_event** action with the payload **interface reload all** - see the example 
+**send_event** action with the payload **interface all reload** - see the example 
 included below and refer to a the resolution to [Issue #10](https://github.com/ndejong/pfsense_fauxapi/issues/10)
 
 __NB:__ *As at FauxAPI v1.2 the **function_call** action has been introduced that 
@@ -788,7 +788,7 @@ curl \
     --insecure \
     --header "fauxapi-auth: <auth-value>" \
     --header "Content-Type: application/json" \
-    --data "[\"interface reload all\"]" \
+    --data "[\"interface all reload\"]" \
     "https://<host-address>/fauxapi/v1/?action=send_event"
 ```
 
