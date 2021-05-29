@@ -716,7 +716,7 @@ class fauxApiPfsenseInterface {
         if (
             array_key_exists('aliases', $config) and
             is_array($config['aliases']) and
-            array_key_exists('aliases', $config['aliases'])) {
+            array_key_exists('alias', $config['aliases'])) {
                 foreach ($config['aliases']['alias'] as $alias) {
                     if (preg_match('/urltable/i', $alias['type'])) {
                         $urltables[$alias['name']] = array(
