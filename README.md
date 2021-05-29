@@ -6,6 +6,12 @@ Additionally available are a set of [client libraries](#client-libraries)
 that hence make programmatic access and management of pfSense hosts for devops 
 tasks feasible.
 
+### Important
+* You MUST (manually) setup your `/etc/fauxapi/credentials.ini` file on the pfSense host before 
+  you continue, see the [API Authentication](#api-authentication) section below.
+* You MUST (manually) setup a `/etc/fauxapi/pfsense_function_calls.txt` file if you want to use
+  the `function_call` API method.  You may wish to copy the sample `/etc/fauxapi/pfsense_function_calls.sample.txt`
+  as a starting point.
 
 ## API Action Summary
  - [alias_update_urltables](#user-content-alias_update_urltables) - Causes the pfSense host to immediately update any urltable alias entries from their (remote) source URLs.
