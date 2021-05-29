@@ -1,0 +1,13 @@
+
+vars:
+  iso_path: "/opt/storage/operating_systems/pfsense"
+  iso_filename: "pfSense-CE-2.5.1-RELEASE-amd64.iso"
+
+  target_vmname: "pfSense-CE-2.5.1"
+  target_basefolder: "/opt/virtual-machines"
+  target_groups: "/pfsense"
+  target_bridgeadapter: "enp0s25"  # local NIC to bridge from
+  vmhost_nic_prefix: "0800000251"  # first 5x octets only
+
+imports:
+  - 'pyvboxmanage-pfsense-base.yml'

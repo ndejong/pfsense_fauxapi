@@ -1,0 +1,101 @@
+
+# Command opts and args follow https://www.virtualbox.org/manual/ch08.html docs
+pyvboxmanage:
+
+  - showvminfo:
+    args:
+      - '{target_vmname}'
+    triggers:
+      - source: stdout
+        string: running
+        condition: not present
+    returncodes: [0,1]
+
+  - unregistervm:
+    args: '{target_vmname}'
+    opts:
+      delete: true
+    returncodes: [0,1]
+
+  - closemedium:
+    args:
+      - "disk"
+      - "{target_basefolder}{target_groups}/{target_vmname}/{target_vmname}.vdi"
+    opts:
+      delete: true
+    returncodes: [0,1]
+
+  - createvm:
+    opts:
+      name: '{target_vmname}'
+      basefolder: '{target_basefolder}'
+      groups: '{target_groups}'
+      ostype: 'FreeBSD_64'
+      register: true
+
+  - createmedium:
+    args:
+      - "disk"
+    opts:
+      filename: "{target_basefolder}{target_groups}/{target_vmname}/{target_vmname}.vdi"
+      size: 4096
+      format: "vdi"
+
+  - modifyvm:
+    args: '{target_vmname}'
+    opts:
+      nic1: "bridged"
+      bridgeadapter1: '{target_bridgeadapter}'
+      nictype1: "82540EM"  # Intel PRO/1000 MT Desktop
+      macaddress1: "{vmhost_nic_prefix}01"
+      cableconnected1: "on"
+
+      nic2: "bridged"
+      bridgeadapter2: '{target_bridgeadapter}'
+      nictype2: "82540EM"  # Intel PRO/1000 MT Desktop
+      macaddress2: "{vmhost_nic_prefix}02"
+      cableconnected2: "on"
+
+      memory: "1024"
+      vram: "16"
+      cpus: "2"
+      pae: "off"
+      accelerate3d: "off"
+      graphicscontroller: "vmsvga"
+      monitorcount: "1"
+      mouse: "ps2"
+      keyboard: "ps2"
+      audio: "none"
+      usb: "off"
+      clipboard-mode: "disabled"
+      draganddrop: "disabled"
+
+      boot1: disk
+      boot2: dvd
+      boot3: none
+      boot4: none
+
+  - storagectl:
+    args: '{target_vmname}'
+    opts:
+      add: "sata"
+      name: "AHCI"
+      controller: "IntelAhci"
+      portcount: 2
+      bootable: "on"
+
+  - storageattach:
+    args: '{target_vmname}'
+    opts:
+      storagectl: "AHCI"
+      port: 0
+      type: dvddrive
+      medium: '{iso_path}/{iso_filename}'
+
+  - storageattach:
+    args: '{target_vmname}'
+    opts:
+      storagectl: "AHCI"
+      port: 1
+      type: hdd
+      medium: '{target_basefolder}{target_groups}/{target_vmname}/{target_vmname}.vdi'
