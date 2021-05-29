@@ -504,9 +504,18 @@ class fauxApiPfsenseInterface {
         fauxApiLogger::debug(__METHOD__);
         $info['sys'] = array (
             'platform'=>system_identify_specific_platform(),
-            'serial_no' => system_get_serial(),
-            'device_id' => system_get_uniqueid(),
         );
+        if (function_exists('system_get_serial')) {
+            $info['sys']['serial_no'] = system_get_serial();
+        } else {
+            $info['sys']['serial_no'] = NULL;
+        }
+        if (function_exists('system_get_uniqueid')) {
+            $info['sys']['device_id'] = system_get_uniqueid();
+        } else {
+            $info['sys']['device_id'] = NULL;
+        }
+
         $info['pfsense_version'] = array(
                 'product_version_string'=> $g['product_version_string'],
                 'product_version'=>$g['product_version'],
