@@ -30,6 +30,13 @@ tasks feasible.
  - [system_reboot](#user-content-system_reboot) - Reboots the pfSense system.
  - [system_stats](#user-content-system_stats) - Returns various useful system stats.
  - [system_info](#user-content-system_info) - Returns various useful system info.
+ - [network_address_aliases_get](#user-content-network_address_aliases_get) - Returns address aliaes used by rules.
+ - [network_address_aliases_create](#user-content-network_address_aliases_create) - Creates An network aliaes for rules
+ - [network_address_aliases_update](#user-content-network_address_aliases_update) - Update a address aliaes. Returns newest result
+ - [network_address_aliases_delete](#user-content-network_address_aliases_delete) - delete a address aliaes. Returns newest result
+ - [filter_rules_get](#user-content-filter_rules_get) - Returns firewall filters.
+ - [filter_rules_create](#user-content-filter_rules_create) - Creates firewall filters.
+ - [filter_rules_delete](#user-content-filter_rules_delete) - Deletes firewall filters.
 
 
 ## Approach
@@ -935,6 +942,344 @@ curl \
     }
 }
 ```
+---
+### network_address_aliases_get
+ - Returns address aliaes used by rules.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_get"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e205fc052956",
+    "action": "network_address_aliases_get",
+    "message": "ok",
+    "data": {
+        "aliases": {
+            "alias": [
+                {
+                    "name": "EasyRuleBlockHostsWAN",
+                    "type": "network",
+                    "address": "1.2.3.4/32 5.6.7.8/32",
+                    "descr": "Hosts blocked from Firewall Log view",
+                    "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
+                }
+            ]
+        }
+    }
+}
+```
+---
+### network_address_aliases_create
+ - Create a address aliaes used by rules. Returns newest result
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+     - **name** :< string > name of aliases
+     - **type** :< string > type of aliases. **MUST** be `network` for now.
+     - **cidr_addresses** : < list of < object > > name alias what
+        - **address** an ip address or a network prefix.
+        - **details** a description of this address. for human readable documentation.
+     - **descr** : < string > the description of current aliases.
+  - Response: json < object >: the items after created
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"name": "wsdfan", "type": "network", "cidr_addresses": [{"address":"12.23.45.3/32", "details":"a"}], "descr":"Test"}'
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_update"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e22393a9aa5a",
+    "action": "network_address_aliases_update",
+    "message": "ok",
+    "data": {
+        "aliases": {
+            "alias": [
+                {
+                    "name": "EasyRuleBlockHostsWAN",
+                    "type": "network",
+                    "address": "1.2.3.4/32 5.6.7.8/32",
+                    "descr": "Hosts blocked from Firewall Log view",
+                    "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
+                },
+                {
+                    "name": "wsdfan",
+                    "descr": "Test",
+                    "type": "network",
+                    "address": "12.23.45.3/32",
+                    "detail": "a"
+                }
+            ]
+        }
+    }
+}
+```
+---
+### network_address_aliases_update
+ - Update a address aliaes. Returns newest result
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+     - **name** :< string > name of aliases. identiy which aliases frr modify
+     - **type** :< string > type of aliases. **MUST** be `network` for now.
+     - **cidr_addresses** : < list of < object > > name alias what
+        - **address** an ip address or a network prefix.
+        - **details** a description of this address. for human readable documentation.
+     - **descr** : < string > the description of current aliases.
+  - Response: json < object >: the items after created
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"name": "wsdfan", "type": "network", "cidr_addresses": [{"address":"12.23.45.3/32", "details":"a"}], "descr":"Test"}'
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_create"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e22393a9aa5a",
+    "action": "network_address_aliases_create",
+    "message": "ok",
+    "data": {
+        "aliases": {
+            "alias": [
+                {
+                    "name": "EasyRuleBlockHostsWAN",
+                    "type": "network",
+                    "address": "1.2.3.4/32 5.6.7.8/32",
+                    "descr": "Hosts blocked from Firewall Log view",
+                    "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
+                },
+                {
+                    "name": "wsdfan",
+                    "descr": "Test",
+                    "type": "network",
+                    "address": "12.23.45.3/32",
+                    "detail": "a"
+                }
+            ]
+        }
+    }
+}
+```
+---
+### network_address_aliases_delete
+ - deletes a address aliaes. Returns newest result
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+     - **name** :< string > name of aliases. identiy which aliase to delete 
+  - Response: json < object >: the items after created
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"name": "wsdfan"}'
+    "https://<host-address>/fauxapi/v1/?action=network_address_aliases_delete"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e22393a9aa5a",
+    "action": "network_address_aliases_delete",
+    "message": "ok",
+    "data": {
+        "aliases": {
+            "alias": [
+                {
+                    "name": "EasyRuleBlockHostsWAN",
+                    "type": "network",
+                    "address": "1.2.3.4/32 5.6.7.8/32",
+                    "descr": "Hosts blocked from Firewall Log view",
+                    "detail": "Entry added Fri, 27 Dec 2019 00:53:01 -0800||\u5df2\u6dfb\u52a0\u6761\u76ee Thu, 16 Jan 2020 03:42:37 -0800"
+                }
+            ]
+        }
+    }
+}
+```
+---
+### filter_rules_get
+ - Returns firewall filters.
+ - HTTP: **GET**
+ - Params: none
+
+*Example Request*
+```bash
+curl \
+    -X GET \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    "https://<host-address>/fauxapi/v1/?action=filter_rules_get"
+```
+
+*Example Response*
+```javascript
+{
+    "callid": "5e2060797a602",
+    "action": "filter_rules_get",
+    "message": "ok",
+    "data": {
+        "filter": {
+            "rules": [
+                {
+                    "id": "",
+                    "tracker": "1579178400",
+                    "type": "pass",
+                    "interface": "wan",
+                    "ipprotocol": "inet",
+                    "tag": "",
+                    "tagged": "",
+                    "max": "",
+                    "max-src-nodes": "",
+                    "max-src-conn": "",
+                    "max-src-states": "",
+                    "statetimeout": "",
+                    "statetype": "keep state",
+                    "os": "",
+                    "protocol": "tcp",
+                    "source": {
+                        "address": "1.2.1.1"
+                    },
+                    "destination": {
+                        "any": "",
+                        "port": "1-65535"
+                    },
+                    "descr": "",
+                    "updated": {
+                        "time": "1579178400",
+                        "username": "admin@192.168.88.1 (Local Database)"
+                    },
+                    "created": {
+                        "time": "1579178400",
+                        "username": "admin@192.168.88.1 (Local Database)"
+                    }
+                },
+                {
+                    "type": "block",
+                    "interface": "wan",
+                    "ipprotocol": "inet",
+                    "source": {
+                        "address": "EasyRuleBlockHostsWAN"
+                    },
+                    "destination": {
+                        "any": ""
+                    },
+                    "descr": "Easy Rule: Blocked from Firewall Log View",
+                    "created": {
+                        "time": "1577436781",
+                        "username": "Easy Rule"
+                    },
+                    "tracker": "1577436781"
+                },
+                {
+                    "type": "drop",
+                    "ipprotocol": "inet",
+                    "descr": "Default allow LAN to any rule",
+                    "interface": "lan",
+                    "source": {
+                        "network": "lan"
+                    },
+                    "destination": {
+                        "ip": "192.10.1.1"
+                    }
+                }
+            ]
+        }
+    }
+}
+```
+---
+### filter_rules_create
+ - Creates firewall filters
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+    - **position**: < int >: insert to which position.
+    - **rule**: < object >: what is the rule. 
+      - **type** :< string > : Type of filter. could take value: pass / block / reject
+      - **ipprotocol**: < string >: Which network type? could take value: inet / inet6 / inet46
+      - **protocol**: < string >: if seted. could only take value: tcp. used for port match.
+      - **descr** : < string > : Used for description.
+      - **interface**: < string >: To which interface. e.g. WAN
+      - **source**: < object > : match source item.
+          - `{"any":""}`: matchs any address.
+          - `{"address": "network_address_aliases"}`: matchs any network_address_aliases.
+          - `{"address": "1.2.3.4"}`: matchs address 1.2.3.4
+          - `{"any":"", "port": "443-1000"}`: matchs 443 to 1000 port. uses with protocol
+      - **destination**: < object >: match description. -- same as above.
+  - Response: json < object >: the items after created
+
+*Test it carefully before going to wild please.  USE AT YOUR OWN RISK*
+
+*Example Request*
+```bash
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"position": 1, "rule": {"type": "reject", "ipprotocol": "inet", "descr": "testobject", "interface": "wan", "source": {"any": ""}, "destination": {"address": "1.2.3.4"}}}' \
+    "https://<host-address>/fauxapi/v1/?action=filter_rules_create"
+```
+*Example Response*
+Same As [filter_rules_get](#user-content-filter_rules_get)
+
+---
+### filter_rules_delete
+ - Returns firewall filters.
+ - HTTP: **POST**
+ - Params: none
+ - Request body: json
+    - **position**: <int>: deletes which position.
+
+*Test it carefully before going to wild please.  USE AT YOUR OWN RISK*
+
+Because there's nothing like Unique ID or name in rule. Currently we could only take the position to identify which rule shell be deleted.
+
+*Example Request*
+```bash
+curl \
+    -X POST \
+    --silent \
+    --insecure \
+    --header "fauxapi-auth: <auth-value>" \
+    --data '{"position": 1}' \
+    "https://<host-address>/fauxapi/v1/?action=filter_rules_delete"
+```
+
+*Example Response*
+Same As [filter_rules_get](#user-content-filter_rules_get)
+
 ---
 
 ## Versions and Testing
